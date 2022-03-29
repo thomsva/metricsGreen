@@ -1,9 +1,9 @@
-
 services:
-
   adminer:
     image: adminer
     restart: always
+    environment:
+      ADMINER_DEFAULT_SERVER: db
     ports:
       - 3003:8080
 
@@ -16,6 +16,6 @@ services:
       - metricsGreen_db:/var/lib/postgresql/data
     ports:
       - 5432:5432
-      
-volumes: 
-     metricsGreen_db:
+
+volumes:
+  metricsGreen_db:
