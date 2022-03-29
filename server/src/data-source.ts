@@ -1,18 +1,18 @@
-import { DataSource } from "typeorm";
-import "reflect-metadata";
+import { DataSource } from 'typeorm';
+import 'reflect-metadata';
 import Book from './entity/Book';
 
 export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: "localhost",
+  type: 'postgres',
+  host: 'localhost',
   port: 5432,
-  username: "postgres",
-  password: "postgres",
-  database: "postgres",
+  username: 'postgres',
+  password: 'postgres',
+  database: 'postgres',
   synchronize: true,
   dropSchema: true,
   logging: true,
   entities: [Book],
   subscribers: [],
-  migrations: ['.src/migration'],
+  migrations: ['.src/migration']
 });
