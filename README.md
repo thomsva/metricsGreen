@@ -1,3 +1,3 @@
 # metricsGreen
 
-[Hours reporting](hours.md)
+[Hours log](hours.md)
