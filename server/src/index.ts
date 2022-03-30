@@ -6,22 +6,37 @@ import http from 'http';
 import { HelloResolver } from './resolver/Hello';
 import { buildSchema } from 'type-graphql';
 import { SensorResolver } from './resolver/SensorResolver';
+import User from './entity/User';
+import { seedDatabase } from './seedDatabase';
+import { authChecker } from './authChecker';
 //import { BookResolver } from './resolver/BookResolver';
 
 const PORT = process.env.PORT || 4000;
+
+export interface Context {
+  user?: User;
+}
 
 const main = async () => {
   await AppDataSource.initialize()
     .then(async () => {
       console.log('The database is running');
 
+      const app = express();
+      const user = await seedDatabase();
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [HelloResolver, SensorResolver]
+          resolvers: [HelloResolver, SensorResolver],
+          authChecker,
+          validate: false
+        }),
+        context: ({ req, res }) => ({
+          req,
+          res,
+          user
         })
       });
 
-      const app = express();
       const httpServer = http.createServer(app);
       await apolloServer.start();
 

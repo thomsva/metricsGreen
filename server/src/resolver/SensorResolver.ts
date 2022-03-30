@@ -1,4 +1,4 @@
-import { Arg, Int, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
 import Sensor from '../entity/Sensor';
 import { AddSensorInput, editSensorInput } from '../input/SensorInput';
 
@@ -9,6 +9,7 @@ export class SensorResolver {
     return await Sensor.find();
   }
 
+  @Authorized('ADMIN')
   @Query(() => Sensor)
   async getSensor(@Arg('id', () => Int) id: number): Promise<Sensor | null> {
     return Sensor.findOneBy({ id: id });
