@@ -5,6 +5,7 @@ import { AppDataSource } from './data-source';
 import http from 'http';
 import { HelloResolver } from './resolver/Hello';
 import { buildSchema } from 'type-graphql';
+import { SensorResolver } from './resolver/SensorResolver';
 //import { BookResolver } from './resolver/BookResolver';
 
 const PORT = process.env.PORT || 4000;
@@ -15,40 +16,10 @@ const main = async () => {
       console.log('The database is running');
 
       const apolloServer = new ApolloServer({
-        schema: await buildSchema({ resolvers: [HelloResolver] })
+        schema: await buildSchema({
+          resolvers: [HelloResolver, SensorResolver]
+        })
       });
-
-      // const typeDefs = gql`
-      //   type Book {
-      //     title: String
-      //     author: String
-      //   }
-
-      //   type Query {
-      //     books: [Book]
-      //   }
-      // `;
-
-      // const books = [
-      //   {
-      //     title: 'The Awakening',
-      //     author: 'Kate Chopin'
-      //   },
-      //   {
-      //     title: 'City of Glass',
-      //     author: 'Paul Auster'
-      //   }
-      // ];
-
-      // const resolvers = {
-      //   Query: {
-      //     books: () => books
-      //   }
-      // };
-
-      // const schema = buildSchema({
-      //   resolvers: [BookResolver],
-      // });
 
       const app = express();
       const httpServer = http.createServer(app);

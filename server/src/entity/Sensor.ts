@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export default class Book extends BaseEntity {
+export default class Sensor extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -14,5 +14,13 @@ export default class Book extends BaseEntity {
 
   @Field()
   @Column()
-  title!: string;
+  type!: string;
+
+  @Field()
+  @Column()
+  description!: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  location?: string;
 }
