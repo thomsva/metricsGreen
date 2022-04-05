@@ -9,13 +9,13 @@ import { SensorResolver } from './resolver/SensorResolver';
 import User from './entity/User';
 import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
-//import { BookResolver } from './resolver/BookResolver';
+import { UserResolver } from './resolver/userResolver';
 
 const PORT = process.env.PORT || 4000;
 
-export interface Context {
+export type Context = {
   user?: User;
-}
+};
 
 const main = async () => {
   await AppDataSource.initialize()
@@ -26,7 +26,7 @@ const main = async () => {
       const user = await seedDatabase();
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [HelloResolver, SensorResolver],
+          resolvers: [HelloResolver, SensorResolver, UserResolver],
           authChecker,
           validate: false
         }),
