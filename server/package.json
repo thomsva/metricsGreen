@@ -13,6 +13,7 @@
   "author": "Thomas Svartbäck",
   "license": "GNU General Public Licence v3.0",
   "devDependencies": {
+    "@types/express-jwt": "^6.0.4",
     "@types/node": "^17.0.23",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
