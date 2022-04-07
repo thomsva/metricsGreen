@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken';
 
 @Resolver()
 export class UserResolver {
-  @Authorized('ADMIN')
   @Query(() => [User], { description: 'Get all users.' })
   async users(): Promise<User[]> {
     return await User.find();
