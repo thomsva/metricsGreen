@@ -1,15 +1,7 @@
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Int,
-  Mutation,
-  Query,
-  Resolver
-} from 'type-graphql';
-import { Context } from '../index';
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
 import User from '../entity/User';
 import { editUserInput, NewUserInput } from '../input/UserInput';
+import jwt from 'jsonwebtoken';
 
 @Resolver()
 export class UserResolver {
@@ -19,13 +11,14 @@ export class UserResolver {
     return await User.find();
   }
 
-  @Query(() => User)
-  async me(@Ctx() ctx: Context): Promise<User | null> {
-    if (ctx.user) {
-      return User.findOneBy({ id: ctx.user.id });
-    }
-    return null;
-  }
+  // TODO: Add currentUser to context to make this work
+  // @Query(() => User)
+  // async me(@Ctx() ctx: Context): Promise<User | null> {
+  //   if (ctx.user) {
+  //     return User.findOneBy({ id: ctx.user.id });
+  //   }
+  //   return null;
+  // }
 
   @Mutation(() => User)
   async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
@@ -54,22 +47,25 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => String)
   async login(
     @Arg('nickname') nickname: string,
-    @Arg('password') password: string,
-    @Ctx() ctx: Context
-  ): Promise<User | null> {
+    @Arg('password') password: string
+  ): Promise<string | null> {
     console.log(nickname);
     const user = await User.findOneBy({ nickname });
     console.log(user);
     if (user) {
       if (user.password === password) {
-        ctx.user = user;
-        return user;
+        const token = jwt.sign(
+          { nickname: user.nickname, id: user.id, role: user.role },
+          'SECRET'
+        );
+        console.log('Login ok. Token = ', token);
+        return token;
       }
     }
-    console.log('oh no');
+    console.log('Failed login attempt');
     return null;
   }
 }

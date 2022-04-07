@@ -1,12 +1,11 @@
 import { ApolloServer } from 'apollo-server-express';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import 'reflect-metadata';
 import { AppDataSource } from './data-source';
 import http from 'http';
 import { HelloResolver } from './resolver/Hello';
 import { buildSchema } from 'type-graphql';
 import { SensorResolver } from './resolver/SensorResolver';
-import User from './entity/User';
 import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
 import { UserResolver } from './resolver/userResolver';
@@ -14,7 +13,8 @@ import { UserResolver } from './resolver/userResolver';
 const PORT = process.env.PORT || 4000;
 
 export type Context = {
-  user?: User;
+  req: Request;
+  res: Response;
 };
 
 const main = async () => {
@@ -23,7 +23,7 @@ const main = async () => {
       console.log('The database is running');
 
       const app = express();
-      const user = await seedDatabase();
+      await seedDatabase();
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
           resolvers: [HelloResolver, SensorResolver, UserResolver],
@@ -32,8 +32,7 @@ const main = async () => {
         }),
         context: ({ req, res }) => ({
           req,
-          res,
-          user
+          res
         })
       });
 
