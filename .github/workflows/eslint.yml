@@ -9,7 +9,7 @@ jobs:
     - run: npm ci
       working-directory: web
     - name: Run ESLint on client
-      run: npm run lint
+    - run: npm run lint
       working-directory: web
     - name: Install server modules
     - run: npm ci
