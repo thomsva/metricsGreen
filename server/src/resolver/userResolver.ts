@@ -3,10 +3,6 @@ import User from '../entity/User';
 import { editUserInput, NewUserInput } from '../input/UserInput';
 import jwt from 'jsonwebtoken';
 
-
-
-
-
 @Resolver()
 export class UserResolver {
   @Query(() => [User], { description: 'Get all users.' })
