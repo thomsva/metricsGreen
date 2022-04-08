@@ -5,15 +5,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - name: Install client modules
-    - run: npm ci
-      working-directory: web
-    - name: Run ESLint on client
-    - run: npm run lint
-      working-directory: web
-    - name: Install server modules
-    - run: npm ci
-      working-directory: server
-    - name: Run ESLint on client
-      run: npm run lint
-      working-directory: server
+    - name: Install and lint client
+      run: |
+        npm ci
+        npm run lint
+
