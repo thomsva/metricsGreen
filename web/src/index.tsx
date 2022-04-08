@@ -8,16 +8,21 @@ import {
   useQuery
 } from '@apollo/client';
 import {
+  AppBar,
+  Box,
   Button,
   createTheme,
   Paper,
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Tabs,
   ThemeProvider,
+  Toolbar,
   Typography
 } from '@mui/material';
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
@@ -73,14 +78,18 @@ const UserList = () => {
   const { loading, data } = useQuery<UsersData>(USERS_QUERY);
   return (
     <div>
-      <Typography variant="h3" gutterBottom component="div">
-        List of users
-      </Typography>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs>
+          <Tab label="Users" />
+          <Tab label="Other stuff" hidden={true} />
+        </Tabs>
+      </Box>
+
       {loading ? (
         <HourglassBottomTwoToneIcon />
       ) : (
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table component={Paper}>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -119,9 +128,16 @@ interface WelcomeProps {
 
 const Welcome = (props: WelcomeProps) => {
   return (
-    <Button variant="contained" color="primary">
-      Hello {props.name}!
-    </Button>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Hello {props.name}!
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 
