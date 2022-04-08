@@ -10,4 +10,10 @@ jobs:
         npm ci
         npm run lint
       working-directory: web
+    - name: Install server and lint
+      run: |
+        npm ci
+        npm run lint
+      working-directory: server
+
 
