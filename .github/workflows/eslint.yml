@@ -5,8 +5,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - name: Install and lint client
+    - name: Install client and lint
       run: |
         npm ci
         npm run lint
+      working-directory: web
 
