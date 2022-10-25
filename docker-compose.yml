@@ -1,3 +1,5 @@
+version: '3.7'
+
 services:
   adminer:
     image: adminer
@@ -16,6 +18,22 @@ services:
       - db:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  web:
+    build: ./web
+    ports:
+      - 3000:3000
+    container_name: metricsGreen_web
+    volumes:
+      - ./web:/usr/src/web
+
+  server:
+    build: ./server
+    ports:
+      - 4000:4000
+    container_name: metricsGreen_server
+    volumes:
+      - ./server:/usr/src/server
 
 volumes:
   db:
