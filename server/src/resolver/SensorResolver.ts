@@ -1,6 +1,8 @@
 import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
 import Sensor from '../entity/Sensor';
 import { AddSensorInput, editSensorInput } from '../input/SensorInput';
+import { AppDataSource } from '../data-source';
+import { validate } from 'class-validator';
 
 @Resolver()
 export class SensorResolver {
@@ -19,10 +21,14 @@ export class SensorResolver {
   async createSensor(
     @Arg('data') newSensorData: AddSensorInput
   ): Promise<Sensor | null> {
-    const sensor = Sensor.create(newSensorData);
-    await sensor.save();
-    console.log('sensor saved:', sensor);
-    return sensor;
+    const errors = await validate(newSensorData);
+    if (errors.length > 0) {
+      throw new Error(`Validation failed!`);
+    } else {
+      const sensor = AppDataSource.getRepository(Sensor).create(newSensorData);
+      const results = await AppDataSource.getRepository(Sensor).save(sensor);
+      return results;
+    }
   }
 
   @Mutation(() => Sensor, { nullable: true })
@@ -31,9 +37,15 @@ export class SensorResolver {
   ): Promise<Sensor | null> {
     if ((await Sensor.findOneBy({ id: editSensorData.id })) === null)
       return null;
-    const sensor = Sensor.create(editSensorData);
-    await sensor.save();
-    return sensor;
+
+    const errors = await validate(editSensorData);
+    if (errors.length > 0) {
+      throw new Error(`Validation failed!`);
+    } else {
+      const sensor = AppDataSource.getRepository(Sensor).create(editSensorData);
+      const results = await AppDataSource.getRepository(Sensor).save(sensor);
+      return results;
+    }
   }
 
   @Mutation(() => Boolean)

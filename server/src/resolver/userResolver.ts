@@ -2,6 +2,8 @@ import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
 import User from '../entity/User';
 import { editUserInput, NewUserInput } from '../input/UserInput';
 import jwt from 'jsonwebtoken';
+import { AppDataSource } from '../data-source';
+import { validate } from 'class-validator';
 
 @Resolver()
 export class UserResolver {
@@ -22,11 +24,14 @@ export class UserResolver {
   @Mutation(() => User)
   async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
     console.log(newUserData);
-    const user = User.create(newUserData);
-    user.role = 'USER';
-    await user.save();
-    console.log('User saved:', user);
-    return user;
+    const errors = await validate(newUserData);
+    if (errors.length > 0) {
+      throw new Error(`Validation failed!`);
+    } else {
+      const user = AppDataSource.getRepository(User).create(newUserData);
+      const results = await AppDataSource.getRepository(User).save(user);
+      return results;
+    }
   }
 
   @Mutation(() => User, { nullable: true })
@@ -34,9 +39,14 @@ export class UserResolver {
     @Arg('data') editUserData: editUserInput
   ): Promise<User | null> {
     if ((await User.findOneBy({ id: editUserData.id })) === null) return null;
-    const user = User.create(editUserData);
-    await user.save();
-    return user;
+    const errors = await validate(editUserData);
+    if (errors.length > 0) {
+      throw new Error(`Validation failed!`);
+    } else {
+      const user = AppDataSource.getRepository(User).create(editUserData);
+      const results = await AppDataSource.getRepository(User).save(user);
+      return results;
+    }
   }
 
   @Authorized('ADMIN')
