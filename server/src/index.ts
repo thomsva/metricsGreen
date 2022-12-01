@@ -30,10 +30,7 @@ const main = async () => {
           authChecker,
           validate: false
         }),
-        context: ({ req, res }) => ({
-          req,
-          res
-        })
+        context: ({ req, res }) => ({ req, res })
       });
 
       const httpServer = http.createServer(app);

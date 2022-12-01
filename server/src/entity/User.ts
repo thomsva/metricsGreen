@@ -20,7 +20,7 @@ export default class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @Field(() => String)
+  @Field({ nullable: true })
   @Column({ nullable: true })
   role?: string;
 }

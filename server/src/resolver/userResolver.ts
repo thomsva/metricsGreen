@@ -1,9 +1,18 @@
-import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver
+} from 'type-graphql';
 import User from '../entity/User';
 import { editUserInput, NewUserInput } from '../input/UserInput';
 import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
+import { Context } from '..';
 
 @Resolver()
 export class UserResolver {
@@ -12,14 +21,23 @@ export class UserResolver {
     return await User.find();
   }
 
-  // TODO: Add currentUser to context to make this work
-  // @Query(() => User)
-  // async me(@Ctx() ctx: Context): Promise<User | null> {
-  //   if (ctx.user) {
-  //     return User.findOneBy({ id: ctx.user.id });
-  //   }
-  //   return null;
-  // }
+  @Query(() => User)
+  async me(@Ctx() context: Context): Promise<User | null> {
+    const token = context.req.headers.bearer as string;
+    if (token !== undefined) {
+      const tokenUser = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
+      console.log('tokenUser: ', tokenUser.user);
+      try {
+        return AppDataSource.getRepository(User).findOneBy({
+          nickname: parseString(tokenUser.user.nickname)
+        });
+      } catch (e) {
+        console.log('error', e);
+        return null;
+      }
+    }
+    return null;
+  }
 
   @Mutation(() => User)
   async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
@@ -30,6 +48,7 @@ export class UserResolver {
     } else {
       const user = AppDataSource.getRepository(User).create(newUserData);
       const results = await AppDataSource.getRepository(User).save(user);
+      console.log('the nwe user: ', user);
       return results;
     }
   }
@@ -61,15 +80,12 @@ export class UserResolver {
     @Arg('nickname') nickname: string,
     @Arg('password') password: string
   ): Promise<string | null> {
-    console.log(nickname);
+    console.log('nickname ', nickname);
     const user = await User.findOneBy({ nickname });
-    console.log(user);
+    console.log('user ', user);
     if (user) {
       if (user.password === password) {
-        const token = jwt.sign(
-          { nickname: user.nickname, id: user.id, role: user.role },
-          'SECRET'
-        );
+        const token = jwt.sign({ user }, 'SECRET');
         console.log('Login ok. Token = ', token);
         return token;
       }
@@ -78,3 +94,14 @@ export class UserResolver {
     return null;
   }
 }
+
+const parseString = (input: unknown): string => {
+  if (!input || !isString(input)) {
+    throw new Error('Invalid string input: ' + input);
+  }
+  return input;
+};
+
+const isString = (text: unknown): text is string => {
+  return typeof text === 'string';
+};
