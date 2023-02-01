@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import {
   ApolloClient,
   ApolloProvider,
@@ -21,6 +22,7 @@ import {
   TableHead,
   TableRow,
   Tabs,
+  TextField,
   ThemeProvider,
   Toolbar,
   Typography
@@ -141,12 +143,39 @@ const Welcome = (props: WelcomeProps) => {
   );
 };
 
+const Login = () => {
+  type FormValues = {
+    username: string;
+    password: string;
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<FormValues>();
+  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+  return (
+    <Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TextField defaultValue="test" {...register('username')} />
+        <TextField {...register('password', { required: true })} />
+        {errors.password && <span>This field is required</span>}
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
+      </form>
+    </Box>
+  );
+};
+
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <Welcome name="world" />
         <UserList />
+        <Login />
       </ThemeProvider>
     </ApolloProvider>
   </React.StrictMode>,
