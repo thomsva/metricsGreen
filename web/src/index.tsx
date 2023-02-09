@@ -6,28 +6,29 @@ import {
   ApolloProvider,
   gql,
   InMemoryCache,
+  useMutation,
   useQuery
 } from '@apollo/client';
 import {
+  Alert,
   AppBar,
   Box,
   Button,
   createTheme,
   Paper,
-  Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Tabs,
   TextField,
   ThemeProvider,
   Toolbar,
   Typography
 } from '@mui/material';
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
+import { LOGIN } from './graphQl';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -79,19 +80,12 @@ interface UsersData {
 const UserList = () => {
   const { loading, data } = useQuery<UsersData>(USERS_QUERY);
   return (
-    <div>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs>
-          <Tab label="Users" />
-          <Tab label="Other stuff" hidden={true} />
-        </Tabs>
-      </Box>
-
+    <Box>
       {loading ? (
         <HourglassBottomTwoToneIcon />
       ) : (
         <TableContainer component={Paper}>
-          <Table component={Paper}>
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -115,7 +109,7 @@ const UserList = () => {
           </Table>
         </TableContainer>
       )}
-    </div>
+    </Box>
   );
 };
 
@@ -145,7 +139,7 @@ const Welcome = (props: WelcomeProps) => {
 
 const Login = () => {
   type FormValues = {
-    username: string;
+    nickname: string;
     password: string;
   };
 
@@ -154,13 +148,31 @@ const Login = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<FormValues>();
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data);
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
+
+    // const result = await useMutation(LOGIN, { variables: data });
+    // console.log('result is: ', result);
+  };
+
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField defaultValue="test" {...register('username')} />
-        <TextField {...register('password', { required: true })} />
-        {errors.password && <span>This field is required</span>}
+        <TextField
+          defaultValue="name"
+          {...register('nickname', { required: true })}
+        />
+        <TextField
+          defaultValue="pass"
+          {...register('password', { required: true })}
+        />
+        {errors.nickname && (
+          <Alert severity="error">Name field is required</Alert>
+        )}
+        {errors.password && (
+          <Alert severity="error">Password field is required</Alert>
+        )}
         <Button variant="contained" type="submit">
           Submit
         </Button>
