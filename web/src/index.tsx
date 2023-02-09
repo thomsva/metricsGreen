@@ -6,6 +6,7 @@ import {
   ApolloProvider,
   gql,
   InMemoryCache,
+  NormalizedCacheObject,
   useMutation,
   useQuery
 } from '@apollo/client';
@@ -29,6 +30,7 @@ import {
 } from '@mui/material';
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
 import { LOGIN, USERS_QUERY } from './graphQl';
+import { isLoggedInVar } from './cache';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -66,6 +68,33 @@ interface UsersData {
   users: User[];
 }
 
+export const typeDefs = gql`
+  extend type Query {
+    isLoggedIn: Boolean!
+    token: String!
+    nickName: nickName
+  }
+`;
+
+function isLoggedIn() {
+  console.log('islogdin data: ', isLoggedInVar());
+  return isLoggedInVar();
+}
+
+// const client = new ApolloClient({
+//   uri: 'http://localhost:4000/graphql',
+//   cache: new InMemoryCache()
+// });
+
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri: 'http://localhost:4000/graphql',
+  headers: {
+    authorization: localStorage.getItem('token') || ''
+  },
+  typeDefs
+});
+
 const UserList = () => {
   const { loading, data } = useQuery<UsersData>(USERS_QUERY);
   return (
@@ -102,24 +131,37 @@ const UserList = () => {
   );
 };
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-  cache: new InMemoryCache()
-});
-
 interface WelcomeProps {
   name: string;
 }
 
 const Welcome = (props: WelcomeProps) => {
+  const logout = () => {
+    console.log('user pressed logout');
+    isLoggedInVar(false);
+    console.log('islogidin: ', isLoggedInVar());
+    console.log('storage', localStorage.getItem('token'));
+    localStorage.clear();
+    window.location.reload();
+    console.log('storage after clear', localStorage.getItem('token'));
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             Hello {props.name}!
+            {isLoggedIn() ? (
+              <Alert severity="success">logid in</Alert>
+            ) : (
+              <Alert severity="error">not logid in</Alert>
+            )}
           </Typography>
           <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={() => logout()}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>
@@ -142,7 +184,10 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     console.log(data);
-    console.log('result is: ', await login({ variables: data }));
+    const result = await login({ variables: data });
+    console.log('result is: ', result);
+    localStorage.setItem('token', result.data.login as string);
+    window.location.reload();
   };
 
   return (
