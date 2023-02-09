@@ -28,7 +28,7 @@ import {
   Typography
 } from '@mui/material';
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
-import { LOGIN } from './graphQl';
+import { LOGIN, USERS_QUERY } from './graphQl';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -54,17 +54,6 @@ const theme = createTheme({
     }
   }
 });
-
-const USERS_QUERY = gql`
-  query Users {
-    users {
-      id
-      nickname
-      email
-      role
-    }
-  }
-`;
 
 interface User {
   id: number;
