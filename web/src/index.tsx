@@ -149,22 +149,22 @@ const Login = () => {
     formState: { errors }
   } = useForm<FormValues>();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+  const [login] = useMutation(LOGIN);
 
-    // const result = await useMutation(LOGIN, { variables: data });
-    // console.log('result is: ', result);
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    console.log(data);
+    console.log('result is: ', await login({ variables: data }));
   };
 
   return (
     <Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
-          defaultValue="name"
+          defaultValue="testuser"
           {...register('nickname', { required: true })}
         />
         <TextField
-          defaultValue="pass"
+          defaultValue="pwd"
           {...register('password', { required: true })}
         />
         {errors.nickname && (
