@@ -4,16 +4,14 @@ jobs:
   build-and-lint:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
-    - name: Install client and lint
-      run: |
-        npm ci
-        npm run lint
-      working-directory: web
-    - name: Install server and lint
-      run: |
-        npm ci
-        npm run lint
-      working-directory: server
-
-
+      - uses: actions/checkout@v3
+      - name: Install client and lint
+        run: |
+          npm ci
+          npm run lint
+        working-directory: web
+      - name: Install server and lint
+        run: |
+          npm ci
+          npm run lint
+        working-directory: server
