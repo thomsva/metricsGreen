@@ -33,7 +33,6 @@ const main = async () => {
         context: ({ req, res }) => ({ req, res })
       });
 
-
       const httpServer = http.createServer(app);
       await apolloServer.start();
 
