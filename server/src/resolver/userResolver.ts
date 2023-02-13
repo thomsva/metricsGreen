@@ -23,7 +23,7 @@ export class UserResolver {
 
   @Query(() => User)
   async me(@Ctx() context: Context): Promise<User | null> {
-    const token = context.req.headers.bearer as string;
+    const token = context.req.headers.authorization as string;
     if (token !== undefined) {
       const tokenUser = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
       console.log('tokenUser: ', tokenUser.user);
@@ -48,7 +48,7 @@ export class UserResolver {
     } else {
       const user = AppDataSource.getRepository(User).create(newUserData);
       const results = await AppDataSource.getRepository(User).save(user);
-      console.log('the nwe user: ', user);
+      console.log('the new user: ', user);
       return results;
     }
   }

@@ -29,7 +29,7 @@ import {
   Typography
 } from '@mui/material';
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
-import { LOGIN, USERS_QUERY } from './graphQl';
+import { LOGIN, USERS_QUERY, ME_QUERY } from './graphQl';
 import { isLoggedInVar } from './cache';
 
 declare module '@mui/material/styles' {
@@ -75,16 +75,6 @@ export const typeDefs = gql`
     nickName: nickName
   }
 `;
-
-function isLoggedIn() {
-  console.log('islogdin data: ', isLoggedInVar());
-  return isLoggedInVar();
-}
-
-// const client = new ApolloClient({
-//   uri: 'http://localhost:4000/graphql',
-//   cache: new InMemoryCache()
-// });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
@@ -136,6 +126,8 @@ interface WelcomeProps {
 }
 
 const Welcome = (props: WelcomeProps) => {
+  const { loading, data } = useQuery(ME_QUERY);
+
   const logout = () => {
     console.log('user pressed logout');
     isLoggedInVar(false);
@@ -151,8 +143,9 @@ const Welcome = (props: WelcomeProps) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Hello {props.name}!
-            {isLoggedIn() ? (
+            {loading ? 'Loading...' : loading}
+            Hello {data ? data?.me.nickname : props.name}!
+            {isLoggedInVar() ? (
               <Alert severity="success">logid in</Alert>
             ) : (
               <Alert severity="error">not logid in</Alert>
@@ -183,7 +176,6 @@ const Login = () => {
   const [login] = useMutation(LOGIN);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
     const result = await login({ variables: data });
     console.log('result is: ', result);
     localStorage.setItem('token', result.data.login as string);
