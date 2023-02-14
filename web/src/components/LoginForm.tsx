@@ -4,11 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { LOGIN } from '../graphQl';
 import { isLoggedInVar } from '../cache';
 
-interface LoginFormProps{
-  closeForm: ()=>void
-}
-
-const LoginForm = ({closeForm = () => {} }: LoginFormProps) => {
+const LoginForm = () => {
   type FormValues = {
     nickname: string;
     password: string;
@@ -27,7 +23,6 @@ const LoginForm = ({closeForm = () => {} }: LoginFormProps) => {
     localStorage.setItem('token', result.data.login as string);
     isLoggedInVar(true);
     client.resetStore();
-    closeForm()
     // window.location.reload();
   };
 

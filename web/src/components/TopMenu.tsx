@@ -53,19 +53,23 @@ const TopMenu = (props: WelcomeProps) => {
               <Button color="inherit" onClick={handleClickOpen}>
                 Login
               </Button>)}
+            
+            {isLoggedIn && (
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Login</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
                     Provide username and password to log in.
                   </DialogContentText>
-                  <LoginForm closeForm={handleClose}/>
+                  <LoginForm />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Close</Button>
                   
                 </DialogActions>
               </Dialog>
+            )}
+              
       
           </Box>
         </Toolbar>
