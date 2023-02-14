@@ -29,21 +29,24 @@ const TopMenu = (props: WelcomeProps) => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {loading ? 'Loading...' : loading}
             Hello {data?.me ? data?.me.nickname : props.name}!
-            {isLoggedIn ? (
-              <Alert severity="success">logid in</Alert>
-            ) : (
-              <Alert severity="error">not logid in</Alert>
-            )}
           </Typography>
-          {isLoggedIn ? (
-            <Button color="inherit" onClick={() => logout()}>
-              Logout
-            </Button>
-          ) : (
-            <LoginForm />
-          )}
+          <Box>
+            {isLoggedIn && (
+              <Button color="inherit" onClick={() => logout()}>
+                Logout
+              </Button>
+            )}
+            {!isLoggedIn && <LoginForm />}
+          </Box>
         </Toolbar>
-      </AppBar>
+      </AppBar>{' '}
+      <Box>
+        {isLoggedIn ? (
+          <Alert severity="success">logid in</Alert>
+        ) : (
+          <Alert severity="error">not logid in</Alert>
+        )}
+      </Box>
     </Box>
   );
 };

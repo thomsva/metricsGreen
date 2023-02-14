@@ -27,26 +27,26 @@ const LoginForm = () => {
   };
 
   return (
-    <Box>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          defaultValue="testuser"
-          {...register('nickname', { required: true })}
-        />
-        <TextField
-          defaultValue="pwd"
-          {...register('password', { required: true })}
-        />
-        {errors.nickname && (
-          <Alert severity="error">Name field is required</Alert>
-        )}
-        {errors.password && (
-          <Alert severity="error">Password field is required</Alert>
-        )}
-        <Button variant="contained" type="submit">
-          Login
-        </Button>
-      </form>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+      <TextField
+        size="small"
+        defaultValue="testuser"
+        {...register('nickname', { required: true })}
+      />
+      <TextField
+        size="small"
+        defaultValue="pwd"
+        {...register('password', { required: true })}
+      />
+      {errors.nickname && (
+        <Alert severity="error">Name field is required</Alert>
+      )}
+      {errors.password && (
+        <Alert severity="error">Password field is required</Alert>
+      )}
+      <Button variant="contained" type="submit">
+        Login
+      </Button>
     </Box>
   );
 };
