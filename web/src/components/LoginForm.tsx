@@ -4,7 +4,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { LOGIN } from '../graphQl';
 import { isLoggedInVar } from '../cache';
 
-const LoginForm = () => {
+interface LoginFormProps{
+  closeForm: ()=>void
+}
+
+const LoginForm = ({closeForm = () => {} }: LoginFormProps) => {
   type FormValues = {
     nickname: string;
     password: string;
@@ -23,6 +27,7 @@ const LoginForm = () => {
     localStorage.setItem('token', result.data.login as string);
     isLoggedInVar(true);
     client.resetStore();
+    closeForm()
     // window.location.reload();
   };
 
@@ -30,13 +35,11 @@ const LoginForm = () => {
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         size="small"
-        sx={{ input: {color:'white'}}}
         defaultValue="testuser"
         {...register('nickname', { required: true })}
       />
       <TextField
         size="small"
-        sx={{ input: {color:'white'}}}
         defaultValue="pwd"
         {...register('password', { required: true })}
       />
