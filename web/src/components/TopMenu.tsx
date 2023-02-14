@@ -54,7 +54,7 @@ const TopMenu = (props: WelcomeProps) => {
                 Login
               </Button>)}
             
-            {isLoggedIn && (
+            {!isLoggedIn && (
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Login</DialogTitle>
                 <DialogContent>
