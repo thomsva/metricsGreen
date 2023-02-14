@@ -13,7 +13,6 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { Context } from '..';
-import { GraphQLError } from 'graphql';
 
 @Resolver()
 export class UserResolver {
@@ -22,7 +21,7 @@ export class UserResolver {
     return await User.find();
   }
 
-  @Query(() => User)
+  @Query(() => User, { nullable: true })
   async me(@Ctx() context: Context): Promise<User | null> {
     const auth = context.req.headers.authorization
       ? context.req.headers.authorization
@@ -42,7 +41,8 @@ export class UserResolver {
       }
     }
     console.log('nothing to return');
-    throw new GraphQLError('Current user error. No valid token supplied');
+    // throw new GraphQLError('Current user error. No valid token supplied');
+    return null;
   }
 
   @Mutation(() => User)
