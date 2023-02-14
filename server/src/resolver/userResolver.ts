@@ -13,6 +13,7 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { Context } from '..';
+import { GraphQLError } from 'graphql';
 
 @Resolver()
 export class UserResolver {
@@ -23,8 +24,12 @@ export class UserResolver {
 
   @Query(() => User)
   async me(@Ctx() context: Context): Promise<User | null> {
-    const token = context.req.headers.authorization as string;
-    if (token !== undefined) {
+    const auth = context.req.headers.authorization
+      ? context.req.headers.authorization
+      : false;
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const token = auth.substring(7);
+
       const tokenUser = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
       console.log('tokenUser: ', tokenUser.user);
       try {
@@ -36,7 +41,8 @@ export class UserResolver {
         return null;
       }
     }
-    return null;
+    console.log('nothing to return');
+    throw new GraphQLError('Current user error. No valid token supplied');
   }
 
   @Mutation(() => User)
@@ -80,9 +86,7 @@ export class UserResolver {
     @Arg('nickname') nickname: string,
     @Arg('password') password: string
   ): Promise<string | null> {
-    console.log('nickname ', nickname);
     const user = await User.findOneBy({ nickname });
-    console.log('user ', user);
     if (user) {
       if (user.password === password) {
         const token = jwt.sign({ user }, 'SECRET');

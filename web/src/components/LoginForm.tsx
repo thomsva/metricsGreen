@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { LOGIN } from '../graphQl';
+import { isLoggedInVar } from '../cache';
 
 const LoginForm = () => {
   type FormValues = {
@@ -15,13 +16,14 @@ const LoginForm = () => {
     formState: { errors }
   } = useForm<FormValues>();
 
-  const [login] = useMutation(LOGIN);
+  const [login, { client }] = useMutation(LOGIN);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const result = await login({ variables: data });
-    console.log('result is: ', result);
     localStorage.setItem('token', result.data.login as string);
-    window.location.reload();
+    isLoggedInVar(true);
+    client.resetStore();
+    // window.location.reload();
   };
 
   return (
@@ -42,7 +44,7 @@ const LoginForm = () => {
           <Alert severity="error">Password field is required</Alert>
         )}
         <Button variant="contained" type="submit">
-          Submit
+          Login
         </Button>
       </form>
     </Box>
