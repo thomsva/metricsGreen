@@ -30,11 +30,13 @@ const LoginForm = () => {
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         size="small"
+        sx={{ input: {color:'white'}}}
         defaultValue="testuser"
         {...register('nickname', { required: true })}
       />
       <TextField
         size="small"
+        sx={{ input: {color:'white'}}}
         defaultValue="pwd"
         {...register('password', { required: true })}
       />
