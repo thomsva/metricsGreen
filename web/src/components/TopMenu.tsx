@@ -27,13 +27,11 @@ const TopMenu = (props: WelcomeProps) => {
   const { client, loading, data } = useQuery(ME_QUERY);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
-  const [open, setOpen] = useState(false);
-
+  const [open, setOpen] = useState(false); // For opening login form
   const handleClickOpen = () => {
     // Open login form
     setOpen(true);
   };
-
   const handleClose = () => {
     // Hide login form
     setOpen(false);
@@ -42,6 +40,7 @@ const TopMenu = (props: WelcomeProps) => {
   const logout = async () => {
     isLoggedInVar(false);
     localStorage.clear();
+    setOpen(false);
     try {
       await client.resetStore();
     } catch (e) {
@@ -68,27 +67,10 @@ const TopMenu = (props: WelcomeProps) => {
                 Login
               </Button>
             )}
-
-            {!isLoggedIn && (
-              <Dialog open={open} onClose={handleClose}>
-                <DialogActions>
-                  <IconButton onClick={handleClose}>
-                    <CloseIcon />
-                  </IconButton>
-                </DialogActions>
-                <DialogTitle>Login </DialogTitle>
-
-                <DialogContent>
-                  <DialogContentText>
-                    Provide username and password to log in.
-                  </DialogContentText>
-                  <LoginForm />
-                </DialogContent>
-              </Dialog>
-            )}
           </Box>
         </Toolbar>
-      </AppBar>{' '}
+      </AppBar>
+
       <Box>
         {isLoggedIn ? (
           <Alert severity="success">logid in</Alert>
@@ -96,6 +78,25 @@ const TopMenu = (props: WelcomeProps) => {
           <Alert severity="error">not logid in</Alert>
         )}
       </Box>
+
+      {/* Below is the dialog for login form. */}
+      {!isLoggedIn && (
+        <Dialog open={open} onClose={handleClose}>
+          <DialogActions>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </DialogActions>
+          <DialogTitle>Login </DialogTitle>
+
+          <DialogContent>
+            <DialogContentText>
+              Provide username and password to log in.
+            </DialogContentText>
+            <LoginForm />
+          </DialogContent>
+        </Dialog>
+      )}
     </Box>
   );
 };
