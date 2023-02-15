@@ -10,8 +10,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  IconButton
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { isLoggedInVar } from '../cache';
 import { ME_QUERY } from '../graphQl';
@@ -69,16 +71,19 @@ const TopMenu = (props: WelcomeProps) => {
 
             {!isLoggedIn && (
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Login</DialogTitle>
+                <DialogActions>
+                  <IconButton onClick={handleClose}>
+                    <CloseIcon />
+                  </IconButton>
+                </DialogActions>
+                <DialogTitle>Login </DialogTitle>
+
                 <DialogContent>
                   <DialogContentText>
                     Provide username and password to log in.
                   </DialogContentText>
                   <LoginForm />
                 </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Close</Button>
-                </DialogActions>
               </Dialog>
             )}
           </Box>
