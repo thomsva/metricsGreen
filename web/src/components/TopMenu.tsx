@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { isLoggedInVar } from '../cache';
 import { ME_QUERY } from '../graphQl';
 import LoginForm from './LoginForm';
+import SignUpForm from './SignUpForm';
 
 interface WelcomeProps {
   name: string;
@@ -59,13 +60,18 @@ const TopMenu = (props: WelcomeProps) => {
           <Box>
             {isLoggedIn && (
               <Button color="inherit" onClick={() => logout()}>
-                Logout
+                Log out
               </Button>
             )}
             {!isLoggedIn && (
-              <Button color="inherit" onClick={handleClickOpen}>
-                Login
-              </Button>
+              <Box>
+                <Button color="inherit" onClick={handleClickOpen}>
+                  Sign up
+                </Button>
+                <Button color="inherit" onClick={handleClickOpen}>
+                  Log in
+                </Button>
+              </Box>
             )}
           </Box>
         </Toolbar>
@@ -87,13 +93,28 @@ const TopMenu = (props: WelcomeProps) => {
               <CloseIcon />
             </IconButton>
           </DialogActions>
-          <DialogTitle>Login </DialogTitle>
-
+          <DialogTitle>Log in </DialogTitle>
           <DialogContent>
             <DialogContentText>
               Provide username and password to log in.
             </DialogContentText>
             <LoginForm />
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Below is the dialog for sign up form. */}
+      {!isLoggedIn && (
+        <Dialog open={open} onClose={handleClose}>
+          <DialogActions>
+            <IconButton onClick={handleClose}>
+              <CloseIcon />
+            </IconButton>
+          </DialogActions>
+          <DialogTitle>Sign up </DialogTitle>
+          <DialogContent>
+            <DialogContentText>Register as a new user.</DialogContentText>
+            <SignUpForm />
           </DialogContent>
         </Dialog>
       )}

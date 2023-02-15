@@ -1,13 +1,15 @@
 import { useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { LOGIN } from '../graphQl';
+import { REGISTER } from '../graphQl';
 import { isLoggedInVar } from '../cache';
 
-const LoginForm = () => {
+const SignUpForm = () => {
   type FormValues = {
     nickname: string;
+    email: string;
     password: string;
+    passwordRepeat: string;
   };
 
   const {
@@ -16,13 +18,26 @@ const LoginForm = () => {
     formState: { errors }
   } = useForm<FormValues>();
 
-  const [login, { client }] = useMutation(LOGIN);
+  const [signup, error] = useMutation(REGISTER);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const result = await login({ variables: data });
-    localStorage.setItem('token', result.data.login as string);
-    isLoggedInVar(true);
-    client.resetStore();
+    try {
+      const result = await signup({
+        variables: {
+          data: {
+            nickname: data.nickname,
+            email: data.email,
+            password: data.password
+          }
+        }
+      });
+      console.log('New user:', result);
+    } catch (e) {
+      console.error(e);
+    }
+    // localStorage.setItem('token', result.data.login as string);
+    // isLoggedInVar(true);
+    // client.resetStore();
     // window.location.reload();
   };
 
@@ -30,7 +45,6 @@ const LoginForm = () => {
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         size="small"
-        defaultValue="testuser"
         label="User name"
         fullWidth
         margin="dense"
@@ -38,11 +52,24 @@ const LoginForm = () => {
       />
       <TextField
         size="small"
-        defaultValue="pwd"
-        label="Password"
+        label="E-mail address"
+        fullWidth
+        margin="dense"
+        {...register('email', { required: true })}
+      />
+      <TextField
+        size="small"
+        label="Select a password"
         fullWidth
         margin="dense"
         {...register('password', { required: true })}
+      />
+      <TextField
+        size="small"
+        label="Repeat password"
+        fullWidth
+        margin="dense"
+        {...register('passwordRepeat', { required: true })}
       />
       {errors.nickname && (
         <Alert severity="error">Name field is required</Alert>
@@ -52,11 +79,11 @@ const LoginForm = () => {
       )}
       <Box display="flex" justifyContent="flex-end" mt={5}>
         <Button variant="contained" type="submit">
-          Login
+          Submit
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default LoginForm;
+export default SignUpForm;
