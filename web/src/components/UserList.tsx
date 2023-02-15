@@ -35,7 +35,9 @@ const UserList = () => {
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell align="right">Nickname</TableCell>
+                <TableCell>Nickname</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Role</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -48,7 +50,9 @@ const UserList = () => {
                     <TableCell component="th" scope="row">
                       {u.id}
                     </TableCell>
-                    <TableCell align="right">{u.nickname}</TableCell>
+                    <TableCell>{u.nickname}</TableCell>
+                    <TableCell>{u.email}</TableCell>
+                    <TableCell>{u.role}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>

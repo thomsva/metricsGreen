@@ -5,6 +5,19 @@ const palette = {
   secondary: { main: '#f50057' }
 };
 
-const theme = createTheme({ palette });
+const components = {
+  MuiTableHead: {
+    styleOverrides: {
+      root: {
+        backgroundColor: '#F5F5F5'
+      }
+    }
+  }
+};
+
+const theme = createTheme({
+  palette,
+  components
+});
 
 export default theme;
