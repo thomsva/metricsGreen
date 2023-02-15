@@ -1,5 +1,17 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
-import { Box, AppBar, Toolbar, Typography, Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@mui/material';
 import { useState } from 'react';
 import { isLoggedInVar } from '../cache';
 import { ME_QUERY } from '../graphQl';
@@ -52,8 +64,9 @@ const TopMenu = (props: WelcomeProps) => {
             {!isLoggedIn && (
               <Button color="inherit" onClick={handleClickOpen}>
                 Login
-              </Button>)}
-            
+              </Button>
+            )}
+
             {!isLoggedIn && (
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Login</DialogTitle>
@@ -65,12 +78,9 @@ const TopMenu = (props: WelcomeProps) => {
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose}>Close</Button>
-                  
                 </DialogActions>
               </Dialog>
             )}
-              
-      
           </Box>
         </Toolbar>
       </AppBar>{' '}
