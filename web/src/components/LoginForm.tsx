@@ -1,5 +1,12 @@
 import { useMutation } from '@apollo/client';
-import { Alert, Box, Button, TextField } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  DialogActions,
+  Grid,
+  TextField
+} from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { LOGIN } from '../graphQl';
 import { isLoggedInVar } from '../cache';
@@ -31,11 +38,17 @@ const LoginForm = () => {
       <TextField
         size="small"
         defaultValue="testuser"
+        label="User name"
+        fullWidth
+        margin="dense"
         {...register('nickname', { required: true })}
       />
       <TextField
         size="small"
         defaultValue="pwd"
+        label="Password"
+        fullWidth
+        margin="dense"
         {...register('password', { required: true })}
       />
       {errors.nickname && (
@@ -44,9 +57,11 @@ const LoginForm = () => {
       {errors.password && (
         <Alert severity="error">Password field is required</Alert>
       )}
-      <Button variant="contained" type="submit">
-        Login
-      </Button>
+      <Box display="flex" justifyContent="flex-end" mt={5}>
+        <Button variant="contained" type="submit">
+          Login
+        </Button>
+      </Box>
     </Box>
   );
 };
