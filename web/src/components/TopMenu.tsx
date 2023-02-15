@@ -28,20 +28,13 @@ const TopMenu = (props: WelcomeProps) => {
   const { client, loading, data } = useQuery(ME_QUERY);
   const isLoggedIn = useReactiveVar(isLoggedInVar);
 
-  const [open, setOpen] = useState(false); // For opening login form
-  const handleClickOpen = () => {
-    // Open login form
-    setOpen(true);
-  };
-  const handleClose = () => {
-    // Hide login form
-    setOpen(false);
-  };
+  const [openLogin, setOpenLogin] = useState(false); // For opening login form
+  const [openSignUp, setOpenSignUp] = useState(false); // For opening signup form
 
   const logout = async () => {
     isLoggedInVar(false);
     localStorage.clear();
-    setOpen(false);
+    setOpenLogin(false);
     try {
       await client.resetStore();
     } catch (e) {
@@ -65,10 +58,10 @@ const TopMenu = (props: WelcomeProps) => {
             )}
             {!isLoggedIn && (
               <Box>
-                <Button color="inherit" onClick={handleClickOpen}>
+                <Button color="inherit" onClick={() => setOpenSignUp(true)}>
                   Sign up
                 </Button>
-                <Button color="inherit" onClick={handleClickOpen}>
+                <Button color="inherit" onClick={() => setOpenLogin(true)}>
                   Log in
                 </Button>
               </Box>
@@ -87,9 +80,9 @@ const TopMenu = (props: WelcomeProps) => {
 
       {/* Below is the dialog for login form. */}
       {!isLoggedIn && (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={openLogin} onClose={() => setOpenLogin(false)}>
           <DialogActions>
-            <IconButton onClick={handleClose}>
+            <IconButton onClick={() => setOpenLogin(false)}>
               <CloseIcon />
             </IconButton>
           </DialogActions>
@@ -105,9 +98,9 @@ const TopMenu = (props: WelcomeProps) => {
 
       {/* Below is the dialog for sign up form. */}
       {!isLoggedIn && (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={openSignUp} onClose={() => setOpenSignUp(false)}>
           <DialogActions>
-            <IconButton onClick={handleClose}>
+            <IconButton onClick={() => setOpenSignUp(false)}>
               <CloseIcon />
             </IconButton>
           </DialogActions>

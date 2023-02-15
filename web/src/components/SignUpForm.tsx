@@ -35,10 +35,6 @@ const SignUpForm = () => {
     } catch (e) {
       console.error(e);
     }
-    // localStorage.setItem('token', result.data.login as string);
-    // isLoggedInVar(true);
-    // client.resetStore();
-    // window.location.reload();
   };
 
   return (
