@@ -11,7 +11,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton
+  IconButton,
+  Link
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
@@ -19,15 +20,19 @@ import { isLoggedInVar } from '../cache';
 import { ME_QUERY } from '../graphQl';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface WelcomeProps {
   name: string;
 }
 
+const pages = ['Sensors', 'Users', 'Register'];
+const settings = ['Account', 'Logout'];
+
 const TopMenu = (props: WelcomeProps) => {
   const { client, loading, data } = useQuery(ME_QUERY);
-  const isLoggedIn = useReactiveVar(isLoggedInVar);
 
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
   const [openLogin, setOpenLogin] = useState(false); // For opening login form
   const [openSignUp, setOpenSignUp] = useState(false); // For opening signup form
 
@@ -47,8 +52,31 @@ const TopMenu = (props: WelcomeProps) => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            {loading ? 'Loading...' : loading}
-            Hello {data?.me ? data?.me.nickname : props.name}!
+            <Link
+              component={RouterLink}
+              sx={{ textDecoration: 'inherit' }}
+              color="inherit"
+              to="/"
+            >
+              {loading ? 'Loading...' : loading}
+              Hello {data?.me ? data?.me.nickname : props.name}!
+            </Link>
+            <Link
+              component={RouterLink}
+              sx={{ textDecoration: 'inherit', pl: 2 }}
+              color="inherit"
+              to="/userlist"
+            >
+              Users
+            </Link>
+            <Link
+              component={RouterLink}
+              sx={{ textDecoration: 'inherit', pl: 2 }}
+              color="inherit"
+              to="/register"
+            >
+              Register
+            </Link>
           </Typography>
           <Box>
             {isLoggedIn && (
