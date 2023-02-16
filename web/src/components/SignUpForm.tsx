@@ -1,9 +1,18 @@
 import { useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
-import zIndex from '@mui/material/styles/zIndex';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { REGISTER } from '../graphQl';
+
+const schema = yup
+  .object({
+    nickname: yup.string().min(3, 'must be at least 3 characters long'),
+    email: yup.string().required().email('must be a valid email'),
+    password: yup.string().required()
+  })
+  .required();
 
 const SignUpForm = () => {
   type FormValues = {
@@ -13,39 +22,42 @@ const SignUpForm = () => {
     passwordRepeat: string;
   };
 
-  type formError = {
-    field: string;
-    errorMessages: string;
+  type serverFieldError = {
+    // Fields to be extracted from GraphQl validation error from server
+    nickname?: string;
+    email?: string;
+    password?: string;
   };
 
-  const [formErrors, setFormErrors] = useState<formError[]>([]);
-
+  const [serverFieldErrors, setServerFieldErrors] = useState<serverFieldError>(
+    {}
+  );
   const [signup, { data, loading, error }] = useMutation(REGISTER, {
     onError: (e) => {
       // Extract new errors from graphQL error and update state
-      const newErrors =
-        e.graphQLErrors[0].extensions.exception.validationErrors.map(
-          (valError: { property: string; constraints: string[] }) => {
-            return {
-              field: valError.property,
-              errorMessages: Object.values(valError.constraints)
-                .map((m) => m)
-                .join(' | ')
-            };
-          }
-        );
-      setFormErrors(newErrors);
+      let newErrors = {};
+      e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
+        (valError: { property: string; constraints: string[] }) =>
+          (newErrors = {
+            ...newErrors,
+            [valError.property]: Object.values(valError.constraints)
+              .map((m) => m)
+              .join(' | ')
+          })
+      );
+      setServerFieldErrors(newErrors);
+      console.log('<>', newErrors);
     }
   });
 
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm<FormValues>();
+    formState: { errors: formFieldErrors }
+  } = useForm<FormValues>({ resolver: yupResolver(schema) });
 
   const onSubmit = async (formData: FormValues) => {
-    setFormErrors([]);
+    setServerFieldErrors({});
     try {
       const result = await signup({
         variables: {
@@ -66,7 +78,7 @@ const SignUpForm = () => {
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       {error && (
         <Alert severity="error">
-          Error:{formErrors.length}
+          Error:
           {
             error.graphQLErrors[0].extensions.exception.validationErrors[0]
               .property
@@ -74,53 +86,44 @@ const SignUpForm = () => {
         </Alert>
       )}
 
-      {/* {formErrors &&
-        formErrors.map((x) => (
-          <Alert key={x.field} severity="error">
-            {x.field}
-            {': '}
-            {x.errorMessages}
-          </Alert>
-        ))} */}
+      {serverFieldErrors && (
+        <Alert severity="warning">
+          {'email' in serverFieldErrors ? 'email' : 'nope'}
+        </Alert>
+      )}
 
       <TextField
         label="User name"
-        error={formErrors.some((e) => e.field === 'nickname')}
+        error={'nickname' in serverFieldErrors || 'nickname' in formFieldErrors}
         size="small"
         fullWidth
         margin="dense"
         helperText={
-          formErrors.some((e) => e.field === 'nickname')
-            ? formErrors.filter((e) => e.field === 'nickname')[0].errorMessages
-            : false
+          ('nickname' in serverFieldErrors ? serverFieldErrors.nickname : '') +
+          (formFieldErrors.nickname
+            ? formFieldErrors.nickname.message || ''
+            : '')
         }
-        {...register('nickname', { required: true })}
       />
       <TextField
         label="E-mail address"
-        error={formErrors.some((e) => e.field === 'email')}
+        error={'email' in serverFieldErrors || 'email' in formFieldErrors}
         size="small"
         fullWidth
         margin="dense"
-        helperText={
-          formErrors.some((e) => e.field === 'email')
-            ? formErrors.filter((e) => e.field === 'email')[0].errorMessages
-            : false
-        }
-        {...register('email', { required: true })}
+        helperText={'email' in serverFieldErrors ? serverFieldErrors.email : ''}
+        {...register('email', { required: 'Email is required' })}
       />
       <TextField
         label="Select a password"
-        error={formErrors.some((e) => e.field === 'password')}
+        error={'password' in serverFieldErrors}
         size="small"
         fullWidth
         margin="dense"
         helperText={
-          formErrors.some((e) => e.field === 'password')
-            ? formErrors.filter((e) => e.field === 'password')[0].errorMessages
-            : false
+          'password' in serverFieldErrors ? serverFieldErrors.password : ''
         }
-        {...register('password', { required: true })}
+        {...register('password', { required: 'Password is reqiored' })}
       />
       <TextField
         size="small"
@@ -130,11 +133,11 @@ const SignUpForm = () => {
         {...register('passwordRepeat', { required: true })}
       />
 
-      {errors.nickname && (
-        <Alert severity="error">Name field is required</Alert>
+      {formFieldErrors.nickname && (
+        <Alert severity="error">{formFieldErrors.nickname.message}</Alert>
       )}
-      {errors.password && (
-        <Alert severity="error">Password field is required</Alert>
+      {formFieldErrors.email && (
+        <Alert severity="error">Email field is required</Alert>
       )}
       <Box display="flex" justifyContent="flex-end" mt={5}>
         <Button variant="contained" type="submit">
