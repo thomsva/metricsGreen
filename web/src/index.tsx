@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import {
   ApolloClient,
   ApolloProvider,
@@ -13,6 +14,7 @@ import { ThemeProvider } from '@mui/material';
 import theme from './theme';
 import UserList from './components/UserList';
 import TopMenu from './components/TopMenu';
+import SignUpForm from './components/SignUpForm';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql'
@@ -44,8 +46,17 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <TopMenu name="world" />
-        <UserList />
+        <Router>
+          <TopMenu name="world" />
+          <div>
+            <Link to="/userlist">userlist</Link>
+            <Link to="/register">register</Link>
+          </div>
+          <Routes>
+            <Route path="/userlist" element={<UserList />} />
+            <Route path="/register" element={<SignUpForm />} />
+          </Routes>
+        </Router>
       </ThemeProvider>
     </ApolloProvider>
   </React.StrictMode>,
