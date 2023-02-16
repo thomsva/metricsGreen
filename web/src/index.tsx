@@ -48,10 +48,6 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <Router>
           <TopMenu name="world" />
-          <div>
-            <Link to="/userlist">userlist</Link>
-            <Link to="/register">register</Link>
-          </div>
           <Routes>
             <Route path="/userlist" element={<UserList />} />
             <Route path="/register" element={<SignUpForm />} />
