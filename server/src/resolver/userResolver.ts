@@ -21,6 +21,37 @@ export class UserResolver {
     return await User.find();
   }
 
+  @Mutation(() => User)
+  async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
+    console.log('new user data', newUserData);
+    const errors = await validate(newUserData);
+    if (errors.length > 0) {
+      throw new Error(`Validation failed!`);
+    } else {
+      const user = AppDataSource.getRepository(User).create(newUserData);
+      const results = await AppDataSource.getRepository(User).save(user);
+      console.log('the new user: ', user);
+      return results;
+    }
+  }
+
+  @Mutation(() => String)
+  async login(
+    @Arg('nickname') nickname: string,
+    @Arg('password') password: string
+  ): Promise<string | null> {
+    const user = await User.findOneBy({ nickname });
+    if (user) {
+      if (user.password === password) {
+        const token = jwt.sign({ user }, 'SECRET');
+        console.log('Login ok. Token = ', token);
+        return token;
+      }
+    }
+    console.log('Failed login attempt');
+    return null;
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() context: Context): Promise<User | null> {
     const auth = context.req.headers.authorization
@@ -44,21 +75,6 @@ export class UserResolver {
     // throw new GraphQLError('Current user error. No valid token supplied');
     return null;
   }
-
-  @Mutation(() => User)
-  async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
-    console.log(newUserData);
-    const errors = await validate(newUserData);
-    if (errors.length > 0) {
-      throw new Error(`Validation failed!`);
-    } else {
-      const user = AppDataSource.getRepository(User).create(newUserData);
-      const results = await AppDataSource.getRepository(User).save(user);
-      console.log('the new user: ', user);
-      return results;
-    }
-  }
-
   @Mutation(() => User, { nullable: true })
   async updateUser(
     @Arg('data') editUserData: editUserInput
@@ -79,23 +95,6 @@ export class UserResolver {
   async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
     await User.delete({ id: id });
     return true;
-  }
-
-  @Mutation(() => String)
-  async login(
-    @Arg('nickname') nickname: string,
-    @Arg('password') password: string
-  ): Promise<string | null> {
-    const user = await User.findOneBy({ nickname });
-    if (user) {
-      if (user.password === password) {
-        const token = jwt.sign({ user }, 'SECRET');
-        console.log('Login ok. Token = ', token);
-        return token;
-      }
-    }
-    console.log('Failed login attempt');
-    return null;
   }
 }
 

@@ -1,15 +1,19 @@
+import { IsString } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 import User from '../entity/User';
 
 @InputType({ description: 'Data for new user' })
 export class NewUserInput implements Partial<User> {
   @Field()
+  @IsString()
   nickname!: string;
 
   @Field()
+  @IsString()
   email!: string;
 
   @Field()
+  @IsString()
   password!: string;
 }
 
