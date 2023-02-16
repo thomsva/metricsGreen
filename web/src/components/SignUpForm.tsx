@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { REGISTER } from '../graphQl';
-import { isLoggedInVar } from '../cache';
 
 const SignUpForm = () => {
   type FormValues = {
@@ -18,7 +17,7 @@ const SignUpForm = () => {
     formState: { errors }
   } = useForm<FormValues>();
 
-  const [signup, error] = useMutation(REGISTER);
+  const [signup] = useMutation(REGISTER);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
