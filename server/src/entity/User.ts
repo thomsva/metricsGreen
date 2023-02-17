@@ -9,11 +9,11 @@ export default class User extends BaseEntity {
   readonly id!: number;
 
   @Field()
-  @Column()
+  @Column({ unique: true })
   nickname!: string;
 
   @Field()
-  @Column()
+  @Column({ unique: true })
   email!: string;
 
   @Field()

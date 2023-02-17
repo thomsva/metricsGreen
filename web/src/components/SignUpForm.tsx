@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { REGISTER } from '../graphQl';
@@ -12,7 +12,9 @@ const schema = yup
     nickname: yup.string().required().min(3),
     email: yup.string().required().email(),
     password: yup.string().required(),
-    passwordRepeat: yup.string().required()
+    passwordRepeat: yup
+      .string()
+      .oneOf([yup.ref('password'), ''], 'Passwords must match')
   })
   .required();
 
@@ -32,16 +34,31 @@ const SignUpForm = () => {
   const [signup, { data, loading, error }] = useMutation(REGISTER, {
     onError: (e) => {
       // Extract new errors from graphQL error and update state
+
       let newErrors = {};
-      e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
-        (valError: { property: string; constraints: string[] }) =>
-          (newErrors = {
-            ...newErrors,
-            [valError.property]: Object.values(valError.constraints)
-              .map((m) => m)
-              .join(' | ')
-          })
-      );
+      if (e.message.includes('Argument Validation Error')) {
+        e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
+          (valError: { property: string; constraints: string[] }) =>
+            (newErrors = {
+              ...newErrors,
+              [valError.property]: Object.values(valError.constraints)
+                .map((m) => m)
+                .join(' | ')
+            })
+        );
+      }
+      if (e.message.includes('duplicate key value')) {
+        const str = e.graphQLErrors[0].extensions.exception.detail;
+        if (str.includes('nickname')) {
+          newErrors = { nickname: 'nickname is already taken' };
+          console.log('1');
+        }
+        if (str.includes('email')) {
+          newErrors = { email: 'email is already taken' };
+          console.log('11');
+        }
+      }
+
       setServerFieldErrors(newErrors);
       console.log('<>', newErrors);
     }
@@ -51,14 +68,16 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { errors: formFieldErrors }
-  } = useForm<FormValues>({ resolver: yupResolver(schema) });
-
-  //  const onSubmit: SubmitHandler<FormValues> = async (formData: FormValues) => {
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema),
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit'
+  });
 
   const onSubmit = async (formData: FormValues) => {
     setServerFieldErrors({});
     try {
-      const result = await signup({
+      await signup({
         variables: {
           data: {
             nickname: formData.nickname,
@@ -67,27 +86,21 @@ const SignUpForm = () => {
           }
         }
       });
-      console.log('Result from server', result);
     } catch (e) {
       console.error('error cought', e);
+      console.error('error:', error?.graphQLErrors[0]);
+      console.log('data: ', data);
     }
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      {error && (
-        <Alert severity="error">
-          Error:
-          {
-            error.graphQLErrors[0].extensions.exception.validationErrors[0]
-              .property
-          }
-        </Alert>
-      )}
-
-      {serverFieldErrors && (
+      {(Object.keys(formFieldErrors).length != 0 ||
+        Object.keys(serverFieldErrors).length != 0) && (
         <Alert severity="warning">
-          {'email' in serverFieldErrors ? 'email' : 'nope'}
+          The form data was not saved. Please fix errors on the form and
+          resubmit. Form errors: {Object.keys(formFieldErrors).length}
+          Server errors: {Object.keys(serverFieldErrors).length}
         </Alert>
       )}
 
@@ -120,37 +133,40 @@ const SignUpForm = () => {
       <TextField
         {...register('password')}
         label="Select a password"
-        error={'password' in serverFieldErrors}
+        error={'password' in serverFieldErrors || 'password' in formFieldErrors}
         size="small"
         fullWidth
         margin="dense"
         helperText={
-          'password' in serverFieldErrors ? serverFieldErrors.password : ''
+          ('password' in serverFieldErrors ? serverFieldErrors.password : '') +
+          (formFieldErrors.password
+            ? formFieldErrors.password.message || ''
+            : '')
         }
       />
       <TextField
         {...register('passwordRepeat')}
         size="small"
         label="Repeat password"
+        error={
+          'passwordRepeat' in serverFieldErrors ||
+          'passwordRepeat' in formFieldErrors
+        }
         fullWidth
         margin="dense"
+        helperText={
+          formFieldErrors.passwordRepeat
+            ? formFieldErrors.passwordRepeat.message || ''
+            : ''
+        }
       />
 
-      {formFieldErrors.nickname && (
-        <Alert severity="error">{formFieldErrors.nickname.message}</Alert>
-      )}
-      {formFieldErrors.email && (
-        <Alert severity="error">{formFieldErrors.email.message}</Alert>
-      )}
-      {formFieldErrors.password && (
-        <Alert severity="error">{formFieldErrors.password.message}</Alert>
-      )}
-      {formFieldErrors.passwordRepeat && (
-        <Alert severity="error">{formFieldErrors.passwordRepeat.message}</Alert>
-      )}
-
       <Box display="flex" justifyContent="flex-end" mt={5}>
-        <Button variant="contained" type="submit">
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={() => setServerFieldErrors({})}
+        >
           Submit
         </Button>
       </Box>
