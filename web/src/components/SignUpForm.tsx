@@ -3,25 +3,22 @@ import { Alert, Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+
 import { REGISTER } from '../graphQl';
+import * as yup from 'yup';
 
 const schema = yup
   .object({
-    nickname: yup.string().min(3, 'must be at least 3 characters long'),
-    email: yup.string().required().email('must be a valid email'),
-    password: yup.string().required()
+    nickname: yup.string().required().min(3),
+    email: yup.string().required().email(),
+    password: yup.string().required(),
+    passwordRepeat: yup.string().required()
   })
   .required();
 
-const SignUpForm = () => {
-  type FormValues = {
-    nickname: string;
-    email: string;
-    password: string;
-    passwordRepeat: string;
-  };
+type FormValues = yup.InferType<typeof schema>;
 
+const SignUpForm = () => {
   type serverFieldError = {
     // Fields to be extracted from GraphQl validation error from server
     nickname?: string;
@@ -55,6 +52,8 @@ const SignUpForm = () => {
     handleSubmit,
     formState: { errors: formFieldErrors }
   } = useForm<FormValues>({ resolver: yupResolver(schema) });
+
+  //  const onSubmit: SubmitHandler<FormValues> = async (formData: FormValues) => {
 
   const onSubmit = async (formData: FormValues) => {
     setServerFieldErrors({});
@@ -93,6 +92,7 @@ const SignUpForm = () => {
       )}
 
       <TextField
+        {...register('nickname')}
         label="User name"
         error={'nickname' in serverFieldErrors || 'nickname' in formFieldErrors}
         size="small"
@@ -106,15 +106,19 @@ const SignUpForm = () => {
         }
       />
       <TextField
+        {...register('email')}
         label="E-mail address"
         error={'email' in serverFieldErrors || 'email' in formFieldErrors}
         size="small"
         fullWidth
         margin="dense"
-        helperText={'email' in serverFieldErrors ? serverFieldErrors.email : ''}
-        {...register('email', { required: 'Email is required' })}
+        helperText={
+          ('email' in serverFieldErrors ? serverFieldErrors.email : '') +
+          (formFieldErrors.email ? formFieldErrors.email.message || '' : '')
+        }
       />
       <TextField
+        {...register('password')}
         label="Select a password"
         error={'password' in serverFieldErrors}
         size="small"
@@ -123,22 +127,28 @@ const SignUpForm = () => {
         helperText={
           'password' in serverFieldErrors ? serverFieldErrors.password : ''
         }
-        {...register('password', { required: 'Password is reqiored' })}
       />
       <TextField
+        {...register('passwordRepeat')}
         size="small"
         label="Repeat password"
         fullWidth
         margin="dense"
-        {...register('passwordRepeat', { required: true })}
       />
 
       {formFieldErrors.nickname && (
         <Alert severity="error">{formFieldErrors.nickname.message}</Alert>
       )}
       {formFieldErrors.email && (
-        <Alert severity="error">Email field is required</Alert>
+        <Alert severity="error">{formFieldErrors.email.message}</Alert>
       )}
+      {formFieldErrors.password && (
+        <Alert severity="error">{formFieldErrors.password.message}</Alert>
+      )}
+      {formFieldErrors.passwordRepeat && (
+        <Alert severity="error">{formFieldErrors.passwordRepeat.message}</Alert>
+      )}
+
       <Box display="flex" justifyContent="flex-end" mt={5}>
         <Button variant="contained" type="submit">
           Submit
