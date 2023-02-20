@@ -1,8 +1,9 @@
-name: CI/CD pipeline
+name: CI/CD pipeline web
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'web/**'
+      - '.github/**'
 jobs:
   build-and-publish:
     runs-on: ubuntu-20.04
