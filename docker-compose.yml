@@ -20,7 +20,9 @@ services:
       - 5432:5432
 
   web:
-    build: ./web
+    build: 
+      context: ./web
+      dockerfile: dev.Dockerfile
     ports:
       - 3000:3000
     container_name: metricsGreen_web

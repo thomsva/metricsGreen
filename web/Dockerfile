@@ -1,8 +1,7 @@
-FROM node:16.14-alpine3.14
+FROM node:16.14-alpine as build-stage
 COPY ./ /usr/src/web
 WORKDIR /usr/src/web
-EXPOSE 3000
+RUN npm ci  && npm run build
 
-# Checks if node_modules exist
-# If not, install before starting
-CMD [ -d "node_modules" ] && npm start || npm ci && npm start
+FROM nginx:1.23.3-alpine-slim
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
