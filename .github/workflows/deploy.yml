@@ -15,5 +15,5 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       - name: Build and upload
         run: |
-          docker build ./web -t thomsva/metricsgreen-web:prod
+          docker build /web/ -t thomsva/metricsgreen-web:prod
           docker push thomsva/metricsgreen-web:prod
