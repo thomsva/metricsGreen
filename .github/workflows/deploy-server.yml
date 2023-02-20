@@ -1,4 +1,4 @@
-name: CI/CD pipeline web
+name: CI/CD pipeline server
 on:
   push:
     paths:
