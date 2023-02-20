@@ -1,0 +1,19 @@
+name: Deploy to Dockerhub
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and upload
+        run: |
+          docker build . -t thomsva/metricgreen-web:prod
+          docker push thomsva/metricgreen-web:prod
