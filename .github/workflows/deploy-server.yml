@@ -1,0 +1,21 @@
+name: CI/CD pipeline web
+on:
+  push:
+    paths:
+      - 'server/**'
+      - '.github/**'
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and upload
+        working-directory: server
+        run: |
+          docker build . -t thomsva/metricsgreen-server:prod
+          docker push thomsva/metricsgreen-server:prod
