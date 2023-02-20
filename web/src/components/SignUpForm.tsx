@@ -137,6 +137,7 @@ const SignUpForm = () => {
         size="small"
         fullWidth
         margin="dense"
+        type="password"
         helperText={
           ('password' in serverFieldErrors ? serverFieldErrors.password : '') +
           (formFieldErrors.password
@@ -154,6 +155,7 @@ const SignUpForm = () => {
         }
         fullWidth
         margin="dense"
+        type="password"
         helperText={
           formFieldErrors.passwordRepeat
             ? formFieldErrors.passwordRepeat.message || ''
