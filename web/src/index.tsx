@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
   uri:
     process.env.REACT_APP_ENV === 'development'
       ? 'http://localhost:4000/graphql/'
-      : `${process.env.SERVER_URL}/graphql/`
+      : `${process.env.SERVER_URL}:${process.env.SERVER_PORT}/graphql/`
 });
 
 const authLink = setContext((_, { headers }) => {
