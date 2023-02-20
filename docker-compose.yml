@@ -20,9 +20,11 @@ services:
       - 5432:5432
 
   web:
-    build: 
+    build:
       context: ./web
       dockerfile: dev.Dockerfile
+      args:
+        REACT_APP_ENV: development
     ports:
       - 3000:3000
     container_name: metricsGreen_web

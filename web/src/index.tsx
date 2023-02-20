@@ -17,13 +17,11 @@ import TopMenu from './components/TopMenu';
 import SignUpForm from './components/SignUpForm';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000/graphql'
+  uri:
+    process.env.REACT_APP_ENV === 'development'
+      ? 'http://localhost:4000/graphql/'
+      : `${process.env.SERVER_URL}/graphql/`
 });
-
-// uri: 'http://localhost:4000/graphql',
-// headers: {
-//   authorization: localStorage.getItem('token') || ''
-// }
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
