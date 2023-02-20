@@ -20,8 +20,12 @@ const httpLink = createHttpLink({
   uri:
     process.env.REACT_APP_ENV === 'development'
       ? 'http://localhost:4000/graphql/'
-      : `${process.env.SERVER_URL}:${process.env.SERVER_PORT}/graphql/`
+      : `${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_SERVER_PORT}/graphql/`
 });
+
+console.log('url', process.env.REACT_APP_SERVER_URL);
+console.log('port', process.env.REACT_APP_SERVER_PORT);
+console.log('env', process.env.REACT_APP_ENV);
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
