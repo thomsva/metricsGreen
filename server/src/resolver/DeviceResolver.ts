@@ -1,55 +1,55 @@
 import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
 import Device from '../entity/Device';
-import { AddSensorInput, editSensorInput } from '../input/SensorInput';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
+import { AddDeviceInput, editDeviceInput } from '../input/DeviceInput';
 
 @Resolver()
 export class DeviceResolver {
-  @Query(() => [Device], { description: 'Get all the sensors.' })
-  async sensors(): Promise<Device[]> {
+  @Query(() => [Device], { description: 'Get all devices.' })
+  async devices(): Promise<Device[]> {
     return await Device.find();
   }
 
   @Authorized('ADMIN')
   @Query(() => Device)
-  async getSensor(@Arg('id', () => Int) id: number): Promise<Device | null> {
+  async getDevice(@Arg('id', () => Int) id: number): Promise<Device | null> {
     return Device.findOneBy({ id: id });
   }
 
   @Mutation(() => Device)
-  async createSensor(
-    @Arg('data') newSensorData: AddSensorInput
+  async createDevice(
+    @Arg('data') newDeviceData: AddDeviceInput
   ): Promise<Device | null> {
-    const errors = await validate(newSensorData);
+    const errors = await validate(newDeviceData);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);
     } else {
-      const sensor = AppDataSource.getRepository(Device).create(newSensorData);
-      const results = await AppDataSource.getRepository(Device).save(sensor);
+      const device = AppDataSource.getRepository(Device).create(newDeviceData);
+      const results = await AppDataSource.getRepository(Device).save(device);
       return results;
     }
   }
 
   @Mutation(() => Device, { nullable: true })
-  async updateSensor(
-    @Arg('data') editSensorData: editSensorInput
+  async updateDevice(
+    @Arg('data') editDeviceData: editDeviceInput
   ): Promise<Device | null> {
-    if ((await Device.findOneBy({ id: editSensorData.id })) === null)
+    if ((await Device.findOneBy({ id: editDeviceData.id })) === null)
       return null;
 
-    const errors = await validate(editSensorData);
+    const errors = await validate(editDeviceData);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);
     } else {
-      const sensor = AppDataSource.getRepository(Device).create(editSensorData);
-      const results = await AppDataSource.getRepository(Device).save(sensor);
+      const device = AppDataSource.getRepository(Device).create(editDeviceData);
+      const results = await AppDataSource.getRepository(Device).save(device);
       return results;
     }
   }
 
   @Mutation(() => Boolean)
-  async deleteSensor(@Arg('id', () => Int) id: number): Promise<boolean> {
+  async deleteDevice(@Arg('id', () => Int) id: number): Promise<boolean> {
     await Device.delete({ id: id });
     return true;
   }

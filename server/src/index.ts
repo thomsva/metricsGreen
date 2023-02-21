@@ -5,10 +5,10 @@ import { AppDataSource } from './data-source';
 import http from 'http';
 import { HelloResolver } from './resolver/Hello';
 import { buildSchema } from 'type-graphql';
-import { DeviceResolver } from './resolver/DeviceResolver';
 import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
 import { UserResolver } from './resolver/userResolver';
+import { DeviceResolver } from './resolver/DeviceResolver';
 
 const PORT = process.env.PORT || 4000;
 
@@ -26,7 +26,7 @@ const main = async () => {
       await seedDatabase();
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [HelloResolver, DeviceResolver, UserResolver],
+          resolvers: [HelloResolver, UserResolver, DeviceResolver],
           authChecker
         }),
         context: ({ req, res }) => ({ req, res })
