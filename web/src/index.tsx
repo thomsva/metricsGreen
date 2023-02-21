@@ -20,7 +20,7 @@ const httpLink = createHttpLink({
   uri:
     process.env.REACT_APP_ENV === 'development'
       ? 'http://localhost:4000/graphql/'
-      : `${process.env.REACT_APP_SERVER_URL}:${process.env.REACT_APP_SERVER_PORT}/graphql/`
+      : '/graphql/'
 });
 
 console.log('url', process.env.REACT_APP_SERVER_URL);
