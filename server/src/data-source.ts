@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import 'reflect-metadata';
 import User from './entity/User';
-import Sensor from './entity/Sensor';
+import Device from './entity/Device';
 //import UserRole from './entity/UserRole';
 
 export const AppDataSource = new DataSource({
@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   dropSchema: true,
   logging: true,
-  entities: [User, Sensor],
+  entities: [User, Device],
   subscribers: [],
   migrations: ['.src/migration']
 });

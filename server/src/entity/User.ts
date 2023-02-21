@@ -1,5 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import Device from './Device';
 
 @ObjectType()
 @Entity()
@@ -23,4 +24,7 @@ export default class User extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   role?: string;
+
+  @OneToMany(() => Device, (device) => device.user)
+  devices?: Device[]
 }

@@ -5,7 +5,7 @@ import { AppDataSource } from './data-source';
 import http from 'http';
 import { HelloResolver } from './resolver/Hello';
 import { buildSchema } from 'type-graphql';
-import { SensorResolver } from './resolver/SensorResolver';
+import { DeviceResolver } from './resolver/DeviceResolver';
 import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
 import { UserResolver } from './resolver/userResolver';
@@ -26,7 +26,7 @@ const main = async () => {
       await seedDatabase();
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [HelloResolver, SensorResolver, UserResolver],
+          resolvers: [HelloResolver, DeviceResolver, UserResolver],
           authChecker
         }),
         context: ({ req, res }) => ({ req, res })

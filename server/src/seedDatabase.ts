@@ -1,8 +1,8 @@
-import Sensor from './entity/Sensor';
+import Device from './entity/Device';
 import User from './entity/User';
 
 export const seedDatabase = async () => {
-  const sensor: Sensor = Sensor.create({
+  const sensor: Device = Device.create({
     name: 'Sensor 39',
     type: 'NodeMCU 82660',
     description: 'Some text here',

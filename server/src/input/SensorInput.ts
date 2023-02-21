@@ -1,8 +1,8 @@
 import { Field, InputType } from 'type-graphql';
-import Sensor from '../entity/Sensor';
+import Device from '../entity/Device';
 
 @InputType({ description: 'Data for new sensor' })
-export class AddSensorInput implements Partial<Sensor> {
+export class AddSensorInput implements Partial<Device> {
   @Field()
   name!: string;
 
@@ -17,7 +17,7 @@ export class AddSensorInput implements Partial<Sensor> {
 }
 
 @InputType({ description: 'Data for editing sensor' })
-export class editSensorInput implements Partial<Sensor> {
+export class editSensorInput implements Partial<Device> {
   @Field()
   id!: number;
 

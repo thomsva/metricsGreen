@@ -23,8 +23,6 @@ const httpLink = createHttpLink({
       : '/graphql/'
 });
 
-console.log('url', process.env.REACT_APP_SERVER_URL);
-console.log('port', process.env.REACT_APP_SERVER_PORT);
 console.log('env', process.env.REACT_APP_ENV);
 
 const authLink = setContext((_, { headers }) => {
