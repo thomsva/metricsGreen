@@ -7,6 +7,7 @@ server {
     listen [::]:${NGINX_PORT};
 
     location /graphql {
+        proxy_set_header Host $host;
         proxy_pass http://apiurl;
     }
 
@@ -14,7 +15,5 @@ server {
         root /usr/share/nginx/html;
         index index.html index.htm;
         try_files $uri $uri/ /index.html =404;
-    }
-
-    
+    }   
 }
