@@ -1,0 +1,12 @@
+upstream apiurl {
+    server ${API_URL};
+}
+
+server {
+    listen      ${NGINX_PORT};
+    listen [::]:${NGINX_PORT};
+
+    location /api {
+        proxy_pass http://apiurl
+    }
+}
