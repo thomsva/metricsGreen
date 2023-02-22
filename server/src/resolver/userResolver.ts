@@ -54,17 +54,10 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() context: Context): Promise<User | null> {
-    const auth = context.req.headers.authorization
-      ? context.req.headers.authorization
-      : false;
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const token = auth.substring(7);
-
-      const tokenUser = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
-      console.log('tokenUser: ', tokenUser.user);
+    if (context.userLoggedIn) {
       try {
         return AppDataSource.getRepository(User).findOneBy({
-          nickname: parseString(tokenUser.user.nickname)
+          nickname: parseString(context.userLoggedIn.nickname)
         });
       } catch (e) {
         console.log('error', e);
@@ -75,6 +68,7 @@ export class UserResolver {
     // throw new GraphQLError('Current user error. No valid token supplied');
     return null;
   }
+  
   @Mutation(() => User, { nullable: true })
   async updateUser(
     @Arg('data') editUserData: editUserInput

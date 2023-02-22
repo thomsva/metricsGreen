@@ -7,6 +7,7 @@ export const authChecker: AuthChecker<Context> = ({ context }, roles) => {
 
   const token = context.req.headers.bearer as string;
 
+  
   if (token !== undefined) {
     const currentUser = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
 

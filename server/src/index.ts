@@ -9,12 +9,15 @@ import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
 import { UserResolver } from './resolver/userResolver';
 import { DeviceResolver } from './resolver/DeviceResolver';
+import jwt from 'jsonwebtoken';
+import User from './entity/User';
 
 const PORT = process.env.PORT || 4000;
 
 export type Context = {
   req: Request;
   res: Response;
+  userLoggedIn: User; // s
 };
 
 const main = async () => {
@@ -29,7 +32,14 @@ const main = async () => {
           resolvers: [HelloResolver, UserResolver, DeviceResolver],
           authChecker
         }),
-        context: ({ req, res }) => ({ req, res })
+        context: ({ req, res }) => { 
+          const authorization = req.headers.authorization as string;       
+          if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+            const token = authorization.substring(7);
+            const tokenObject = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
+            return ({ req, res, userLoggedIn: tokenObject.user });
+          } 
+          return ({ req, res, userLoggedIn: false})}
       });
 
       const httpServer = http.createServer(app);
