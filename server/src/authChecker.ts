@@ -24,6 +24,7 @@ export const authChecker: AuthChecker<Context> = ({ context }, roles) => {
   } else {
     if (roles.length === 0) {
       // No roles required but user has to exist
+      console.log('hello');
       return false;
     }
   }

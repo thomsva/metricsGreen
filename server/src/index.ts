@@ -45,7 +45,7 @@ const main = async () => {
             const u = tokenObject.user as User;
             if (u !== undefined) return { req, res, userLoggedIn: u };
           }
-          return { req, res, userLoggedIn: false };
+          return { req, res, userLoggedIn: undefined };
         }
       });
 
