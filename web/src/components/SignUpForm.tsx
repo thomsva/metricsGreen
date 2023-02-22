@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import REGISTER_USER from '../graphQl/mutations/REGISTER_USER';
 
+// Schema for form validation
 const schema = yup
   .object({
     nickname: yup.string().required().min(3),
@@ -18,16 +19,17 @@ const schema = yup
   })
   .required();
 
+// Infer type from schema
 type FormValues = yup.InferType<typeof schema>;
 
-const SignUpForm = () => {
-  type serverFieldError = {
-    // Fields to be extracted from GraphQl validation error from server
-    nickname?: string;
-    email?: string;
-    password?: string;
-  };
+// Fields validated on server
+type serverFieldError = {
+  nickname?: string;
+  email?: string;
+  password?: string;
+};
 
+const SignUpForm = () => {
   const [serverFieldErrors, setServerFieldErrors] = useState<serverFieldError>(
     {}
   );
