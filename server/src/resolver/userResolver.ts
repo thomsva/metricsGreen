@@ -16,8 +16,7 @@ import { Context } from '..';
 
 @Resolver()
 export class UserResolver {
-  
-  @Authorized('ADMIN')
+  // @Authorized('ADMIN')
   @Query(() => [User], { description: 'Get all users.' })
   async users(): Promise<User[]> {
     return await User.find();
