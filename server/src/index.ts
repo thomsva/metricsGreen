@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 4000;
 export type Context = {
   req: Request;
   res: Response;
-  userLoggedIn: User; // s
+  userLoggedIn: User; 
 };
 
 const main = async () => {

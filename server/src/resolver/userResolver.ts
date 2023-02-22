@@ -16,6 +16,8 @@ import { Context } from '..';
 
 @Resolver()
 export class UserResolver {
+  
+  @Authorized('ADMIN')
   @Query(() => [User], { description: 'Get all users.' })
   async users(): Promise<User[]> {
     return await User.find();
@@ -68,7 +70,7 @@ export class UserResolver {
     // throw new GraphQLError('Current user error. No valid token supplied');
     return null;
   }
-  
+
   @Mutation(() => User, { nullable: true })
   async updateUser(
     @Arg('data') editUserData: editUserInput
