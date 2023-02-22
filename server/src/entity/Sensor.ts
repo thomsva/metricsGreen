@@ -1,5 +1,11 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import Device from './Device';
 import Metric from './Metric';
 import Reading from './Reading';
@@ -19,10 +25,7 @@ export default class Sensor extends BaseEntity {
   @ManyToOne(() => Metric, (metric) => metric.sensors)
   metric!: Metric;
 
-  @Field(() => [Reading], {nullable: true})
+  @Field(() => [Reading], { nullable: true })
   @OneToMany(() => Reading, (reading) => reading.sensor)
-  readings?: Reading[]
-
-
-
+  readings?: Reading[];
 }

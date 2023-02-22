@@ -19,13 +19,13 @@ export class DeviceResolver {
 
   @Mutation(() => Device)
   async createDevice(
-    @Arg('data') newDeviceData: AddDeviceInput
+    @Arg('data') input: AddDeviceInput
   ): Promise<Device | null> {
-    const errors = await validate(newDeviceData);
+    const errors = await validate(input);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);
     } else {
-      const device = AppDataSource.getRepository(Device).create(newDeviceData);
+      const device = AppDataSource.getRepository(Device).create(input);
       const results = await AppDataSource.getRepository(Device).save(device);
       return results;
     }
@@ -33,16 +33,15 @@ export class DeviceResolver {
 
   @Mutation(() => Device, { nullable: true })
   async updateDevice(
-    @Arg('data') editDeviceData: editDeviceInput
+    @Arg('data') input: editDeviceInput
   ): Promise<Device | null> {
-    if ((await Device.findOneBy({ id: editDeviceData.id })) === null)
-      return null;
+    if ((await Device.findOneBy({ id: input.id })) === null) return null;
 
-    const errors = await validate(editDeviceData);
+    const errors = await validate(input);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);
     } else {
-      const device = AppDataSource.getRepository(Device).create(editDeviceData);
+      const device = AppDataSource.getRepository(Device).create(input);
       const results = await AppDataSource.getRepository(Device).save(device);
       return results;
     }

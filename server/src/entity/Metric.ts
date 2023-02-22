@@ -1,7 +1,12 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import Sensor from './Sensor';
-
 
 @ObjectType()
 @Entity()
@@ -20,6 +25,5 @@ export default class Metric extends BaseEntity {
 
   @Field(() => [Sensor], { nullable: true })
   @OneToMany(() => Sensor, (sensor) => sensor.metric)
-  sensors?: Sensor[]
-
+  sensors?: Sensor[];
 }

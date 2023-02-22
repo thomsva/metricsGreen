@@ -1,5 +1,11 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import Sensor from './Sensor';
 
 @ObjectType()
@@ -15,6 +21,4 @@ export default class Reading extends BaseEntity {
   @Field(() => Sensor)
   @ManyToOne(() => Sensor, (sensor) => sensor.readings)
   sensor!: Sensor;
-
-
 }

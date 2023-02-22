@@ -1,5 +1,12 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import Sensor from './Sensor';
 import User from './User';
 
@@ -33,6 +40,4 @@ export default class Device extends BaseEntity {
   @Field(() => [Sensor], { nullable: true })
   @OneToMany(() => Sensor, (sensor) => sensor.device)
   sensors?: Sensor[];
-  
 }
-
