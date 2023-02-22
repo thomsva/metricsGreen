@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { LOGIN } from '../graphQl';
+import LOGIN from '../graphQl/mutations/LOGIN';
 import { isLoggedInVar } from '../cache';
 
 const LoginForm = () => {
@@ -23,7 +23,6 @@ const LoginForm = () => {
     localStorage.setItem('token', result.data.login as string);
     isLoggedInVar(true);
     client.resetStore();
-    // window.location.reload();
   };
 
   return (

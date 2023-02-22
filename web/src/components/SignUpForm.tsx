@@ -1,11 +1,11 @@
 import { useMutation } from '@apollo/client';
-import { Alert, Box, Button, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { REGISTER } from '../graphQl';
 import * as yup from 'yup';
+import REGISTER_USER from '../graphQl/mutations/REGISTER_USER';
 
 const schema = yup
   .object({
@@ -31,7 +31,7 @@ const SignUpForm = () => {
   const [serverFieldErrors, setServerFieldErrors] = useState<serverFieldError>(
     {}
   );
-  const [signup, { data, loading, error }] = useMutation(REGISTER, {
+  const [signup, { data, loading, error }] = useMutation(REGISTER_USER, {
     onError: (e) => {
       // Extract new errors from graphQL error and update state
 

@@ -11,7 +11,7 @@ import {
   TableRow
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { USERS_QUERY } from '../graphQl';
+import USERS from '../graphQl/queries/USERS';
 
 interface User {
   id: number;
@@ -25,7 +25,7 @@ interface UsersData {
 }
 
 const UserList = () => {
-  const { loading, data, error } = useQuery<UsersData>(USERS_QUERY);
+  const { loading, data, error } = useQuery<UsersData>(USERS);
   if (error) return <Alert severity="error">{error.message}</Alert>;
   if (loading) return <HourglassBottomIcon />;
   return (

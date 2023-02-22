@@ -17,7 +17,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { isLoggedInVar } from '../cache';
-import { ME_QUERY } from '../graphQl';
+import ME from '../graphQl/queries/ME';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import { Link as RouterLink } from 'react-router-dom';
@@ -30,7 +30,7 @@ const pages = ['Sensors', 'Users', 'Register'];
 const settings = ['Account', 'Logout'];
 
 const TopMenu = (props: WelcomeProps) => {
-  const { client, loading, data } = useQuery(ME_QUERY);
+  const { client, loading, data } = useQuery(ME);
 
   const isLoggedIn = useReactiveVar(isLoggedInVar);
   const [openLogin, setOpenLogin] = useState(false); // For opening login form
@@ -69,6 +69,15 @@ const TopMenu = (props: WelcomeProps) => {
             >
               Users
             </Link>
+            <Link
+              component={RouterLink}
+              sx={{ textDecoration: 'inherit', pl: 2 }}
+              color="inherit"
+              to="/deviceform"
+            >
+              Devices
+            </Link>
+
             <Link
               component={RouterLink}
               sx={{ textDecoration: 'inherit', pl: 2 }}
