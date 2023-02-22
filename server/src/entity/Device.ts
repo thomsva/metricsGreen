@@ -23,10 +23,6 @@ export default class Device extends BaseEntity {
 
   @Field()
   @Column()
-  type!: string;
-
-  @Field()
-  @Column()
   description!: string;
 
   @Field({ nullable: true })

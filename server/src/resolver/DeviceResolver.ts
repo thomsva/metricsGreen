@@ -21,6 +21,7 @@ export class DeviceResolver {
   async createDevice(
     @Arg('data') input: AddDeviceInput
   ): Promise<Device | null> {
+    console.log('Create device with this data: ', input);
     const errors = await validate(input);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);

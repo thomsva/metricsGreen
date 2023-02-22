@@ -15,6 +15,7 @@ import theme from './theme';
 import UserList from './components/UserList';
 import TopMenu from './components/TopMenu';
 import SignUpForm from './components/SignUpForm';
+import DeviceForm from './components/DeviceForm';
 
 const httpLink = createHttpLink({
   uri:
@@ -49,8 +50,10 @@ ReactDOM.render(
         <Router>
           <TopMenu name="world" />
           <Routes>
+            <Route path="/" element={<UserList />} />
             <Route path="/userlist" element={<UserList />} />
             <Route path="/register" element={<SignUpForm />} />
+            <Route path="/deviceform" element={<DeviceForm />} />
           </Routes>
         </Router>
       </ThemeProvider>

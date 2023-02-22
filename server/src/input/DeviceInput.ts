@@ -7,9 +7,6 @@ export class AddDeviceInput implements Partial<Device> {
   name!: string;
 
   @Field()
-  type!: string;
-
-  @Field()
   description!: string;
 
   @Field({ nullable: true })
@@ -23,9 +20,6 @@ export class editDeviceInput implements Partial<Device> {
 
   @Field()
   name!: string;
-
-  @Field()
-  type!: string;
 
   @Field()
   description!: string;
