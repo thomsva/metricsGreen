@@ -1,9 +1,12 @@
+import { IsString, Length } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 import Device from '../entity/Device';
 
 @InputType({ description: 'Data for new sensor' })
 export class AddDeviceInput implements Partial<Device> {
   @Field()
+  @IsString()
+  @Length(5, 30)
   name!: string;
 
   @Field({ nullable: true })

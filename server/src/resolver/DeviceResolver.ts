@@ -29,23 +29,19 @@ export class DeviceResolver {
 
   // async me(@Ctx() context: Context): Promise<User | null> {
 
+  @Authorized()
   @Mutation(() => Device)
   async createDevice(
     @Arg('data') input: AddDeviceInput,
     @Ctx() context: Context
   ): Promise<Device | null> {
     console.log('Create device with this data:: ', input);
-    const errors = await validate(input);
-    if (errors.length > 0) {
-      throw new Error(`Validation failed!`);
-    } else {
-      const device = AppDataSource.getRepository(Device).create({
-        ...input,
-        user: context.userLoggedIn
-      });
-      const results = await AppDataSource.getRepository(Device).save(device);
-      return results;
-    }
+    const device = AppDataSource.getRepository(Device).create({
+      ...input,
+      user: context.userLoggedIn
+    });
+    const results = await AppDataSource.getRepository(Device).save(device);
+    return results;
   }
 
   @Mutation(() => Device, { nullable: true })

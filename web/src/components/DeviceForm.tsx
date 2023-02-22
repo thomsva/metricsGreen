@@ -7,6 +7,7 @@ import { useState } from 'react';
 import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
 import Devices from './Devices';
 
+// Schema for form validation
 const schema = yup
   .object({
     name: yup.string().required().min(3),
@@ -15,9 +16,11 @@ const schema = yup
   })
   .required();
 
+// Infer type from schema
 type FormValues = yup.InferType<typeof schema>;
+
+// Fields validated on server
 type serverFieldError = {
-  // Fields to be extracted from GraphQl validation error from server
   name?: string;
   description?: string;
   location?: string;
@@ -38,30 +41,33 @@ const DeviceForm = () => {
     {}
   );
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [createDevice, { data, loading, error }] = useMutation(CREATE_DEVICE, {
     onError: (e) => {
-      // Extract new errors from graphQL error and update state
-      console.log('here');
-      console.error(e);
+      // Extract new errors from graphQL and update state
       let newErrors = {};
       if (e.message.includes('Argument Validation Error')) {
         e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
-          (valError: { property: string; constraints: string[] }) =>
+          (valError: { field: string; msg: string[] }) =>
             (newErrors = {
               ...newErrors,
-              [valError.property]: Object.values(valError.constraints)
+              [valError.field]: Object.values(valError.msg)
                 .map((m) => m)
                 .join(' | ')
             })
         );
+      } else {
+        // Other error than validation error
+        setErrorMessage(e.message);
       }
       setServerFieldErrors(newErrors);
-      console.log('<>', newErrors);
     }
   });
 
   const onSubmit = async (formData: FormValues) => {
     setServerFieldErrors({});
+    setErrorMessage('');
     try {
       await createDevice({
         variables: {
@@ -69,9 +75,7 @@ const DeviceForm = () => {
         }
       });
     } catch (e) {
-      console.error('error cought', e);
-      console.error('error:', error?.graphQLErrors[0]);
-      console.log('data: ', data);
+      console.error('Oops, something went wrong: ', e);
     }
   };
 
@@ -81,11 +85,11 @@ const DeviceForm = () => {
         Object.keys(serverFieldErrors).length != 0) && (
         <Alert severity="warning">
           The form data was not saved. Please fix errors on the form and
-          resubmit. Form errors: {Object.keys(formFieldErrors).length}
-          Server errors: {Object.keys(serverFieldErrors).length}
+          resubmit.
         </Alert>
       )}
-      <Alert>{error && error.message}</Alert>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
       <TextField
         {...register('name')}
         label="Device name"
