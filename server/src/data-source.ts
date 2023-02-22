@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: 'postgres',
   synchronize: true,
   dropSchema: true,
-  logging: true,
+  logging: false,
   entities: [User, Device, Sensor, Metric, Reading],
   subscribers: [],
   migrations: ['.src/migration']
