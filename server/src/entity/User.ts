@@ -1,5 +1,11 @@
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 import Device from './Device';
 
 @ObjectType()
@@ -27,5 +33,5 @@ export default class User extends BaseEntity {
 
   @Field(() => [Device], { nullable: true })
   @OneToMany(() => Device, (device) => device.user)
-  devices?: Device[]
+  devices?: Device[];
 }
