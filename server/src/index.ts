@@ -42,8 +42,8 @@ const main = async () => {
           ) {
             const token = authorization.substring(7);
             const tokenObject = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
-            if (tokenObject.user instanceof User)
-              return { req, res, userLoggedIn: tokenObject.user };
+            const u = tokenObject.user as User;
+            if (u !== undefined) return { req, res, userLoggedIn: u };
           }
           return { req, res, userLoggedIn: false };
         }

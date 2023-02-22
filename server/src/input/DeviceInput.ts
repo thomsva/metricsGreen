@@ -6,8 +6,8 @@ export class AddDeviceInput implements Partial<Device> {
   @Field()
   name!: string;
 
-  @Field()
-  description!: string;
+  @Field({ nullable: true })
+  description?: string;
 
   @Field({ nullable: true })
   location?: string;

@@ -57,6 +57,7 @@ export class UserResolver {
   async me(@Ctx() context: Context): Promise<User | null> {
     if (context.userLoggedIn) {
       try {
+        console.log('useerr', context.userLoggedIn);
         return AppDataSource.getRepository(User).findOneBy({
           nickname: parseString(context.userLoggedIn.nickname)
         });

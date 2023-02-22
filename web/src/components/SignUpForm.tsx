@@ -80,7 +80,7 @@ const SignUpForm = () => {
       await signup({
         variables: {
           data: {
-            nickname: formData.nickname,
+            name: formData.nickname,
             email: formData.email,
             password: formData.password
           }

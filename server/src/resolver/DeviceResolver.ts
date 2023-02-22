@@ -1,14 +1,24 @@
-import { Arg, Authorized, Int, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver
+} from 'type-graphql';
 import Device from '../entity/Device';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { AddDeviceInput, editDeviceInput } from '../input/DeviceInput';
+import { Context } from '..';
 
 @Resolver()
 export class DeviceResolver {
   @Query(() => [Device], { description: 'Get all devices.' })
   async devices(): Promise<Device[]> {
-    return await Device.find();
+    const devices = await Device.find({ relations: { user: true } });
+    return devices;
   }
 
   @Authorized('ADMIN')
@@ -17,16 +27,22 @@ export class DeviceResolver {
     return Device.findOneBy({ id: id });
   }
 
+  // async me(@Ctx() context: Context): Promise<User | null> {
+
   @Mutation(() => Device)
   async createDevice(
-    @Arg('data') input: AddDeviceInput
+    @Arg('data') input: AddDeviceInput,
+    @Ctx() context: Context
   ): Promise<Device | null> {
-    console.log('Create device with this data: ', input);
+    console.log('Create device with this data:: ', input);
     const errors = await validate(input);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);
     } else {
-      const device = AppDataSource.getRepository(Device).create(input);
+      const device = AppDataSource.getRepository(Device).create({
+        ...input,
+        user: context.userLoggedIn
+      });
       const results = await AppDataSource.getRepository(Device).save(device);
       return results;
     }

@@ -4,7 +4,6 @@ export default gql`
   mutation Mutation($data: AddDeviceInput!) {
     createDevice(data: $data) {
       name
-      type
       description
       location
     }

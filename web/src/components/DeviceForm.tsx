@@ -5,12 +5,13 @@ import * as yup from 'yup';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
 import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
+import Devices from './Devices';
 
 const schema = yup
   .object({
     name: yup.string().required().min(3),
     description: yup.string(),
-    location: yup.string().required()
+    location: yup.string()
   })
   .required();
 
@@ -40,6 +41,8 @@ const DeviceForm = () => {
   const [createDevice, { data, loading, error }] = useMutation(CREATE_DEVICE, {
     onError: (e) => {
       // Extract new errors from graphQL error and update state
+      console.log('here');
+      console.error(e);
       let newErrors = {};
       if (e.message.includes('Argument Validation Error')) {
         e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
@@ -82,7 +85,7 @@ const DeviceForm = () => {
           Server errors: {Object.keys(serverFieldErrors).length}
         </Alert>
       )}
-
+      <Alert>{error && error.message}</Alert>
       <TextField
         {...register('name')}
         label="Device name"
@@ -126,6 +129,7 @@ const DeviceForm = () => {
           Submit
         </Button>
       </Box>
+      <Devices />
     </Box>
   );
 };
