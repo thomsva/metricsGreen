@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 4000;
 export type Context = {
   req: Request;
   res: Response;
-  userLoggedIn: User; 
+  userLoggedIn: User;
 };
 
 const main = async () => {
@@ -27,19 +27,26 @@ const main = async () => {
 
       const app = express();
       await seedDatabase();
+
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
           resolvers: [HelloResolver, UserResolver, DeviceResolver],
-          authChecker
+          authChecker,
+          validate: true
         }),
-        context: ({ req, res }) => { 
-          const authorization = req.headers.authorization as string;       
-          if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+        context: ({ req, res }) => {
+          const authorization = req.headers.authorization as string;
+          if (
+            authorization &&
+            authorization.toLowerCase().startsWith('bearer ')
+          ) {
             const token = authorization.substring(7);
             const tokenObject = jwt.verify(token, 'SECRET') as jwt.JwtPayload;
-            return ({ req, res, userLoggedIn: tokenObject.user });
-          } 
-          return ({ req, res, userLoggedIn: false})}
+            if (tokenObject.user instanceof User)
+              return { req, res, userLoggedIn: tokenObject.user };
+          }
+          return { req, res, userLoggedIn: false };
+        }
       });
 
       const httpServer = http.createServer(app);
