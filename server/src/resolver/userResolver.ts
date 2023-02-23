@@ -16,7 +16,7 @@ import { Context } from '..';
 
 @Resolver()
 export class UserResolver {
-  // @Authorized('ADMIN')
+  @Authorized('ADMIN')
   @Query(() => [User], { description: 'Get all users.' })
   async users(): Promise<User[]> {
     return await User.find();
@@ -25,15 +25,13 @@ export class UserResolver {
   @Mutation(() => User)
   async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
     console.log('new user data', newUserData);
-    const errors = await validate(newUserData);
-    if (errors.length > 0) {
-      throw new Error(`Validation failed!`);
-    } else {
-      const user = AppDataSource.getRepository(User).create(newUserData);
-      const results = await AppDataSource.getRepository(User).save(user);
-      console.log('the new user: ', user);
-      return results;
-    }
+    const user = AppDataSource.getRepository(User).create({
+      ...newUserData,
+      devices: []
+    });
+    const results = await AppDataSource.getRepository(User).save(user);
+    console.log('the new user: ', user);
+    return results;
   }
 
   @Mutation(() => String)

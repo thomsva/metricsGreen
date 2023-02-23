@@ -78,11 +78,12 @@ const SignUpForm = () => {
 
   const onSubmit = async (formData: FormValues) => {
     setServerFieldErrors({});
+    console.log('fd', formData);
     try {
       await signup({
         variables: {
           data: {
-            name: formData.nickname,
+            nickname: formData.nickname,
             email: formData.email,
             password: formData.password
           }
