@@ -51,6 +51,7 @@ services:
       - web
     environment:
       - CYPRESS_BASE_URL=http://web:3000
+      - CYPRESS_VERIFY_TIMEOUT=90000
     working_dir: /e2e
     volumes:
       - ./:/e2e
