@@ -13,13 +13,8 @@ jobs:
       working-directory: e2e
       run: docker compose up -d db server web 
     - name: Run Cypress tests
-      uses: cypress-io/github-action@v2
-      with:
-        working-directory: e2e
-        browser: chrome
-        headless: true
-        quiet: false
-        config: video=false
+      working-directory: e2e
+      run: docker compose up cypress
     - name: Upload screenshots    
       uses: actions/upload-artifact@v2
       if: failure()
