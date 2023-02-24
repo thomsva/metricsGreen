@@ -1,0 +1,35 @@
+name: Cypress tests
+on:
+  push:
+
+jobs:
+
+  # Run end to end tests using Cypress
+  run-tests:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Start test environment
+      working-directory: e2e
+      run: docker compose up -d db server web 
+    - name: Run Cypress tests
+      uses: cypress-io/github-action@v2
+      with:
+        working-directory: e2e
+        browser: chrome
+        headless: true
+        quiet: false
+        config: video=false
+    - name: Upload screenshots    
+      uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: cypress-screenshots
+        path: e2e/cypress/screenshots
+    - name: Upload videos    
+      uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: cypress-videos
+        path: e2e/cypress/videos
+        if-no-files-found: ignore
