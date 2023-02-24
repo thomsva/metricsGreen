@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Start test environment
       working-directory: e2e
-      run: docker compose up db server web 
+      run: docker compose up -d db server web 
     - name: Run Cypress tests
       working-directory: e2e
       run: docker compose up cypress
