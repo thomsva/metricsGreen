@@ -15,7 +15,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: app-test
-          wait-on: http://localhost:3001, http://localhost:4001
+          wait-on: http://localhost:3001, http://localhost:4001/graphql
           wait-on-timeout: 300
           quiet: false
           config: video=false
