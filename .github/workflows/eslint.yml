@@ -1,5 +1,7 @@
 name: ESLint
-on: [workflow_call]
+on:
+  workflow_call:
+
 jobs:
   build-and-lint:
     runs-on: ubuntu-20.04

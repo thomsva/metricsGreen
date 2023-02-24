@@ -1,5 +1,7 @@
 name: Run tests
-on: [workflow_call]
+on:
+  workflow_call:
+
 jobs:
   # Run end to end tests using Cypress
   run-tests:
