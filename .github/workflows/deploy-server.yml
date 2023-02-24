@@ -5,9 +5,13 @@ on:
       - 'server/**'
       - '.github/**'
 jobs:
+  eslint:
+    uses: ./.github/workflows/eslint.yml
+  tests:
+    uses: ./.github/workflows/run-tests.yml
   build-and-publish:
     runs-on: ubuntu-20.04
-    needs: [Run tests, ESlint]
+    needs: [ESlint, Run tests]
     steps:
       - uses: actions/checkout@v2
       - name: Log in to Docker Hub
