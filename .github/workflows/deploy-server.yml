@@ -12,8 +12,8 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-20.04
     needs:
-      - build-and-lint
-      - run-tests
+      - eslint
+      - tests
     steps:
       - uses: actions/checkout@v2
       - name: Log in to Docker Hub
