@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Start test environment
-      working-directory: e2e
+      working-directory: app-test
       run: docker compose up -d db server web 
     - name: Cypress run
       uses: cypress-io/github-action@v5
