@@ -1,14 +1,10 @@
-FROM node:16.14-alpine3.14
+FROM node:18.14-alpine3.17
 COPY ./ /usr/src/server
 WORKDIR /usr/src/server
 EXPOSE 4000
 
 ARG DB_HOST
 ARG DB_PORT
-# ENV DB_HOST $DB_HOST
-# ENV DB_PORT: $DB_PORT
-
-
 
 # Checks if node_modules exist
 # If not, install before starting
