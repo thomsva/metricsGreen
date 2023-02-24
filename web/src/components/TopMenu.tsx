@@ -26,9 +26,6 @@ interface WelcomeProps {
   name: string;
 }
 
-const pages = ['Sensors', 'Users', 'Register'];
-const settings = ['Account', 'Logout'];
-
 const TopMenu = (props: WelcomeProps) => {
   const { client, loading, data } = useQuery(ME);
 

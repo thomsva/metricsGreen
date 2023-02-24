@@ -33,7 +33,7 @@ const SignUpForm = () => {
   const [serverFieldErrors, setServerFieldErrors] = useState<serverFieldError>(
     {}
   );
-  const [signup, { data, loading, error }] = useMutation(REGISTER_USER, {
+  const [signup, { data, error }] = useMutation(REGISTER_USER, {
     onError: (e) => {
       // Extract new errors from graphQL error and update state
 

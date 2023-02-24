@@ -43,7 +43,7 @@ const DeviceForm = () => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [createDevice, { data, loading, error }] = useMutation(CREATE_DEVICE, {
+  const [createDevice] = useMutation(CREATE_DEVICE, {
     onError: (e) => {
       // Extract new errors from graphQL and update state
       let newErrors = {};
