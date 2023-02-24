@@ -23,9 +23,6 @@ const httpLink = createHttpLink({
     : 'http://localhost:4000/graphql'
 });
 
-console.log('env', process.env.REACT_APP_ENV);
-console.log('api', process.env.REACT_APP_SERVER_URL);
-
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = localStorage.getItem('token');
