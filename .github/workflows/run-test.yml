@@ -20,6 +20,8 @@ jobs:
       with:
         working-directory: e2e
         baseUrl: http://localhost:3001
+        wait-on: http://localhost:3001
+        wait-on-timeout: 300
         headless: true
         quiet: false
         config: video=false
