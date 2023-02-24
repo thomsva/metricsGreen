@@ -21,6 +21,8 @@ export type Context = {
 };
 
 const main = async () => {
+  console.log('DB_HOST:',process.env.DB_HOST);
+  console.log('DB_PORT:', process.env.DB_PORT);
   await AppDataSource.initialize()
     .then(async () => {
       console.log('The database is running');

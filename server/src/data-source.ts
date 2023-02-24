@@ -9,8 +9,8 @@ import Reading from './entity/Reading';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'metricsGreen_db',
-  port: 5432,
+  host: process.env.DB_HOST ? process.env.DB_HOST : 'metricsGreen_db',
+  port: process.env.DB_PORT ? (process.env.DB_PORT as unknown as number) : 5432,
   username: 'postgres',
   password: 'postgres',
   database: 'postgres',
