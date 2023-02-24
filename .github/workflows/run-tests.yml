@@ -7,7 +7,7 @@ jobs:
   run-tests:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Start test environment
         working-directory: app-test
         run: docker compose up -d db server web
@@ -20,13 +20,13 @@ jobs:
           quiet: false
           config: video=false
       - name: Upload screenshots
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: cypress-screenshots
           path: e2e/cypress/screenshots
       - name: Upload videos
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: cypress-videos
