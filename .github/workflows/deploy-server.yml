@@ -7,6 +7,7 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-20.04
+    needs: [Run tests, ESlint]
     steps:
       - uses: actions/checkout@v2
       - name: Log in to Docker Hub
