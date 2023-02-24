@@ -19,7 +19,7 @@ jobs:
       uses: cypress-io/github-action@v5
       with:
         working-directory: e2e
-        CYPRESS_BASE_URL: http://localhost:3001
+        baseUrl: http://localhost:3001
         headless: true
         quiet: false
         config: video=false
