@@ -12,20 +12,14 @@ jobs:
     - name: Start test environment
       working-directory: e2e
       run: docker compose up -d db server web 
-    # - name: Run Cypress tests
-    #   working-directory: e2e
-    #   run: docker compose up cypress
     - name: Cypress run
       uses: cypress-io/github-action@v5
       with:
         working-directory: e2e
-        baseUrl: http://localhost:3001
-        wait-on: http://localhost:3001
+        wait-on: http://localhost:3001, http://localhost:4001
         wait-on-timeout: 300
-        headless: true
         quiet: false
-        config: video=false
-      
+        config: video=false   
     - name: Upload screenshots    
       uses: actions/upload-artifact@v2
       if: failure()
