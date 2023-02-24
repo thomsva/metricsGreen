@@ -34,6 +34,8 @@ services:
 
   server:
     build: ./server
+    environment:
+      NODE_ENV: development
     ports:
       - 4000:4000
     container_name: metricsGreen_server

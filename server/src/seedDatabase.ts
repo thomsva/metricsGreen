@@ -1,7 +1,12 @@
+import { AppDataSource } from './data-source';
 import Device from './entity/Device';
 import User from './entity/User';
 
 export const seedDatabase = async () => {
+  await AppDataSource.destroy();
+  await AppDataSource.initialize();
+  console.log('seeding DB with test data');
+
   const user: User = User.create({
     nickname: 'testuser',
     email: 'lol@metricsgreen',

@@ -8,11 +8,6 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - db-test:/var/lib/postgresql/data
-    # expose:
-    #   - 5433
-    # ports:
-    #   - 5433:5433
-    # command: -p 5433
 
   web:
     build:
@@ -33,14 +28,15 @@ services:
   server:
     build: ../server
     ports:
-      - 4001:4000
+      - 4001:4001
     container_name: metricsGreen_server-test
     depends_on:
       - db
     environment:
-      # -
-      - DB_HOST=metricsGreen_db_test
-      - DB_PORT=5432
+      PORT: 4001
+      DB_HOST: metricsGreen_db_test
+      DB_PORT: 5432
+      NODE_ENV: development
     volumes:
       - ../server:/usr/src/server
 
@@ -50,8 +46,8 @@ services:
     depends_on:
       - web
     environment:
-      - CYPRESS_BASE_URL=http://web:3000
-      - CYPRESS_VERIFY_TIMEOUT=90000
+      CYPRESS_BASE_URL: http://web:3000
+      CYPRESS_VERIFY_TIMEOUT: 90000
     working_dir: /e2e
     volumes:
       - ./:/e2e

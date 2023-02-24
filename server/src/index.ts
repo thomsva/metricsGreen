@@ -11,6 +11,7 @@ import { UserResolver } from './resolver/userResolver';
 import { DeviceResolver } from './resolver/DeviceResolver';
 import jwt from 'jsonwebtoken';
 import User from './entity/User';
+import cors from 'cors';
 
 const PORT = process.env.PORT || 4000;
 
@@ -21,14 +22,21 @@ export type Context = {
 };
 
 const main = async () => {
-  console.log('DB_HOST:', process.env.DB_HOST);
-  console.log('DB_PORT:', process.env.DB_PORT);
   await AppDataSource.initialize()
     .then(async () => {
       console.log('The database is running');
 
       const app = express();
       await seedDatabase();
+
+      if (process.env.NODE_ENV === 'development') {
+        app.use(cors());
+        app.get('/seed', (_req, res) => {
+          seedDatabase()
+            .then(() => res.status(200).send('Reset and seed database OK!'))
+            .catch(() => res.status(500).send('Error while seeding database.'));
+        });
+      }
 
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
