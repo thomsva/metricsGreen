@@ -4,7 +4,7 @@ on:
 
 jobs:
   # Run end to end tests using Cypress
-  run-tests:
+  cypress-tests:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -32,11 +32,12 @@ jobs:
           name: cypress-videos
           path: e2e/cypress/videos
           if-no-files-found: ignore
+  # Run tests on the front end using Jest
   jest-tests:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: Insall
+      - name: Install
         working-directory: web
         run: npm i
       - name: Jest run

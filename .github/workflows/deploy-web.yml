@@ -6,13 +6,16 @@ on:
 jobs:
   eslint:
     uses: ./.github/workflows/eslint.yml
-  tests:
-    uses: ./.github/workflows/run-tests.yml
+  cypress-tests:
+    uses: ./.github/workflows/cypress-tests.yml
+  jest-tests:
+    uses: ./.github/workflows/jest-tests.yml
   build-and-publish:
     runs-on: ubuntu-20.04
     needs:
       - eslint
-      - tests
+      - cypress-tests
+      - jest-tests
     steps:
       - uses: actions/checkout@v3
       - name: Log in to Docker Hub
