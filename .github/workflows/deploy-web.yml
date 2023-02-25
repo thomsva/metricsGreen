@@ -7,9 +7,9 @@ jobs:
   eslint:
     uses: ./.github/workflows/eslint.yml
   cypress-tests:
-    uses: ./.github/workflows/cypress-tests.yml
+    uses: ./.github/workflows/run-tests.yml
   jest-tests:
-    uses: ./.github/workflows/jest-tests.yml
+    uses: ./.github/workflows/run-tests.yml
   build-and-publish:
     runs-on: ubuntu-20.04
     needs:
