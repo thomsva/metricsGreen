@@ -1,4 +1,4 @@
-describe('Placeholder test', () => {
+describe('placeholder test', () => {
   it('should compare correctly', () => {
     expect(true).toBe(true);
   });

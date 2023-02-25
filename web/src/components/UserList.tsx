@@ -26,7 +26,12 @@ interface UsersData {
 
 const UserList = () => {
   const { loading, data, error } = useQuery<UsersData>(USERS);
-  if (error) return <Alert severity="error">{error.message}</Alert>;
+  if (error)
+    return (
+      <Alert data-testid="usersDataError" severity="error">
+        {error.message}
+      </Alert>
+    );
   if (loading) return <HourglassBottomIcon />;
   return (
     <Box>
@@ -47,12 +52,18 @@ const UserList = () => {
                   key={u.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell
+                    data-testid={'id' + u.id}
+                    component="th"
+                    scope="row"
+                  >
                     {u.id}
                   </TableCell>
-                  <TableCell>{u.username}</TableCell>
-                  <TableCell>{u.email}</TableCell>
-                  <TableCell>{u.role}</TableCell>
+                  <TableCell data-testid={'username' + u.id}>
+                    {u.username}
+                  </TableCell>
+                  <TableCell data-testid={'email' + u.id}>{u.email}</TableCell>
+                  <TableCell data-testid={'role' + u.id}>{u.role}</TableCell>
                 </TableRow>
               ))}
           </TableBody>
