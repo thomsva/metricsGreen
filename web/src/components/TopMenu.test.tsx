@@ -1,6 +1,6 @@
 describe('placeholder test', () => {
   it('should compare correctly', () => {
-    expect(true).toBe(true);
+    expect(true).toBe(false);
   });
 });
 
