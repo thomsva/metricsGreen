@@ -4,8 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useMutation } from '@apollo/client';
 import { useState } from 'react';
-import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
 import Devices from './Devices';
+import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
+import DEVICES from '../graphQl/queries/DEVICES';
 
 // Schema for form validation
 const schema = yup
@@ -30,6 +31,7 @@ const DeviceForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors: formFieldErrors }
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
@@ -44,6 +46,7 @@ const DeviceForm = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const [createDevice] = useMutation(CREATE_DEVICE, {
+    refetchQueries: [{ query: DEVICES }],
     onError: (e) => {
       // Extract new errors from graphQL and update state
       let newErrors = {};
@@ -74,6 +77,7 @@ const DeviceForm = () => {
           data: formData
         }
       });
+      reset();
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }

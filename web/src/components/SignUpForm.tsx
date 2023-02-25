@@ -63,12 +63,17 @@ const SignUpForm = () => {
 
       setServerFieldErrors(newErrors);
       console.log('<>', newErrors);
+    },
+    onCompleted: (d) => {
+      console.log('added to db:', d);
+      reset();
     }
   });
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors: formFieldErrors }
   } = useForm<FormValues>({
     resolver: yupResolver(schema),
@@ -89,6 +94,7 @@ const SignUpForm = () => {
           }
         }
       });
+      console.log('foo:', data);
     } catch (e) {
       console.error('error cought', e);
       console.error('error:', error?.graphQLErrors[0]);
