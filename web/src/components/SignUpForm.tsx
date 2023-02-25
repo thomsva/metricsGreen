@@ -1,12 +1,10 @@
-import { ApolloError, useMutation } from '@apollo/client';
-import { Alert, Box, Button, TextField } from '@mui/material';
+import { useMutation } from '@apollo/client';
+import { Alert, Chip, Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-
 import * as yup from 'yup';
 import REGISTER_USER from '../graphQl/mutations/REGISTER_USER';
-import { GraphQLError } from 'graphql';
 import { fieldErrorsFromGqlError } from '../formTools';
 import USERS from '../graphQl/queries/USERS';
 
@@ -77,8 +75,11 @@ const SignUpForm = () => {
         Object.keys(serverFieldErrors).length != 0) && (
         <Alert severity="warning">
           The form data was not saved. Please fix errors on the form and
-          resubmit. Form errors: {Object.keys(formFieldErrors).length}
-          Server errors: {Object.keys(serverFieldErrors).length}
+          resubmit.
+          <Chip label={`${Object.keys(formFieldErrors).length} form errors`} />
+          <Chip
+            label={`${Object.keys(serverFieldErrors).length} server errors`}
+          />
         </Alert>
       )}
 
