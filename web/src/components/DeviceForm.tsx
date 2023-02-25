@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Devices from './Devices';
 import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
 import DEVICES from '../graphQl/queries/DEVICES';
+import { fieldErrorsFromGqlError } from '../formTools';
 
 // Schema for form validation
 const schema = yup
@@ -47,25 +48,8 @@ const DeviceForm = () => {
 
   const [createDevice] = useMutation(CREATE_DEVICE, {
     refetchQueries: [{ query: DEVICES }],
-    onError: (e) => {
-      // Extract new errors from graphQL and update state
-      let newErrors = {};
-      if (e.message.includes('Argument Validation Error')) {
-        e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
-          (valError: { field: string; msg: string[] }) =>
-            (newErrors = {
-              ...newErrors,
-              [valError.field]: Object.values(valError.msg)
-                .map((m) => m)
-                .join(' | ')
-            })
-        );
-      } else {
-        // Other error than validation error
-        setErrorMessage(e.message);
-      }
-      setServerFieldErrors(newErrors);
-    }
+    onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
+    onCompleted: () => reset()
   });
 
   const onSubmit = async (formData: FormValues) => {
@@ -77,7 +61,6 @@ const DeviceForm = () => {
           data: formData
         }
       });
-      reset();
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }

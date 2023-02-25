@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { Alert, Box, Button, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -6,6 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import * as yup from 'yup';
 import REGISTER_USER from '../graphQl/mutations/REGISTER_USER';
+import { GraphQLError } from 'graphql';
+import { fieldErrorsFromGqlError } from '../formTools';
+import USERS from '../graphQl/queries/USERS';
 
 // Schema for form validation
 const schema = yup
@@ -33,41 +36,11 @@ const SignUpForm = () => {
   const [serverFieldErrors, setServerFieldErrors] = useState<serverFieldError>(
     {}
   );
-  const [signup, { data, error }] = useMutation(REGISTER_USER, {
-    onError: (e) => {
-      // Extract new errors from graphQL error and update state
 
-      let newErrors = {};
-      if (e.message.includes('Argument Validation Error')) {
-        e.graphQLErrors[0].extensions.exception.validationErrors.forEach(
-          (valError: { property: string; constraints: string[] }) =>
-            (newErrors = {
-              ...newErrors,
-              [valError.property]: Object.values(valError.constraints)
-                .map((m) => m)
-                .join(' | ')
-            })
-        );
-      }
-      if (e.message.includes('duplicate key value')) {
-        const str = e.graphQLErrors[0].extensions.exception.detail;
-        if (str.includes('username')) {
-          newErrors = { username: 'username is already taken' };
-          console.log('1');
-        }
-        if (str.includes('email')) {
-          newErrors = { email: 'email is already taken' };
-          console.log('11');
-        }
-      }
-
-      setServerFieldErrors(newErrors);
-      console.log('<>', newErrors);
-    },
-    onCompleted: (d) => {
-      console.log('added to db:', d);
-      reset();
-    }
+  const [signup] = useMutation(REGISTER_USER, {
+    refetchQueries: [{ query: USERS }],
+    onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
+    onCompleted: () => reset()
   });
 
   const {
@@ -83,7 +56,6 @@ const SignUpForm = () => {
 
   const onSubmit = async (formData: FormValues) => {
     setServerFieldErrors({});
-    console.log('fd', formData);
     try {
       await signup({
         variables: {
@@ -94,11 +66,8 @@ const SignUpForm = () => {
           }
         }
       });
-      console.log('foo:', data);
     } catch (e) {
-      console.error('error cought', e);
-      console.error('error:', error?.graphQLErrors[0]);
-      console.log('data: ', data);
+      console.error('Oops, something went wrong: ', e);
     }
   };
 
