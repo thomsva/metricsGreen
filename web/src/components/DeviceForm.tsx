@@ -44,8 +44,6 @@ const DeviceForm = () => {
     {}
   );
 
-  const [errorMessage, setErrorMessage] = useState('');
-
   const [createDevice] = useMutation(CREATE_DEVICE, {
     refetchQueries: [{ query: DEVICES }],
     onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
@@ -53,8 +51,6 @@ const DeviceForm = () => {
   });
 
   const onSubmit = async (formData: FormValues) => {
-    setServerFieldErrors({});
-    setErrorMessage('');
     try {
       await createDevice({
         variables: {
@@ -75,7 +71,6 @@ const DeviceForm = () => {
           resubmit.
         </Alert>
       )}
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
       <TextField
         {...register('name')}

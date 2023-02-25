@@ -53,7 +53,6 @@ const SignUpForm = () => {
   });
 
   const onSubmit = async (formData: FormValues) => {
-    setServerFieldErrors({});
     try {
       await signup({
         variables: {
