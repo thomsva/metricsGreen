@@ -56,7 +56,7 @@ const TopMenu = (props: WelcomeProps) => {
               to="/"
             >
               {loading ? 'Loading...' : loading}
-              Hello {data?.me ? data?.me.nickname : props.name}!
+              Hello {data?.me ? data?.me.username : props.name}!
             </Link>
             <Link
               component={RouterLink}

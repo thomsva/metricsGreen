@@ -4,7 +4,7 @@ export default gql`
   mutation Register($data: NewUserInput!) {
     register(data: $data) {
       id
-      nickname
+      username
       email
       password
       role

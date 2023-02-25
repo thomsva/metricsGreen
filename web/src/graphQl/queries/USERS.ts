@@ -4,7 +4,7 @@ export default gql`
   query Users {
     users {
       id
-      nickname
+      username
       email
       role
     }

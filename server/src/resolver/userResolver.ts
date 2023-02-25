@@ -36,10 +36,10 @@ export class UserResolver {
 
   @Mutation(() => String)
   async login(
-    @Arg('nickname') nickname: string,
+    @Arg('username') username: string,
     @Arg('password') password: string
   ): Promise<string | null> {
-    const user = await User.findOneBy({ nickname });
+    const user = await User.findOneBy({ username: username });
     if (user) {
       if (user.password === password) {
         const token = jwt.sign({ user }, 'SECRET');
@@ -57,7 +57,7 @@ export class UserResolver {
       try {
         console.log('useerr', context.userLoggedIn);
         return AppDataSource.getRepository(User).findOneBy({
-          nickname: parseString(context.userLoggedIn.nickname)
+          username: parseString(context.userLoggedIn.username)
         });
       } catch (e) {
         console.log('error', e);

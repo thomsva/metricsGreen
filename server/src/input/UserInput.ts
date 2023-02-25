@@ -7,7 +7,7 @@ export class NewUserInput implements Partial<User> {
   @Field()
   @IsString()
   @Length(5, 30)
-  nickname!: string;
+  username!: string;
 
   @Field()
   @IsString()
@@ -26,7 +26,7 @@ export class editUserInput implements Partial<User> {
   id!: number;
 
   @Field()
-  nickname!: string;
+  username!: string;
 
   @Field()
   email!: string;

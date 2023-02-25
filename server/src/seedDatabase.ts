@@ -8,7 +8,7 @@ export const seedDatabase = async () => {
   console.log('seeding DB with test data');
 
   const user: User = User.create({
-    nickname: 'testuser',
+    username: 'testuser',
     email: 'lol@metricsgreen',
     password: 'pwd',
     role: 'ADMIN'

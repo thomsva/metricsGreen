@@ -9,7 +9,7 @@ export default gql`
       location
       user {
         id
-        nickname
+        username
       }
       sensors {
         id

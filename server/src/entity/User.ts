@@ -17,7 +17,7 @@ export default class User extends BaseEntity {
 
   @Field()
   @Column({ unique: true })
-  nickname!: string;
+  username!: string;
 
   @Field()
   @Column({ unique: true })

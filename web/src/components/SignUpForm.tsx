@@ -10,7 +10,7 @@ import REGISTER_USER from '../graphQl/mutations/REGISTER_USER';
 // Schema for form validation
 const schema = yup
   .object({
-    nickname: yup.string().required().min(3),
+    username: yup.string().required().min(3),
     email: yup.string().required().email(),
     password: yup.string().required(),
     passwordRepeat: yup
@@ -24,7 +24,7 @@ type FormValues = yup.InferType<typeof schema>;
 
 // Fields validated on server
 type serverFieldError = {
-  nickname?: string;
+  username?: string;
   email?: string;
   password?: string;
 };
@@ -51,8 +51,8 @@ const SignUpForm = () => {
       }
       if (e.message.includes('duplicate key value')) {
         const str = e.graphQLErrors[0].extensions.exception.detail;
-        if (str.includes('nickname')) {
-          newErrors = { nickname: 'nickname is already taken' };
+        if (str.includes('username')) {
+          newErrors = { username: 'username is already taken' };
           console.log('1');
         }
         if (str.includes('email')) {
@@ -83,7 +83,7 @@ const SignUpForm = () => {
       await signup({
         variables: {
           data: {
-            nickname: formData.nickname,
+            username: formData.username,
             email: formData.email,
             password: formData.password
           }
@@ -108,16 +108,16 @@ const SignUpForm = () => {
       )}
 
       <TextField
-        {...register('nickname')}
+        {...register('username')}
         label="User name"
-        error={'nickname' in serverFieldErrors || 'nickname' in formFieldErrors}
+        error={'username' in serverFieldErrors || 'username' in formFieldErrors}
         size="small"
         fullWidth
         margin="dense"
         helperText={
-          ('nickname' in serverFieldErrors ? serverFieldErrors.nickname : '') +
-          (formFieldErrors.nickname
-            ? formFieldErrors.nickname.message || ''
+          ('username' in serverFieldErrors ? serverFieldErrors.username : '') +
+          (formFieldErrors.username
+            ? formFieldErrors.username.message || ''
             : '')
         }
       />

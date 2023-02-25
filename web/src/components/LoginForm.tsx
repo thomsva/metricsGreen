@@ -6,7 +6,7 @@ import { isLoggedInVar } from '../cache';
 
 const LoginForm = () => {
   type FormValues = {
-    nickname: string;
+    username: string;
     password: string;
   };
 
@@ -33,7 +33,7 @@ const LoginForm = () => {
         label="User name"
         fullWidth
         margin="dense"
-        {...register('nickname', { required: true })}
+        {...register('username', { required: true })}
       />
       <TextField
         size="small"
@@ -43,7 +43,7 @@ const LoginForm = () => {
         margin="dense"
         {...register('password', { required: true })}
       />
-      {errors.nickname && (
+      {errors.username && (
         <Alert severity="error">Name field is required</Alert>
       )}
       {errors.password && (

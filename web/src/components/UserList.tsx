@@ -15,7 +15,7 @@ import USERS from '../graphQl/queries/USERS';
 
 interface User {
   id: number;
-  nickname: string;
+  username: string;
   email: string;
   role: string;
 }
@@ -35,7 +35,7 @@ const UserList = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Nickname</TableCell>
+              <TableCell>Username</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
             </TableRow>
@@ -50,7 +50,7 @@ const UserList = () => {
                   <TableCell component="th" scope="row">
                     {u.id}
                   </TableCell>
-                  <TableCell>{u.nickname}</TableCell>
+                  <TableCell>{u.username}</TableCell>
                   <TableCell>{u.email}</TableCell>
                   <TableCell>{u.role}</TableCell>
                 </TableRow>
