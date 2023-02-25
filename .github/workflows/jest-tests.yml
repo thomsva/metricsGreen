@@ -4,7 +4,7 @@ on:
 
 jobs:
   # Run tests on the front end using Jest
-  jest-tests:
+  run-tests:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
