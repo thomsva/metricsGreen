@@ -32,3 +32,13 @@ jobs:
           name: cypress-videos
           path: e2e/cypress/videos
           if-no-files-found: ignore
+  jest-tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Insall
+        working-directory: web
+        run: npm i
+      - name: Jest run
+        working-directory: web  
+        run: npm test
