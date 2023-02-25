@@ -1,4 +1,4 @@
-name: Run tests
+name: Run Cypress tests
 on:
   workflow_call:
 
@@ -32,14 +32,3 @@ jobs:
           name: cypress-videos
           path: e2e/cypress/videos
           if-no-files-found: ignore
-  # Run tests on the front end using Jest
-  jest-tests:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install
-        working-directory: web
-        run: npm i
-      - name: Jest run
-        working-directory: web  
-        run: npm test
