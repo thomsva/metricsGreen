@@ -8,10 +8,14 @@ import {
   TableRow,
   TableCell,
   Alert,
-  Typography
+  Typography,
+  Button,
+  TableBody
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import DEVICES from '../graphQl/queries/DEVICES';
+import { useState } from 'react';
+import DeviceForm from './DeviceForm';
 
 interface Device {
   id: number;
@@ -20,11 +24,8 @@ interface Device {
   location: string;
 }
 
-// interface UsersData {
-//   users: User[];
-// }
-
 const Devices = () => {
+  const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
   const { loading, data, error } = useQuery<{ devices: Device[] }>(DEVICES);
   if (error)
     return (
@@ -39,15 +40,35 @@ const Devices = () => {
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Username</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
+          <TableBody>
+            {data &&
+              data.devices.map((d) => (
+                <TableRow key={d.id}>
+                  <TableCell>{d.id}</TableCell>
+                  <TableCell>{d.name}</TableCell>
+                  <TableCell>{d.description}</TableCell>
+                  <TableCell>{d.location}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      onClick={() => setDeviceToUpdate(d)}
+                    >
+                      Edit
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
         </Table>
       </TableContainer>
-      {data &&
-        data.devices.map((d) => <Typography key={d.id}>{d.name}</Typography>)}
+
+      {deviceToUpdate && <DeviceForm device={deviceToUpdate} />}
     </Box>
   );
 };

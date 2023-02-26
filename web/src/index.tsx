@@ -16,6 +16,7 @@ import UserList from './components/UserList';
 import TopMenu from './components/TopMenu';
 import SignUpForm from './components/SignUpForm';
 import DeviceForm from './components/DeviceForm';
+import Devices from './components/Devices';
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_SERVER_URL
@@ -50,7 +51,11 @@ ReactDOM.render(
             <Route path="/" element={<UserList />} />
             <Route path="/userlist" element={<UserList />} />
             <Route path="/register" element={<SignUpForm />} />
-            <Route path="/deviceform" element={<DeviceForm />} />
+            <Route path="/devices" element={<Devices />} />
+            <Route
+              path="/deviceform"
+              element={<DeviceForm device={undefined} />}
+            />
           </Routes>
         </Router>
       </ThemeProvider>

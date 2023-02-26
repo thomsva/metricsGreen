@@ -3,11 +3,12 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useMutation } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Devices from './Devices';
 import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
 import DEVICES from '../graphQl/queries/DEVICES';
 import { fieldErrorsFromGqlError } from '../formTools';
+import UPDATE_DEVICE from '../graphQl/mutations/UPDATE_DEVICE';
 
 // Schema for form validation
 const schema = yup
@@ -24,11 +25,23 @@ type FormValues = yup.InferType<typeof schema>;
 // Fields validated on server
 type serverFieldError = {
   name?: string;
-  description?: string;
-  location?: string;
+  // description?: string;
+  // location?: string;
 };
 
-const DeviceForm = () => {
+interface Device {
+  id: number;
+  name: string;
+  description?: string;
+  location: string;
+}
+
+// eslint-disable-next-line react/prop-types
+const DeviceForm = ({ device }: { device: Device | undefined }) => {
+  const createMode = device === undefined;
+  console.log('createMode:', createMode);
+  console.log('devais', device);
+
   const {
     register,
     handleSubmit,
@@ -50,13 +63,38 @@ const DeviceForm = () => {
     onCompleted: () => reset()
   });
 
+  const [updateDevice] = useMutation(UPDATE_DEVICE, {
+    refetchQueries: [{ query: DEVICES }],
+    onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
+    onCompleted: () => reset()
+  });
+
   const onSubmit = async (formData: FormValues) => {
     try {
-      await createDevice({
-        variables: {
-          data: formData
-        }
-      });
+      if (createMode) {
+        await createDevice({
+          variables: {
+            data: formData
+          }
+        });
+      } else {
+        console.log('about to send:', {
+          id: device.id,
+          name: formData.name,
+          description: formData.description,
+          location: formData.location
+        });
+        await updateDevice({
+          variables: {
+            data: {
+              id: device.id,
+              name: formData.name,
+              description: formData.description,
+              location: formData.location
+            }
+          }
+        });
+      }
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }
@@ -79,6 +117,7 @@ const DeviceForm = () => {
         size="small"
         fullWidth
         margin="dense"
+        defaultValue={device !== undefined && device.name}
         helperText={
           ('name' in serverFieldErrors ? serverFieldErrors.name : '') +
           (formFieldErrors.name ? formFieldErrors.name.message || '' : '')
@@ -93,6 +132,7 @@ const DeviceForm = () => {
         size="small"
         fullWidth
         margin="dense"
+        defaultValue={device !== undefined && device.description}
       />
       <TextField
         {...register('location')}
@@ -101,6 +141,7 @@ const DeviceForm = () => {
         error={'location' in serverFieldErrors || 'location' in formFieldErrors}
         fullWidth
         margin="dense"
+        defaultValue={device !== undefined && device.description}
         helperText={
           formFieldErrors.location ? formFieldErrors.location.message || '' : ''
         }
@@ -115,7 +156,6 @@ const DeviceForm = () => {
           Submit
         </Button>
       </Box>
-      <Devices />
     </Box>
   );
 };

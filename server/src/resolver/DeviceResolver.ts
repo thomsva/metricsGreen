@@ -10,7 +10,7 @@ import {
 import Device from '../entity/Device';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
-import { AddDeviceInput, editDeviceInput } from '../input/DeviceInput';
+import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
 
 @Resolver()
@@ -32,7 +32,7 @@ export class DeviceResolver {
   @Authorized()
   @Mutation(() => Device)
   async createDevice(
-    @Arg('data') input: AddDeviceInput,
+    @Arg('data') input: createDeviceInput,
     @Ctx() context: Context
   ): Promise<Device | null> {
     console.log('Create device with this data:: ', input);
@@ -44,10 +44,11 @@ export class DeviceResolver {
     return results;
   }
 
-  @Mutation(() => Device, { nullable: true })
+  @Mutation(() => Device)
   async updateDevice(
-    @Arg('data') input: editDeviceInput
+    @Arg('data') input: updateDeviceInput
   ): Promise<Device | null> {
+    console.log('herehere');
     if ((await Device.findOneBy({ id: input.id })) === null) return null;
 
     const errors = await validate(input);
