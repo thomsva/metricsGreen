@@ -44,6 +44,7 @@ interface Props {
 // eslint-disable-next-line react/prop-types
 const DeviceForm = ({ device, closeForm }: Props) => {
   const createMode = device === undefined;
+  console.log('createMode', createMode);
 
   const {
     register,
