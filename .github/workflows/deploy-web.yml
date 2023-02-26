@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'web/**'
+      - 'app-test/**'
 jobs:
   eslint:
     uses: ./.github/workflows/eslint.yml
