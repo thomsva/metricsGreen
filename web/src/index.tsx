@@ -52,10 +52,6 @@ ReactDOM.render(
             <Route path="/userlist" element={<UserList />} />
             <Route path="/register" element={<SignUpForm />} />
             <Route path="/devices" element={<Devices />} />
-            <Route
-              path="/deviceform"
-              element={<DeviceForm device={undefined} />}
-            />
           </Routes>
         </Router>
       </ThemeProvider>

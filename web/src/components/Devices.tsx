@@ -50,7 +50,7 @@ const Devices = () => {
           closeForm={() => setCreateFormOpen(false)}
         />
       ) : (
-        <TableContainer component={Paper} sx={{ width: '100%', mb: 2 }}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
@@ -58,7 +58,7 @@ const Devices = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Location</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -76,13 +76,15 @@ const Devices = () => {
                 ))}
             </TableBody>
           </Table>
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateFormOpen(true)}
-          >
-            Create new device
-          </Button>
+          <Box display="flex" justifyContent="flex-end" mt={3}>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={() => setCreateFormOpen(true)}
+            >
+              Create new device
+            </Button>
+          </Box>
         </TableContainer>
       )}
     </Box>

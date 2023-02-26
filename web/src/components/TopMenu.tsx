@@ -74,14 +74,6 @@ const TopMenu = (props: WelcomeProps) => {
             >
               Devices
             </Link>
-            <Link
-              component={RouterLink}
-              sx={{ textDecoration: 'inherit', pl: 2 }}
-              color="inherit"
-              to="/deviceform"
-            >
-              Add device
-            </Link>
 
             <Link
               component={RouterLink}

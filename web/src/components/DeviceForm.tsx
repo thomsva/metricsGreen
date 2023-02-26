@@ -151,9 +151,9 @@ const DeviceForm = ({ device, closeForm }: Props) => {
         }
       />
 
-      <Box display="flex" justifyContent="flex-end" mt={5}>
+      <Box display="flex" justifyContent="flex-end" mt={3}>
         {closeForm !== undefined && (
-          <Button variant="outlined" onClick={() => closeForm()}>
+          <Button variant="outlined" sx={{ mr: 2 }} onClick={() => closeForm()}>
             Cancel
           </Button>
         )}

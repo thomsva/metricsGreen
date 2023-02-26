@@ -35,7 +35,7 @@ const UserList = () => {
   if (loading) return <HourglassBottomIcon />;
   return (
     <Box>
-      <TableContainer component={Paper}>
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
