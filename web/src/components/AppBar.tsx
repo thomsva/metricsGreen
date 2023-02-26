@@ -1,20 +1,13 @@
 import { useState, MouseEvent } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useQuery, useReactiveVar } from '@apollo/client';
 import {
   Alert,
   AppBar as MuiAppBar,
   Dialog,
   DialogContent,
   DialogContentText,
-  DialogTitle
-} from '@mui/material';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import AdbIcon from '@mui/icons-material/Adb';
-import LoginIcon from '@mui/icons-material/Login';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import MenuIcon from '@mui/icons-material/Menu';
-import {
+  DialogTitle,
   Button,
   IconButton,
   Container,
@@ -24,10 +17,15 @@ import {
   Tooltip,
   Typography
 } from '@mui/material';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import AdbIcon from '@mui/icons-material/Adb';
+import LoginIcon from '@mui/icons-material/Login';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
 import LoginForm from './LoginForm';
-import { useQuery, useReactiveVar } from '@apollo/client';
-import { isLoggedInVar } from '../cache';
 import ME from '../graphQl/queries/ME';
+import { isLoggedInVar } from '../cache';
 import SignUpForm from './SignUpForm';
 
 const AppBar = () => {
@@ -71,7 +69,8 @@ const AppBar = () => {
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: 'none', sm: 'flex' }, mr: 1 }} />
 
-            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+            {/* Menu for small screen */}
+            <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -97,7 +96,7 @@ const AppBar = () => {
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{
-                  display: { xs: 'block', sm: 'none' }
+                  display: { xs: 'flex', sm: 'none' }
                 }}
               >
                 <MenuItem>
@@ -125,14 +124,17 @@ const AppBar = () => {
               </Menu>
             </Box>
 
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' } }} />
+
             <Box
-              sx={{ flexGrow: 0, display: { xs: 'block', sm: 'none' }, mr: 1 }}
+              sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' }, mr: 1 }}
             >
               <AdbIcon />
             </Box>
 
+            {/* Menu items for large screen */}
             <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
-              <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+              <Button sx={{ my: 2, color: 'white', display: 'flex' }}>
                 <Link
                   component={RouterLink}
                   sx={{ textDecoration: 'inherit' }}
@@ -142,7 +144,7 @@ const AppBar = () => {
                   Devices
                 </Link>
               </Button>
-              <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+              <Button sx={{ my: 2, color: 'white', display: 'flex' }}>
                 <Link
                   component={RouterLink}
                   sx={{ textDecoration: 'inherit' }}
@@ -154,8 +156,7 @@ const AppBar = () => {
               </Button>
             </Box>
 
-            <Box sx={{ flexGrow: 1 }}></Box>
-
+            {/* User settings menu */}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open user settings">
                 <IconButton
@@ -208,7 +209,7 @@ const AppBar = () => {
           </Toolbar>
         </Container>
 
-        {/* Below is the dialog for login form. */}
+        {/* Dialog for login form. */}
         {!isLoggedIn && (
           <Dialog open={openLogin} onClose={() => setOpenLogin(false)}>
             <DialogTitle>Log in </DialogTitle>
@@ -221,7 +222,7 @@ const AppBar = () => {
           </Dialog>
         )}
 
-        {/* Below is the dialog for sign up form. */}
+        {/* Dialog for signup form. */}
         {!isLoggedIn && (
           <Dialog open={openSignUp} onClose={() => setOpenSignUp(false)}>
             <DialogTitle>Sign up</DialogTitle>
