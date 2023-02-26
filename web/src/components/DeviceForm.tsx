@@ -36,11 +36,14 @@ interface Device {
   location: string;
 }
 
+interface Props {
+  device: Device | undefined;
+  closeForm?: () => void;
+}
+
 // eslint-disable-next-line react/prop-types
-const DeviceForm = ({ device }: { device: Device | undefined }) => {
+const DeviceForm = ({ device, closeForm }: Props) => {
   const createMode = device === undefined;
-  console.log('createMode:', createMode);
-  console.log('devais', device);
 
   const {
     register,
@@ -95,6 +98,7 @@ const DeviceForm = ({ device }: { device: Device | undefined }) => {
           }
         });
       }
+      if (closeForm !== undefined) closeForm();
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }
@@ -117,7 +121,7 @@ const DeviceForm = ({ device }: { device: Device | undefined }) => {
         size="small"
         fullWidth
         margin="dense"
-        defaultValue={device !== undefined && device.name}
+        defaultValue={createMode ? '' : device.name}
         helperText={
           ('name' in serverFieldErrors ? serverFieldErrors.name : '') +
           (formFieldErrors.name ? formFieldErrors.name.message || '' : '')
@@ -132,7 +136,7 @@ const DeviceForm = ({ device }: { device: Device | undefined }) => {
         size="small"
         fullWidth
         margin="dense"
-        defaultValue={device !== undefined && device.description}
+        defaultValue={createMode ? '' : device.description}
       />
       <TextField
         {...register('location')}
@@ -141,13 +145,18 @@ const DeviceForm = ({ device }: { device: Device | undefined }) => {
         error={'location' in serverFieldErrors || 'location' in formFieldErrors}
         fullWidth
         margin="dense"
-        defaultValue={device !== undefined && device.description}
+        defaultValue={createMode ? '' : device.location}
         helperText={
           formFieldErrors.location ? formFieldErrors.location.message || '' : ''
         }
       />
 
       <Box display="flex" justifyContent="flex-end" mt={5}>
+        {closeForm !== undefined && (
+          <Button variant="outlined" onClick={() => closeForm()}>
+            Cancel
+          </Button>
+        )}
         <Button
           variant="contained"
           type="submit"
