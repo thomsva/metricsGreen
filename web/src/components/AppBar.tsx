@@ -186,23 +186,24 @@ const AppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {isLoggedIn ? (
+                {isLoggedIn && (
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography onClick={() => logout()}>Logout</Typography>
                   </MenuItem>
-                ) : (
-                  <>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography onClick={() => setOpenLogin(true)}>
-                        Login
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography onClick={() => setOpenSignUp(true)}>
-                        Register
-                      </Typography>
-                    </MenuItem>
-                  </>
+                )}
+                {!isLoggedIn && (
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography onClick={() => setOpenLogin(true)}>
+                      Login
+                    </Typography>
+                  </MenuItem>
+                )}
+                {!isLoggedIn && (
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography onClick={() => setOpenSignUp(true)}>
+                      Register
+                    </Typography>
+                  </MenuItem>
                 )}
               </Menu>
             </Box>
