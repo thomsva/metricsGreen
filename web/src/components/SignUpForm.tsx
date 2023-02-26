@@ -30,7 +30,11 @@ type serverFieldError = {
   password?: string;
 };
 
-const SignUpForm = () => {
+interface Props {
+  closeForm: () => void;
+}
+
+const SignUpForm = ({ closeForm }: Props) => {
   const [serverFieldErrors, setServerFieldErrors] = useState<serverFieldError>(
     {}
   );
@@ -63,6 +67,7 @@ const SignUpForm = () => {
           }
         }
       });
+      closeForm();
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }
@@ -141,7 +146,10 @@ const SignUpForm = () => {
         }
       />
 
-      <Box display="flex" justifyContent="flex-end" mt={5}>
+      <Box display="flex" justifyContent="flex-end" mt={3}>
+        <Button variant="outlined" sx={{ mr: 2 }} onClick={() => closeForm()}>
+          Cancel
+        </Button>
         <Button
           variant="contained"
           type="submit"

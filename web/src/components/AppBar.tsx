@@ -4,7 +4,6 @@ import {
   Alert,
   AppBar as MuiAppBar,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle
@@ -12,9 +11,9 @@ import {
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import AdbIcon from '@mui/icons-material/Adb';
+import LoginIcon from '@mui/icons-material/Login';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
 import {
   Button,
   IconButton,
@@ -30,9 +29,6 @@ import { useQuery, useReactiveVar } from '@apollo/client';
 import { isLoggedInVar } from '../cache';
 import ME from '../graphQl/queries/ME';
 import SignUpForm from './SignUpForm';
-
-const pages = ['Users', 'Devces'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const AppBar = () => {
   const { client, loading, data } = useQuery(ME);
@@ -73,9 +69,9 @@ const AppBar = () => {
       <MuiAppBar position="static">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            <AdbIcon sx={{ display: { xs: 'none', sm: 'flex' }, mr: 1 }} />
 
-            <Box sx={{ flexGrow: 0, display: { xs: 'block', md: 'none' } }}>
+            <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -101,7 +97,7 @@ const AppBar = () => {
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
                 sx={{
-                  display: { xs: 'block', md: 'none' }
+                  display: { xs: 'block', sm: 'none' }
                 }}
               >
                 <MenuItem>
@@ -130,16 +126,12 @@ const AppBar = () => {
             </Box>
 
             <Box
-              sx={{ flexGrow: 0, display: { xs: 'block', md: 'none' }, mr: 1 }}
+              sx={{ flexGrow: 0, display: { xs: 'block', sm: 'none' }, mr: 1 }}
             >
               <AdbIcon />
             </Box>
 
-            <Box
-              sx={{ flexGrow: 1, display: { xs: 'block', md: 'none' } }}
-            ></Box>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
               <Button sx={{ my: 2, color: 'white', display: 'block' }}>
                 <Link
                   component={RouterLink}
@@ -174,7 +166,7 @@ const AppBar = () => {
                   onClick={handleOpenUserMenu}
                   color="inherit"
                 >
-                  <AccountCircleIcon />
+                  {isLoggedIn ? <AccountCircleIcon /> : <LoginIcon />}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -219,17 +211,12 @@ const AppBar = () => {
         {/* Below is the dialog for login form. */}
         {!isLoggedIn && (
           <Dialog open={openLogin} onClose={() => setOpenLogin(false)}>
-            <DialogActions>
-              <IconButton onClick={() => setOpenLogin(false)}>
-                <CloseIcon />
-              </IconButton>
-            </DialogActions>
             <DialogTitle>Log in </DialogTitle>
             <DialogContent>
               <DialogContentText>
                 Provide username and password to log in.
               </DialogContentText>
-              <LoginForm />
+              <LoginForm closeForm={() => setOpenLogin(false)} />
             </DialogContent>
           </Dialog>
         )}
@@ -237,15 +224,10 @@ const AppBar = () => {
         {/* Below is the dialog for sign up form. */}
         {!isLoggedIn && (
           <Dialog open={openSignUp} onClose={() => setOpenSignUp(false)}>
-            <DialogActions>
-              <IconButton onClick={() => setOpenSignUp(false)}>
-                <CloseIcon />
-              </IconButton>
-            </DialogActions>
-            <DialogTitle>Sign up </DialogTitle>
+            <DialogTitle>Sign up</DialogTitle>
             <DialogContent>
               <DialogContentText>Register as a new user.</DialogContentText>
-              <SignUpForm />
+              <SignUpForm closeForm={() => setOpenSignUp(false)} />
             </DialogContent>
           </Dialog>
         )}
@@ -262,20 +244,3 @@ const AppBar = () => {
 };
 
 export default AppBar;
-
-{
-  /* <Dialog open={openLogin} onClose={() => setOpenLogin(false)}>
-        <DialogActions>
-          <IconButton onClick={() => setOpenLogin(false)}>
-            <CloseIcon />
-          </IconButton>
-        </DialogActions>
-        <DialogTitle>Log in </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Provide username and password to log in.
-          </DialogContentText>
-          <LoginForm />
-        </DialogContent>
-      </Dialog> */
-}

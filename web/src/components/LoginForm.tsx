@@ -4,7 +4,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import LOGIN from '../graphQl/mutations/LOGIN';
 import { isLoggedInVar } from '../cache';
 
-const LoginForm = () => {
+interface Props {
+  closeForm: () => void;
+}
+
+const LoginForm = ({ closeForm }: Props) => {
   type FormValues = {
     username: string;
     password: string;
@@ -23,6 +27,7 @@ const LoginForm = () => {
     localStorage.setItem('token', result.data.login as string);
     isLoggedInVar(true);
     client.resetStore();
+    closeForm();
   };
 
   return (
@@ -49,9 +54,13 @@ const LoginForm = () => {
       {errors.password && (
         <Alert severity="error">Password field is required</Alert>
       )}
-      <Box display="flex" justifyContent="flex-end" mt={5}>
+
+      <Box display="flex" justifyContent="flex-end" mt={3}>
+        <Button variant="outlined" sx={{ mr: 2 }} onClick={() => closeForm()}>
+          Cancel
+        </Button>
         <Button variant="contained" type="submit">
-          Login
+          Submit
         </Button>
       </Box>
     </Box>

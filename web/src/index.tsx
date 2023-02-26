@@ -13,9 +13,6 @@ import { ThemeProvider } from '@mui/material';
 
 import theme from './theme';
 import Users from './components/Users';
-import TopMenu from './components/TopMenu';
-import SignUpForm from './components/SignUpForm';
-import DeviceForm from './components/DeviceForm';
 import Devices from './components/Devices';
 import AppBar from './components/AppBar';
 
@@ -52,7 +49,6 @@ ReactDOM.render(
           <Routes>
             <Route path="/" element={<Users />} />
             <Route path="/users" element={<Users />} />
-            <Route path="/register" element={<SignUpForm />} />
             <Route path="/devices" element={<Devices />} />
           </Routes>
         </Router>
