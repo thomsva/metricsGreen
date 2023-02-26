@@ -12,11 +12,12 @@ import { setContext } from '@apollo/client/link/context';
 import { ThemeProvider } from '@mui/material';
 
 import theme from './theme';
-import UserList from './components/UserList';
+import Users from './components/Users';
 import TopMenu from './components/TopMenu';
 import SignUpForm from './components/SignUpForm';
 import DeviceForm from './components/DeviceForm';
 import Devices from './components/Devices';
+import AppBar from './components/AppBar';
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_SERVER_URL
@@ -46,10 +47,11 @@ ReactDOM.render(
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <Router>
-          <TopMenu name="world" />
+          {/* <TopMenu name="world" /> */}
+          <AppBar />
           <Routes>
-            <Route path="/" element={<UserList />} />
-            <Route path="/userlist" element={<UserList />} />
+            <Route path="/" element={<Users />} />
+            <Route path="/users" element={<Users />} />
             <Route path="/register" element={<SignUpForm />} />
             <Route path="/devices" element={<Devices />} />
           </Routes>

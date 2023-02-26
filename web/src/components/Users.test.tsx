@@ -2,7 +2,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import USERS from '../graphQl/queries/USERS';
-import UserList from './UserList';
+import UserList from './Users';
 
 const fakeUser1 = {
   id: 1,
