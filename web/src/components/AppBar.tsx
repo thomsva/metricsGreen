@@ -23,6 +23,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import LoginIcon from '@mui/icons-material/Login';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import LoginForm from './LoginForm';
 import ME from '../graphQl/queries/ME';
 import { isLoggedInVar } from '../cache';
@@ -35,7 +36,7 @@ const AppBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [openLogin, setOpenLogin] = useState(false); // For opening login form
   const [openSignUp, setOpenSignUp] = useState(false); // For opening signup form
-
+  const admin = localStorage.getItem('userLoggedInRole') === 'ADMIN';
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -114,17 +115,20 @@ const AppBar = () => {
                     Devices
                   </Link>
                 </MenuItem>
-                <MenuItem>
-                  <Link
-                    component={RouterLink}
-                    sx={{ textDecoration: 'inherit' }}
-                    color="inherit"
-                    to="/users"
-                    onClick={handleCloseNavMenu}
-                  >
-                    Users
-                  </Link>
-                </MenuItem>
+
+                {admin && (
+                  <MenuItem>
+                    <Link
+                      component={RouterLink}
+                      sx={{ textDecoration: 'inherit' }}
+                      color="inherit"
+                      to="/users"
+                      onClick={handleCloseNavMenu}
+                    >
+                      Users
+                    </Link>
+                  </MenuItem>
+                )}
               </Menu>
             </Box>
 
@@ -148,16 +152,18 @@ const AppBar = () => {
                   Devices
                 </Link>
               </Button>
-              <Button sx={{ my: 2, color: 'white', display: 'flex' }}>
-                <Link
-                  component={RouterLink}
-                  sx={{ textDecoration: 'inherit' }}
-                  color="inherit"
-                  to="/users"
-                >
-                  Users
-                </Link>
-              </Button>
+              {admin && (
+                <Button sx={{ my: 2, color: 'white', display: 'flex' }}>
+                  <Link
+                    component={RouterLink}
+                    sx={{ textDecoration: 'inherit' }}
+                    color="inherit"
+                    to="/users"
+                  >
+                    Users
+                  </Link>
+                </Button>
+              )}
             </Box>
 
             {/* User settings menu */}
@@ -172,7 +178,11 @@ const AppBar = () => {
                   color="inherit"
                 >
                   {isLoggedIn ? (
-                    <AccountCircleIcon data-testid="accountUserIcon" />
+                    admin ? (
+                      <SupervisedUserCircleIcon data-testid="adminUserIcon" />
+                    ) : (
+                      <AccountCircleIcon data-testid="accountUserIcon" />
+                    )
                   ) : (
                     <LoginIcon data-testid="guestUserIcon" />
                   )}

@@ -46,7 +46,7 @@ const LoginForm = ({ closeForm }: Props) => {
       <TextField
         data-testid="username"
         size="small"
-        defaultValue="testuser"
+        defaultValue="don"
         label="User name"
         fullWidth
         margin="dense"

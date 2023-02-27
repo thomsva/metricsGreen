@@ -25,10 +25,8 @@ interface UsersData {
 }
 
 const UserList = () => {
-  if (
-    localStorage.getItem('userLoggedInRole') !== 'ADMIN' ||
-    localStorage.getItem('userLoggedInRole') === null
-  ) {
+  console.log();
+  if (localStorage.getItem('userLoggedInRole') !== 'ADMIN') {
     return (
       <Alert data-testid="usersDataError" severity="error">
         Admin privileges needed to view this content.

@@ -15,10 +15,18 @@ import { Context } from '..';
 
 @Resolver()
 export class DeviceResolver {
+  @Authorized()
   @Query(() => [Device], { description: 'Get all devices.' })
-  async devices(): Promise<Device[]> {
-    const devices = await Device.find({ relations: { user: true } });
-    return devices;
+  async devices(@Ctx() context: Context): Promise<Device[]> {
+    const user = context.userLoggedIn;
+    if (user.role === 'ADMIN') {
+      return await Device.find({ relations: { user: true } });
+    } else {
+      return await Device.find({
+        relations: { user: true },
+        where: { user: { id: user.id } }
+      });
+    }
   }
 
   @Authorized('ADMIN')

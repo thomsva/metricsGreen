@@ -36,3 +36,15 @@ describe('visitors', () => {
     cy.get('[data-testid="guestUserIcon"]').should('be.visible');
   });
 });
+
+describe('admins', () => {
+  it('are identified as admins when they log in', () => {
+    cy.visit('/');
+    cy.get('[data-testid="guestUserIcon"]').click();
+    cy.get('[data-testid="userMenuLogin"]').click();
+    cy.get('[data-testid="username').clear().type('admin');
+    cy.get('[data-testid="password').clear().type('pwd');
+    cy.get('[data-testid="submit"]').click();
+    cy.get('[data-testid="adminUserIcon"]').should('be.visible');
+  });
+});
