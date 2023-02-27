@@ -1,6 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
+  Column,
   Entity,
   ManyToOne,
   OneToMany,
@@ -16,6 +17,10 @@ export default class Sensor extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Field()
+  @Column()
+  name!: string;
 
   @Field(() => Device)
   @ManyToOne(() => Device, (device) => device.sensors)

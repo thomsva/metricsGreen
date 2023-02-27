@@ -1,9 +1,9 @@
+import { sensorResolver } from './resolver/sensorResolver';
 import { ApolloServer } from 'apollo-server-express';
 import express, { Request, Response } from 'express';
 import 'reflect-metadata';
 import { AppDataSource } from './data-source';
 import http from 'http';
-import { HelloResolver } from './resolver/Hello';
 import { buildSchema } from 'type-graphql';
 import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
@@ -12,6 +12,7 @@ import { deviceResolver } from './resolver/deviceResolver';
 import jwt from 'jsonwebtoken';
 import User from './entity/User';
 import cors from 'cors';
+import metricResolver from './resolver/metricResolver';
 
 const PORT = process.env.PORT || 4000;
 
@@ -40,7 +41,12 @@ const main = async () => {
 
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [HelloResolver, UserResolver, deviceResolver],
+          resolvers: [
+            UserResolver,
+            deviceResolver,
+            sensorResolver,
+            metricResolver
+          ],
           authChecker,
           validate: true
         }),
