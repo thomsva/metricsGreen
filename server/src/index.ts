@@ -8,7 +8,7 @@ import { buildSchema } from 'type-graphql';
 import { seedDatabase } from './seedDatabase';
 import { authChecker } from './authChecker';
 import { UserResolver } from './resolver/userResolver';
-import { DeviceResolver } from './resolver/DeviceResolver';
+import { deviceResolver } from './resolver/deviceResolver';
 import jwt from 'jsonwebtoken';
 import User from './entity/User';
 import cors from 'cors';
@@ -40,7 +40,7 @@ const main = async () => {
 
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [HelloResolver, UserResolver, DeviceResolver],
+          resolvers: [HelloResolver, UserResolver, deviceResolver],
           authChecker,
           validate: true
         }),

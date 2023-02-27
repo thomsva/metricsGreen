@@ -14,7 +14,7 @@ import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
 
 @Resolver()
-export class DeviceResolver {
+export class deviceResolver {
   @Authorized()
   @Query(() => [Device], { description: 'Get all devices.' })
   async devices(@Ctx() context: Context): Promise<Device[]> {
