@@ -7,14 +7,23 @@ export const seedDatabase = async () => {
   await AppDataSource.initialize();
   console.log('seeding DB with test data');
 
-  const user: User = User.create({
-    username: 'testuser',
-    email: 'lol@metricsgreen',
+  
+  const adminUser=User.create({
+    username: 'boss',
+    email: 'boss@metrics.green',
     password: 'pwd',
     role: 'ADMIN'
-  });
-  await user.save();
+  })
+  const user = User.create({
+    username: 'don',
+    email: 'don@scdp.com',
+    password: 'pwd',
+    role: 'USER'
+  })
 
+  await adminUser.save();
+  await user.save();
+  
   const device: Device = Device.create({
     name: 'Sensor 39',
     description: 'My NodeMCU 82660 based device',

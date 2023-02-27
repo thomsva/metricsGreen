@@ -33,6 +33,7 @@ const LoginForm = ({ closeForm }: Props) => {
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
+        data-testid="userName"
         size="small"
         defaultValue="testuser"
         label="User name"
@@ -41,6 +42,7 @@ const LoginForm = ({ closeForm }: Props) => {
         {...register('username', { required: true })}
       />
       <TextField
+        data-testid="password"
         size="small"
         defaultValue="pwd"
         label="Password"
@@ -56,10 +58,15 @@ const LoginForm = ({ closeForm }: Props) => {
       )}
 
       <Box display="flex" justifyContent="flex-end" mt={3}>
-        <Button variant="outlined" sx={{ mr: 2 }} onClick={() => closeForm()}>
+        <Button
+          data-testid="cancelLogin"
+          variant="outlined"
+          sx={{ mr: 2 }}
+          onClick={() => closeForm()}
+        >
           Cancel
         </Button>
-        <Button variant="contained" type="submit">
+        <Button data-testid="submitLogin" variant="contained" type="submit">
           Submit
         </Button>
       </Box>

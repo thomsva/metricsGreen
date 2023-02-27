@@ -167,7 +167,11 @@ const AppBar = () => {
                   onClick={handleOpenUserMenu}
                   color="inherit"
                 >
-                  {isLoggedIn ? <AccountCircleIcon /> : <LoginIcon />}
+                  {isLoggedIn ? (
+                    <AccountCircleIcon data-testid="accountUserIcon" />
+                  ) : (
+                    <LoginIcon data-testid="guestUserIcon" />
+                  )}
                 </IconButton>
               </Tooltip>
               <Menu
@@ -188,19 +192,30 @@ const AppBar = () => {
               >
                 {isLoggedIn && (
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography onClick={() => logout()}>Logout</Typography>
+                    <Typography
+                      data-testid="userMenuLogout"
+                      onClick={() => logout()}
+                    >
+                      Logout
+                    </Typography>
                   </MenuItem>
                 )}
                 {!isLoggedIn && (
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography onClick={() => setOpenLogin(true)}>
+                    <Typography
+                      data-testid="userMenuLogin"
+                      onClick={() => setOpenLogin(true)}
+                    >
                       Login
                     </Typography>
                   </MenuItem>
                 )}
                 {!isLoggedIn && (
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography onClick={() => setOpenSignUp(true)}>
+                    <Typography
+                      data-testid="userMenuRegister"
+                      onClick={() => setOpenSignUp(true)}
+                    >
                       Register
                     </Typography>
                   </MenuItem>
