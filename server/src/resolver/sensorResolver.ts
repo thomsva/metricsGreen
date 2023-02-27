@@ -1,17 +1,16 @@
-import { AppDataSource } from './../data-source';
 import {
   Arg,
   Authorized,
   Ctx,
   Int,
-  Mutation,
+  // Mutation,
   Query,
   Resolver
 } from 'type-graphql';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
-import { createSensorInput } from '../input/sensorInput';
-import Device from '../entity/Device';
+// import { createSensorInput } from '../input/sensorInput';
+// import Device from '../entity/Device';
 
 @Resolver()
 export class sensorResolver {
