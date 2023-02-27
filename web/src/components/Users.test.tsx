@@ -1,5 +1,6 @@
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
+import 'jest-localstorage-mock';
 import { GraphQLError } from 'graphql';
 import USERS from '../graphQl/queries/USERS';
 import UserList from './Users';
@@ -43,7 +44,13 @@ const errorMocks = [
 
 const container = document.createElement('div');
 document.body.appendChild(container);
-describe('the component', () => {
+
+describe('with admin rights the component', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    jest.clearAllMocks();
+    localStorage.setItem('userLoggedInRole', 'ADMIN');
+  });
   it('renders the correct elements', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
