@@ -13,6 +13,7 @@
   "author": "Thomas Svartbäck",
   "license": "GNU General Public Licence v3.0",
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/express-jwt": "^7.4.2",
     "@types/node": "^18.11.5",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
