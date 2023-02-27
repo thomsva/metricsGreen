@@ -13,6 +13,7 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { Context } from '..';
+import Login from '../entity/Login';
 
 @Resolver()
 export class UserResolver {
@@ -27,6 +28,7 @@ export class UserResolver {
     console.log('new user data', newUserData);
     const user = AppDataSource.getRepository(User).create({
       ...newUserData,
+      role: 'USER',
       devices: []
     });
     const results = await AppDataSource.getRepository(User).save(user);
@@ -34,17 +36,17 @@ export class UserResolver {
     return results;
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Login, { nullable: true })
   async login(
     @Arg('username') username: string,
     @Arg('password') password: string
-  ): Promise<string | null> {
+  ): Promise<Login | null> {
     const user = await User.findOneBy({ username: username });
     if (user) {
       if (user.password === password) {
         const token = jwt.sign({ user }, 'SECRET');
         console.log('Login ok. Token = ', token);
-        return token;
+        return { user, token: token };
       }
     }
     console.log('Failed login attempt');
@@ -54,8 +56,8 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   async me(@Ctx() context: Context): Promise<User | null> {
     if (context.userLoggedIn) {
+      console.log('meee');
       try {
-        console.log('useerr', context.userLoggedIn);
         return AppDataSource.getRepository(User).findOneBy({
           username: parseString(context.userLoggedIn.username)
         });

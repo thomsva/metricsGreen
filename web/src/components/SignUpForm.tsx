@@ -42,7 +42,10 @@ const SignUpForm = ({ closeForm }: Props) => {
   const [signup] = useMutation(REGISTER_USER, {
     refetchQueries: [{ query: USERS }],
     onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
-    onCompleted: () => reset()
+    onCompleted: () => {
+      reset();
+      closeForm();
+    }
   });
 
   const {
@@ -67,7 +70,6 @@ const SignUpForm = ({ closeForm }: Props) => {
           }
         }
       });
-      closeForm();
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }
@@ -88,6 +90,7 @@ const SignUpForm = ({ closeForm }: Props) => {
       )}
 
       <TextField
+        data-testid="username"
         {...register('username')}
         label="User name"
         error={'username' in serverFieldErrors || 'username' in formFieldErrors}
@@ -102,6 +105,7 @@ const SignUpForm = ({ closeForm }: Props) => {
         }
       />
       <TextField
+        data-testid="email"
         {...register('email')}
         label="E-mail address"
         error={'email' in serverFieldErrors || 'email' in formFieldErrors}
@@ -114,6 +118,7 @@ const SignUpForm = ({ closeForm }: Props) => {
         }
       />
       <TextField
+        data-testid="password"
         {...register('password')}
         label="Select a password"
         error={'password' in serverFieldErrors || 'password' in formFieldErrors}
@@ -129,6 +134,7 @@ const SignUpForm = ({ closeForm }: Props) => {
         }
       />
       <TextField
+        data-testid="passwordRepeat"
         {...register('passwordRepeat')}
         size="small"
         label="Repeat password"
@@ -147,10 +153,16 @@ const SignUpForm = ({ closeForm }: Props) => {
       />
 
       <Box display="flex" justifyContent="flex-end" mt={3}>
-        <Button variant="outlined" sx={{ mr: 2 }} onClick={() => closeForm()}>
+        <Button
+          data-testid="cancel"
+          variant="outlined"
+          sx={{ mr: 2 }}
+          onClick={() => closeForm()}
+        >
           Cancel
         </Button>
         <Button
+          data-testid="submit"
           variant="contained"
           type="submit"
           onClick={() => setServerFieldErrors({})}

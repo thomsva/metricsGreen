@@ -52,9 +52,13 @@ const AppBar = () => {
   };
 
   const logout = async () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userLoggedInName');
+    localStorage.removeItem('userLoggedInRole');
     isLoggedInVar(false);
     localStorage.clear();
     setOpenLogin(false);
+    window.location.reload();
     try {
       await client.resetStore();
     } catch (e) {

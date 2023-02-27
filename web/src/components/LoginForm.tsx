@@ -20,20 +20,31 @@ const LoginForm = ({ closeForm }: Props) => {
     formState: { errors }
   } = useForm<FormValues>();
 
-  const [login, { client }] = useMutation(LOGIN);
-
+  const [login, { client }] = useMutation(LOGIN, {
+    onError: (e) => console.log('hep', e)
+  });
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const result = await login({ variables: data });
-    localStorage.setItem('token', result.data.login as string);
-    isLoggedInVar(true);
-    client.resetStore();
-    closeForm();
+    if (result.data.login === null) {
+      console.log('login failed');
+    } else {
+      // Store token
+      localStorage.setItem('token', result.data.login.token);
+      localStorage.setItem(
+        'userLoggedInUsername',
+        result.data.login.user.username
+      );
+      localStorage.setItem('userLoggedInRole', result.data.login.user.role);
+      isLoggedInVar(true);
+      client.resetStore();
+      closeForm();
+    }
   };
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
-        data-testid="userName"
+        data-testid="username"
         size="small"
         defaultValue="testuser"
         label="User name"
@@ -59,14 +70,14 @@ const LoginForm = ({ closeForm }: Props) => {
 
       <Box display="flex" justifyContent="flex-end" mt={3}>
         <Button
-          data-testid="cancelLogin"
+          data-testid="cancel"
           variant="outlined"
           sx={{ mr: 2 }}
           onClick={() => closeForm()}
         >
           Cancel
         </Button>
-        <Button data-testid="submitLogin" variant="contained" type="submit">
+        <Button data-testid="submit" variant="contained" type="submit">
           Submit
         </Button>
       </Box>

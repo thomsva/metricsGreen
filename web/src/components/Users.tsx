@@ -25,7 +25,26 @@ interface UsersData {
 }
 
 const UserList = () => {
-  const { loading, data, error } = useQuery<UsersData>(USERS);
+  if (
+    localStorage.getItem('userLoggedInRole') !== 'ADMIN' ||
+    localStorage.getItem('userLoggedInRole') === null
+  ) {
+    return (
+      <Alert data-testid="usersDataError" severity="error">
+        Admin privileges needed to view this content.
+      </Alert>
+    );
+  }
+
+  const { loading, data, error } = useQuery<UsersData | undefined>(USERS, {
+    onError: (e) => {
+      if (e.message.includes('Access denied!')) console.log('No access');
+      console.log('moi');
+    }
+  });
+
+  console.log('role: ', localStorage.getItem('userLoggedInRole'));
+
   if (error)
     return (
       <Alert data-testid="usersDataError" severity="error">
