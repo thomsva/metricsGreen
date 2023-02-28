@@ -104,18 +104,22 @@ const Devices = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell sx={{ display: { xs: 'none', sm: 'block' } }}>
+                ID
+              </TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Location</TableCell>
-              <TableCell></TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data &&
               data.myDevices.map((d) => (
                 <TableRow key={d.id}>
-                  <TableCell>{d.id}</TableCell>
+                  <TableCell sx={{ display: { xs: 'none', sm: 'block' } }}>
+                    {d.id}
+                  </TableCell>
                   <TableCell>{d.name}</TableCell>
                   <TableCell>{d.description}</TableCell>
                   <TableCell>{d.location}</TableCell>
