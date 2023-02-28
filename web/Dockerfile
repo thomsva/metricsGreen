@@ -19,5 +19,3 @@ ENV NGINX_PORT 80
 ENV API_URL https://host.docker.internal:8080
 COPY --from=build-stage /app/nginx/ /etc/nginx/templates/
 COPY --from=build-stage /app/build/ /usr/share/nginx/html
-# COPY nginx.conf /etc/nginx/nginx.conf
-COPY .htpasswd /etc/nginx/.htpasswd
