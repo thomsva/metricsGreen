@@ -4,7 +4,7 @@ upstream apiurl {
 
 server {
     auth_basic  "Access restricted!";
-    auth_basic_user_file conf/.pwd; 
+    auth_basic_user_file conf.d/.pwd; 
 
     listen      ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
