@@ -29,11 +29,11 @@ export class deviceResolver {
     }
   }
 
-  @Authorized('ADMIN')
-  @Query(() => Device)
-  async getDevice(@Arg('id', () => Int) id: number): Promise<Device | null> {
-    return Device.findOneBy({ id: id });
-  }
+  // @Authorized('ADMIN')
+  // @Query(() => Device)
+  // async getDevice(@Arg('id', () => Int) id: number): Promise<Device | null> {
+  //   return Device.findOneBy({ id: id });
+  // }
 
   // async me(@Ctx() context: Context): Promise<User | null> {
 
