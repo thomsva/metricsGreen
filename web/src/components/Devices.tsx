@@ -14,14 +14,18 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText
+  DialogContentText,
+  ButtonGroup,
+  IconButton
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import DeviceForm from './DeviceForm';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
+import DeleteDeviceDialog from './DeleteDeviceDialog';
 
 interface Device {
   id: number;
@@ -32,6 +36,7 @@ interface Device {
 
 const Devices = () => {
   const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
+  const [deviceToDelete, setDeviceToDelete] = useState<Device | undefined>();
   const [createFormOpen, setCreateFormOpen] = useState(false);
   const { loading, data, error } = useQuery<{ myDevices: Device[] }>(
     MY_DEVICES
@@ -53,10 +58,11 @@ const Devices = () => {
       ) : createFormOpen ? (
         
       ) : ( */}
+
       <Dialog open={createFormOpen} onClose={() => setCreateFormOpen(false)}>
         <DialogTitle>Create device</DialogTitle>
         <DialogContent>
-          <DialogContentText>Register as a new user.</DialogContentText>
+          <DialogContentText>Fill in new device data.</DialogContentText>
           <DeviceForm
             device={undefined}
             closeForm={() => setCreateFormOpen(false)}
@@ -68,12 +74,27 @@ const Devices = () => {
         open={deviceToUpdate !== undefined}
         onClose={() => setDeviceToUpdate(undefined)}
       >
-        <DialogTitle>Create device</DialogTitle>
+        <DialogTitle>Update device</DialogTitle>
         <DialogContent>
-          <DialogContentText>Register as a new user.</DialogContentText>
+          <DialogContentText>Fill in changed device data.</DialogContentText>
           <DeviceForm
             device={deviceToUpdate}
             closeForm={() => setDeviceToUpdate(undefined)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={deviceToDelete !== undefined}
+        onClose={() => setDeviceToDelete(undefined)}
+      >
+        <DialogTitle>Delete device</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Confirmation.</DialogContentText>
+
+          <DeleteDeviceDialog
+            device={deviceToDelete}
+            closeForm={() => setDeviceToDelete(undefined)}
           />
         </DialogContent>
       </Dialog>
@@ -98,7 +119,20 @@ const Devices = () => {
                   <TableCell>{d.description}</TableCell>
                   <TableCell>{d.location}</TableCell>
                   <TableCell>
-                    <EditIcon onClick={() => setDeviceToUpdate(d)} />
+                    <ButtonGroup>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => setDeviceToUpdate(d)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => setDeviceToDelete(d)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ButtonGroup>
                   </TableCell>
                 </TableRow>
               ))}
