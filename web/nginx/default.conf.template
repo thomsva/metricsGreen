@@ -3,6 +3,9 @@ upstream apiurl {
 }
 
 server {
+    auth_basic  "Access restricted!";
+    auth_basic_user_file /home/ec2-user/.pwd; 
+
     listen      ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
 
