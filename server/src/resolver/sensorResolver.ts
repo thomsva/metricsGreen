@@ -1,12 +1,4 @@
-import {
-  Arg,
-  Authorized,
-  Ctx,
-  Int,
-  // Mutation,
-  Query,
-  Resolver
-} from 'type-graphql';
+import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
 // import { createSensorInput } from '../input/sensorInput';
@@ -17,7 +9,7 @@ export class sensorResolver {
   @Authorized()
   @Query(() => [Sensor])
   async sensors(
-    @Arg('deviceId', () => Int) deviceId: number,
+    @Arg('deviceId') deviceId: string,
     @Ctx() context: Context
   ): Promise<Sensor[]> {
     const user = context.userLoggedIn;
