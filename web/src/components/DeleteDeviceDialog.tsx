@@ -11,16 +11,11 @@ interface Device {
 }
 
 interface Props {
-  device: Device | undefined;
+  device: Device;
   closeForm: () => void;
 }
 
 const DeleteDeviceDialog = ({ device, closeForm }: Props) => {
-  if (device === undefined) {
-    closeForm();
-    return null;
-  }
-
   const [deleteDevice] = useMutation(DELETE_DEVICE, {
     refetchQueries: [{ query: MY_DEVICES }]
   });

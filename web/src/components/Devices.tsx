@@ -91,11 +91,12 @@ const Devices = () => {
         <DialogTitle>Delete device</DialogTitle>
         <DialogContent>
           <DialogContentText>Confirmation.</DialogContentText>
-
-          <DeleteDeviceDialog
-            device={deviceToDelete}
-            closeForm={() => setDeviceToDelete(undefined)}
-          />
+          {deviceToDelete !== undefined && (
+            <DeleteDeviceDialog
+              device={deviceToDelete}
+              closeForm={() => setDeviceToDelete(undefined)}
+            />
+          )}
         </DialogContent>
       </Dialog>
 
