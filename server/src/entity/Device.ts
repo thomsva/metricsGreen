@@ -14,8 +14,8 @@ import User from './User';
 @Entity()
 export default class Device extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Field()
   @Column()

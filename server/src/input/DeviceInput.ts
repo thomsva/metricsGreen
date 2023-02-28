@@ -19,7 +19,7 @@ export class createDeviceInput implements Partial<Device> {
 @InputType({ description: 'Data for editing sensor' })
 export class updateDeviceInput implements Partial<Device> {
   @Field()
-  id!: number;
+  id!: string;
 
   @Field()
   @IsString()

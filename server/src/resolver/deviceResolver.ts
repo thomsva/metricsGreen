@@ -3,7 +3,6 @@ import {
   Authorized,
   Ctx,
   FieldResolver,
-  Int,
   Mutation,
   Query,
   Resolver,
@@ -88,7 +87,7 @@ export class deviceResolver {
 
   @Mutation(() => Boolean)
   async deleteDevice(
-    @Arg('id', () => Int) id: number,
+    @Arg('id') id: string,
     @Ctx() context: Context
   ): Promise<boolean> {
     const d = await Device.findOne({
