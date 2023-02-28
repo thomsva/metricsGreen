@@ -2,10 +2,12 @@ import {
   Arg,
   Authorized,
   Ctx,
+  FieldResolver,
   Int,
   Mutation,
   Query,
-  Resolver
+  Resolver,
+  Root
 } from 'type-graphql';
 import User from '../entity/User';
 import { editUserInput, NewUserInput } from '../input/UserInput';
@@ -14,9 +16,33 @@ import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { Context } from '..';
 import Login from '../entity/Login';
+import Device from '../entity/Device';
+// import Device from '../entity/Device';
 
-@Resolver()
+@Resolver(() => User)
 export class UserResolver {
+  @FieldResolver()
+  async devices(@Root() user: User) {
+    console.log('using fieldreslover');
+    const result = await Device.find({
+      relations: { sensors: true, user: true },
+      where: { user: { id: user.id } }
+    });
+    console.log('result', result);
+    return result !== undefined ? result : [];
+  }
+
+  @FieldResolver(() => Int)
+  async devicesCount(@Root() user: User) {
+    console.log('using fieldreslover');
+    const result = await Device.count({
+      relations: { sensors: true, user: true },
+      where: { user: { id: user.id } }
+    });
+    console.log('result', result);
+    return result;
+  }
+
   @Authorized('ADMIN')
   @Query(() => [User], { description: 'Get all users.' })
   async users(): Promise<User[]> {
@@ -32,7 +58,6 @@ export class UserResolver {
       devices: []
     });
     const results = await AppDataSource.getRepository(User).save(user);
-    console.log('the new user: ', user);
     return results;
   }
 

@@ -31,7 +31,7 @@ export default class User extends BaseEntity {
   @Column({ nullable: true })
   role?: string;
 
-  @Field(() => [Device])
+  @Field(() => [Device], { nullable: true })
   @OneToMany(() => Device, (device) => device.user)
   devices?: Device[];
 }
