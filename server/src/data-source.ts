@@ -3,7 +3,6 @@ import 'reflect-metadata';
 import User from './entity/User';
 import Device from './entity/Device';
 import Sensor from './entity/Sensor';
-import Metric from './entity/Metric';
 import Reading from './entity/Reading';
 //import UserRole from './entity/UserRole';
 
@@ -17,7 +16,7 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   dropSchema: true,
   logging: false,
-  entities: [User, Device, Sensor, Metric, Reading],
+  entities: [User, Device, Sensor, Reading],
   subscribers: [],
   migrations: ['.src/migration']
 });

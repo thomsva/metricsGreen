@@ -29,6 +29,10 @@ export default class Device extends BaseEntity {
   @Column({ nullable: true })
   location?: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  secret?: string;
+
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.devices)
   user!: User;

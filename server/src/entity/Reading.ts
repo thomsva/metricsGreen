@@ -14,6 +14,7 @@ export default class Reading extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
+
   @Field()
   @Column({ type: 'timestamptz', nullable: true })
   timeStamp!: Date;

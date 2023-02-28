@@ -2,20 +2,47 @@ import {
   Arg,
   Authorized,
   Ctx,
+  FieldResolver,
   Int,
   Mutation,
   Query,
-  Resolver
+  Resolver,
+  Root
 } from 'type-graphql';
 import Device from '../entity/Device';
 import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
+import Sensor from '../entity/Sensor';
 
-@Resolver()
+@Resolver(() => Device)
 export class deviceResolver {
-  @Authorized()
+  @FieldResolver()
+  async sensors(@Root() device: Device) {
+    console.log('using  sensors fieldreslover');
+    const result = await Sensor.find({
+      relations: { device: true, readings: true },
+      where: { device: { id: device.id } }
+    });
+    console.log('result', result);
+    return result !== undefined ? result : [];
+  }
+
+  // @Authorized()
+  @Query(() => [Device], {
+    description: 'All devices owned by the user logged in.'
+  })
+  async myDevices(@Ctx() context: Context): Promise<Device[]> {
+    console.log('resolver myDevices');
+    const user = context.userLoggedIn;
+    return await Device.find({
+      relations: { user: true },
+      where: { user: { id: user.id } }
+    });
+  }
+
+  @Authorized('ADMIN')
   @Query(() => [Device], { description: 'Get all devices.' })
   async devices(@Ctx() context: Context): Promise<Device[]> {
     const user = context.userLoggedIn;
@@ -28,14 +55,6 @@ export class deviceResolver {
       });
     }
   }
-
-  // @Authorized('ADMIN')
-  // @Query(() => Device)
-  // async getDevice(@Arg('id', () => Int) id: number): Promise<Device | null> {
-  //   return Device.findOneBy({ id: id });
-  // }
-
-  // async me(@Ctx() context: Context): Promise<User | null> {
 
   @Authorized()
   @Mutation(() => Device)
@@ -56,9 +75,7 @@ export class deviceResolver {
   async updateDevice(
     @Arg('data') input: updateDeviceInput
   ): Promise<Device | null> {
-    console.log('herehere');
     if ((await Device.findOneBy({ id: input.id })) === null) return null;
-
     const errors = await validate(input);
     if (errors.length > 0) {
       throw new Error(`Validation failed!`);
@@ -70,7 +87,15 @@ export class deviceResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteDevice(@Arg('id', () => Int) id: number): Promise<boolean> {
+  async deleteDevice(
+    @Arg('id', () => Int) id: number,
+    @Ctx() context: Context
+  ): Promise<boolean> {
+    const d = await Device.findOne({
+      relations: { user: true },
+      where: { id: id }
+    });
+    if (context.userLoggedIn.id !== d?.user.id) return false;
     await Device.delete({ id: id });
     return true;
   }

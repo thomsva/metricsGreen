@@ -83,9 +83,10 @@ export class UserResolver {
     if (context.userLoggedIn) {
       console.log('meee');
       try {
-        return AppDataSource.getRepository(User).findOneBy({
-          username: parseString(context.userLoggedIn.username)
-        });
+        return User.findOne({ where: { id: context.userLoggedIn.id } });
+        // return AppDataSource.getRepository(User).findOneBy({
+        //   username: parseString(context.userLoggedIn.username)
+        // });
       } catch (e) {
         console.log('error', e);
         return null;
@@ -119,13 +120,13 @@ export class UserResolver {
   }
 }
 
-const parseString = (input: unknown): string => {
-  if (!input || !isString(input)) {
-    throw new Error('Invalid string input: ' + input);
-  }
-  return input;
-};
+// const parseString = (input: unknown): string => {
+//   if (!input || !isString(input)) {
+//     throw new Error('Invalid string input: ' + input);
+//   }
+//   return input;
+// };
 
-const isString = (text: unknown): text is string => {
-  return typeof text === 'string';
-};
+// const isString = (text: unknown): text is string => {
+//   return typeof text === 'string';
+// };

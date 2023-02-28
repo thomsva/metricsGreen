@@ -19,10 +19,9 @@ import {
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import DEVICES from '../graphQl/queries/DEVICES';
 import { useState } from 'react';
 import DeviceForm from './DeviceForm';
-import SignUpForm from './SignUpForm';
+import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 
 interface Device {
   id: number;
@@ -34,7 +33,9 @@ interface Device {
 const Devices = () => {
   const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
   const [createFormOpen, setCreateFormOpen] = useState(false);
-  const { loading, data, error } = useQuery<{ devices: Device[] }>(DEVICES);
+  const { loading, data, error } = useQuery<{ myDevices: Device[] }>(
+    MY_DEVICES
+  );
   if (error)
     return (
       <Alert severity="error">
@@ -90,7 +91,7 @@ const Devices = () => {
           </TableHead>
           <TableBody>
             {data &&
-              data.devices.map((d) => (
+              data.myDevices.map((d) => (
                 <TableRow key={d.id}>
                   <TableCell>{d.id}</TableCell>
                   <TableCell>{d.name}</TableCell>

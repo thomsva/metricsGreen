@@ -3,12 +3,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useMutation } from '@apollo/client';
-import { useEffect, useState } from 'react';
-import Devices from './Devices';
+import { useState } from 'react';
 import CREATE_DEVICE from '../graphQl/mutations/CREATE_DEVICE';
-import DEVICES from '../graphQl/queries/DEVICES';
 import { fieldErrorsFromGqlError } from '../formTools';
 import UPDATE_DEVICE from '../graphQl/mutations/UPDATE_DEVICE';
+import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 
 // Schema for form validation
 const schema = yup
@@ -62,13 +61,13 @@ const DeviceForm = ({ device, closeForm }: Props) => {
   );
 
   const [createDevice] = useMutation(CREATE_DEVICE, {
-    refetchQueries: [{ query: DEVICES }],
+    refetchQueries: [{ query: MY_DEVICES }],
     onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
     onCompleted: () => reset()
   });
 
   const [updateDevice] = useMutation(UPDATE_DEVICE, {
-    refetchQueries: [{ query: DEVICES }],
+    refetchQueries: [{ query: MY_DEVICES }],
     onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
     onCompleted: () => reset()
   });

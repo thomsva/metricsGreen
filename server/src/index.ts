@@ -12,7 +12,6 @@ import { deviceResolver } from './resolver/deviceResolver';
 import jwt from 'jsonwebtoken';
 import User from './entity/User';
 import cors from 'cors';
-import metricResolver from './resolver/metricResolver';
 
 const PORT = process.env.PORT || 4000;
 
@@ -41,12 +40,7 @@ const main = async () => {
 
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [
-            UserResolver,
-            deviceResolver,
-            sensorResolver,
-            metricResolver
-          ],
+          resolvers: [UserResolver, deviceResolver, sensorResolver],
           authChecker,
           validate: true
         }),
