@@ -26,8 +26,13 @@ export class editUserInput implements Partial<User> {
   id!: number;
 
   @Field()
+  @IsString()
+  @Length(5, 30)
   username!: string;
 
   @Field()
+  @IsString()
+  @Length(5, 100)
+  @IsEmail()
   email!: string;
 }

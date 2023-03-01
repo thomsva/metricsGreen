@@ -12,12 +12,9 @@ import {
 import User from '../entity/User';
 import { editUserInput, NewUserInput } from '../input/UserInput';
 import jwt from 'jsonwebtoken';
-import { AppDataSource } from '../data-source';
-import { validate } from 'class-validator';
 import { Context } from '..';
 import Login from '../entity/Login';
 import Device from '../entity/Device';
-// import Device from '../entity/Device';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -51,14 +48,11 @@ export class UserResolver {
 
   @Mutation(() => User)
   async register(@Arg('data') newUserData: NewUserInput): Promise<User | null> {
-    console.log('new user data', newUserData);
-    const user = AppDataSource.getRepository(User).create({
+    return User.create({
       ...newUserData,
       role: 'USER',
       devices: []
-    });
-    const results = await AppDataSource.getRepository(User).save(user);
-    return results;
+    }).save();
   }
 
   @Mutation(() => Login, { nullable: true })
@@ -78,38 +72,18 @@ export class UserResolver {
     return null;
   }
 
+  @Authorized()
   @Query(() => User, { nullable: true })
   async me(@Ctx() context: Context): Promise<User | null> {
-    if (context.userLoggedIn) {
-      console.log('meee');
-      try {
-        return User.findOne({ where: { id: context.userLoggedIn.id } });
-        // return AppDataSource.getRepository(User).findOneBy({
-        //   username: parseString(context.userLoggedIn.username)
-        // });
-      } catch (e) {
-        console.log('error', e);
-        return null;
-      }
-    }
-    console.log('nothing to return');
-    // throw new GraphQLError('Current user error. No valid token supplied');
-    return null;
+    return User.findOne({ where: { id: context.userLoggedIn.id } });
   }
 
   @Mutation(() => User, { nullable: true })
   async updateUser(
     @Arg('data') editUserData: editUserInput
   ): Promise<User | null> {
-    if ((await User.findOneBy({ id: editUserData.id })) === null) return null;
-    const errors = await validate(editUserData);
-    if (errors.length > 0) {
-      throw new Error(`Validation failed!`);
-    } else {
-      const user = AppDataSource.getRepository(User).create(editUserData);
-      const results = await AppDataSource.getRepository(User).save(user);
-      return results;
-    }
+    await User.update({ id: editUserData.id }, editUserData);
+    return User.findOneBy({ id: editUserData.id });
   }
 
   @Authorized('ADMIN')
@@ -119,14 +93,3 @@ export class UserResolver {
     return true;
   }
 }
-
-// const parseString = (input: unknown): string => {
-//   if (!input || !isString(input)) {
-//     throw new Error('Invalid string input: ' + input);
-//   }
-//   return input;
-// };
-
-// const isString = (text: unknown): text is string => {
-//   return typeof text === 'string';
-// };
