@@ -9,7 +9,7 @@ import {
   Root
 } from 'type-graphql';
 import Device from '../entity/Device';
-import { AppDataSource } from '../data-source';
+// import { AppDataSource } from '../data-source';
 import { validate } from 'class-validator';
 import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
@@ -19,12 +19,10 @@ import Sensor from '../entity/Sensor';
 export class deviceResolver {
   @FieldResolver()
   async sensors(@Root() device: Device) {
-    console.log('using  sensors fieldreslover');
     const result = await Sensor.find({
       relations: { device: true, readings: true },
       where: { device: { id: device.id } }
     });
-    console.log('result', result);
     return result !== undefined ? result : [];
   }
 
@@ -62,12 +60,14 @@ export class deviceResolver {
     @Ctx() context: Context
   ): Promise<Device | null> {
     console.log('Create device with this data:: ', input);
-    const device = AppDataSource.getRepository(Device).create({
-      ...input,
-      user: context.userLoggedIn
-    });
-    const results = await AppDataSource.getRepository(Device).save(device);
-    return results;
+
+    // const device = AppDataSource.getRepository(Device).create({
+    //   ...input,
+    //   user: context.userLoggedIn
+    // });
+    // const results = await AppDataSource.getRepository(Device).save(device);
+    // return results;
+    return Device.create({ ...input, user: context.userLoggedIn }).save();
   }
 
   @Mutation(() => Device)
@@ -77,11 +77,15 @@ export class deviceResolver {
     if ((await Device.findOneBy({ id: input.id })) === null) return null;
     const errors = await validate(input);
     if (errors.length > 0) {
+      console.log('updateDevice validation');
       throw new Error(`Validation failed!`);
     } else {
-      const device = AppDataSource.getRepository(Device).create(input);
-      const results = await AppDataSource.getRepository(Device).save(device);
-      return results;
+      await Device.update({ id: input.id }, input);
+      return Device.findOneBy({ id: input.id });
+
+      // const device = AppDataSource.getRepository(Device).create(input);
+      // const results = await AppDataSource.getRepository(Device).save(device);
+      // return results;
     }
   }
 

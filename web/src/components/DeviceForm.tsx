@@ -37,7 +37,7 @@ interface Device {
 
 interface Props {
   device: Device | undefined;
-  closeForm?: () => void;
+  closeForm: () => void;
 }
 
 // eslint-disable-next-line react/prop-types
@@ -68,8 +68,13 @@ const DeviceForm = ({ device, closeForm }: Props) => {
 
   const [updateDevice] = useMutation(UPDATE_DEVICE, {
     refetchQueries: [{ query: MY_DEVICES }],
-    onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
-    onCompleted: () => reset()
+    onError: (e) => {
+      setServerFieldErrors(fieldErrorsFromGqlError(e));
+    },
+    onCompleted: () => {
+      reset();
+      closeForm();
+    }
   });
 
   const onSubmit = async (formData: FormValues) => {
@@ -98,7 +103,6 @@ const DeviceForm = ({ device, closeForm }: Props) => {
           }
         });
       }
-      if (closeForm !== undefined) closeForm();
     } catch (e) {
       console.error('Oops, something went wrong: ', e);
     }
