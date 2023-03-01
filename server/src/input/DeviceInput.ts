@@ -23,7 +23,7 @@ export class updateDeviceInput implements Partial<Device> {
 
   @Field()
   @IsString()
-  @Length(7, 30)
+  @Length(5, 30)
   name!: string;
 
   @Field({ nullable: true })
