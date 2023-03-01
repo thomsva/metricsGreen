@@ -12,7 +12,7 @@ import {
 } from 'type-graphql';
 import Device from '../entity/Device';
 // import { AppDataSource } from '../data-source';
-import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
+import { CreateDeviceInput, UpdateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
 
@@ -58,7 +58,7 @@ export class deviceResolver {
   @Authorized()
   @Mutation(() => Device)
   async createDevice(
-    @Arg('data') input: createDeviceInput,
+    @Arg('data') input: CreateDeviceInput,
     @Ctx() context: Context
   ): Promise<Device | null> {
     return Device.create({ ...input, user: context.userLoggedIn }).save();
@@ -68,7 +68,7 @@ export class deviceResolver {
   @UseMiddleware(deviceOwner)
   @Mutation(() => Device)
   async updateDevice(
-    @Arg('data') input: updateDeviceInput
+    @Arg('data') input: UpdateDeviceInput
   ): Promise<Device | null> {
     await Device.update({ id: input.id }, input);
     return Device.findOneBy({ id: input.id });

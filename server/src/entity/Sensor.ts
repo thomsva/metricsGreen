@@ -14,8 +14,8 @@ import Reading from './Reading';
 @Entity()
 export default class Sensor extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Field()
   @Column()

@@ -21,9 +21,9 @@ export class NewUserInput implements Partial<User> {
 }
 
 @InputType({ description: 'Data for editing user' })
-export class editUserInput implements Partial<User> {
+export class EditUserInput implements Partial<User> {
   @Field()
-  id!: number;
+  id!: string;
 
   @Field()
   @IsString()

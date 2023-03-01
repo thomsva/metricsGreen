@@ -12,8 +12,8 @@ import Device from './Device';
 @Entity()
 export default class User extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  readonly id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  readonly id!: string;
 
   @Field()
   @Column({ unique: true })

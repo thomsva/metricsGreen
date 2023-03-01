@@ -10,7 +10,7 @@ import {
   Root
 } from 'type-graphql';
 import User from '../entity/User';
-import { editUserInput, NewUserInput } from '../input/UserInput';
+import { EditUserInput, NewUserInput } from '../input/UserInput';
 import jwt from 'jsonwebtoken';
 import { Context } from '..';
 import Login from '../entity/Login';
@@ -80,7 +80,7 @@ export class UserResolver {
 
   @Mutation(() => User, { nullable: true })
   async updateUser(
-    @Arg('data') editUserData: editUserInput
+    @Arg('data') editUserData: EditUserInput
   ): Promise<User | null> {
     await User.update({ id: editUserData.id }, editUserData);
     return User.findOneBy({ id: editUserData.id });
@@ -88,7 +88,7 @@ export class UserResolver {
 
   @Authorized('ADMIN')
   @Mutation(() => Boolean)
-  async deleteUser(@Arg('id', () => Int) id: number): Promise<boolean> {
+  async deleteUser(@Arg('id') id: string): Promise<boolean> {
     await User.delete({ id: id });
     return true;
   }

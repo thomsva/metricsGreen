@@ -3,8 +3,16 @@ import { MiddlewareFn } from 'type-graphql';
 import { Context } from '..';
 import Device from '../entity/Device';
 
+/**
+ * Guard middleware for resolvers. Makes sure that the user requesting
+ * the operation is the owner of the object. Otherwise throws error.
+ *
+ * @param context - Contains the current user
+ * @param args - The arguments sent with the request
+ * @returns next() moves to the next middleware
+ *
+ */
 export const deviceOwner: MiddlewareFn<Context> = async (
-  // Throws an error if the action is performed by other than the device owner
   { context, args },
   next
 ) => {
