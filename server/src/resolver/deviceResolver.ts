@@ -1,3 +1,4 @@
+import { deviceOwner } from './../middleware/deviceOwner';
 import {
   Arg,
   Authorized,
@@ -6,14 +7,14 @@ import {
   Mutation,
   Query,
   Resolver,
-  Root
+  Root,
+  UseMiddleware
 } from 'type-graphql';
 import Device from '../entity/Device';
 // import { AppDataSource } from '../data-source';
 import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
-import { GraphQLError } from 'graphql';
 
 @Resolver(() => Device)
 export class deviceResolver {
@@ -26,7 +27,7 @@ export class deviceResolver {
     return result !== undefined ? result : [];
   }
 
-  // @Authorized()
+  @Authorized()
   @Query(() => [Device], {
     description: 'All devices owned by the user logged in.'
   })
@@ -39,9 +40,9 @@ export class deviceResolver {
     });
   }
 
+  // TODO: same as myDevices for other than admin users
   @Authorized('ADMIN')
   @Query(() => [Device], { description: 'Get all devices.' })
-  // TODO: same as myDevices for other than admin users
   async devices(@Ctx() context: Context): Promise<Device[]> {
     const user = context.userLoggedIn;
     if (user.role === 'ADMIN') {
@@ -64,32 +65,19 @@ export class deviceResolver {
   }
 
   @Authorized()
+  @UseMiddleware(deviceOwner)
   @Mutation(() => Device)
   async updateDevice(
-    @Arg('data') input: updateDeviceInput,
-    @Ctx() context: Context
+    @Arg('data') input: updateDeviceInput
   ): Promise<Device | null> {
-    const d = await Device.findOne({
-      relations: { user: true },
-      where: { id: input.id }
-    });
-    if (context.userLoggedIn.id !== d?.user.id && d?.user.role !== 'ADMIN')
-      throw new GraphQLError('Not authorized');
     await Device.update({ id: input.id }, input);
     return Device.findOneBy({ id: input.id });
   }
 
   @Authorized()
+  @UseMiddleware(deviceOwner)
   @Mutation(() => Boolean)
-  async deleteDevice(
-    @Arg('id') id: string,
-    @Ctx() context: Context
-  ): Promise<boolean> {
-    const d = await Device.findOne({
-      relations: { user: true },
-      where: { id: id }
-    });
-    if (context.userLoggedIn.id !== d?.user.id) return false;
+  async deleteDevice(@Arg('id') id: string): Promise<boolean> {
     await Device.delete({ id: id });
     return true;
   }
