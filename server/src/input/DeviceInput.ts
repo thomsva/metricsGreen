@@ -32,3 +32,10 @@ export class UpdateDeviceInput implements Partial<Device> {
   @Field({ nullable: true })
   location?: string;
 }
+
+@InputType()
+export class DeleteDeviceInput implements Partial<Device> {
+  @IsString()
+  @Field()
+  id!: string;
+}

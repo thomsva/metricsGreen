@@ -24,7 +24,7 @@ const DeleteDeviceDialog = ({ device, closeForm }: Props) => {
     try {
       await deleteDevice({
         variables: {
-          deleteDeviceId: device?.id
+          data: { id: device?.id }
         }
       });
       closeForm();

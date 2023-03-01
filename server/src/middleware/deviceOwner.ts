@@ -16,13 +16,13 @@ export const deviceOwner: MiddlewareFn<Context> = async (
   { context, args },
   next
 ) => {
-  if (typeof args.id !== 'string') {
+  if (typeof args.data.id !== 'string') {
     throw new GraphQLError('Invalid argument: id');
   }
 
   const d = await Device.findOne({
     relations: { user: true },
-    where: { id: args.id }
+    where: { id: args.data.id as string }
   });
 
   if (d === null) {

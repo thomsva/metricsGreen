@@ -13,7 +13,11 @@ import {
 } from 'type-graphql';
 import Device from '../entity/Device';
 // import { AppDataSource } from '../data-source';
-import { CreateDeviceInput, UpdateDeviceInput } from '../input/DeviceInput';
+import {
+  CreateDeviceInput,
+  DeleteDeviceInput,
+  UpdateDeviceInput
+} from '../input/DeviceInput';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
 
@@ -88,8 +92,8 @@ export class deviceResolver {
   @Authorized()
   @UseMiddleware(deviceOwner)
   @Mutation(() => Boolean)
-  async deleteDevice(@Arg('id') id: string): Promise<boolean> {
-    await Device.delete({ id: id });
+  async deleteDevice(@Arg('data') input: DeleteDeviceInput): Promise<boolean> {
+    await Device.delete({ id: input.id });
     return true;
   }
 }

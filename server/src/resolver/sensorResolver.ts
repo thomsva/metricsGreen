@@ -41,7 +41,7 @@ export class sensorResolver {
   @Authorized()
   @UseMiddleware(sensorOwner)
   @Mutation(() => Sensor)
-  async createDevice(
+  async createSensor(
     @Arg('deviceId') deviceId: string,
     @Arg('name') name: string
   ): Promise<Sensor | null> {
