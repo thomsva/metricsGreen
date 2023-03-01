@@ -1,8 +1,20 @@
-import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql';
+import { GraphQLError } from 'graphql';
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware
+} from 'type-graphql';
 import { Context } from '..';
+import Device from '../entity/Device';
 import Sensor from '../entity/Sensor';
+import { UpdateSensorInput } from '../input/SensorInput';
+import { sensorOwner } from '../middleware/sensorOwner';
 
-@Resolver()
+@Resolver(() => Sensor)
 export class sensorResolver {
   @Authorized()
   @Query(() => [Sensor])
@@ -24,6 +36,42 @@ export class sensorResolver {
         }
       });
     }
+  }
+
+  @Authorized()
+  @UseMiddleware(sensorOwner)
+  @Mutation(() => Sensor)
+  async createDevice(
+    @Arg('deviceId') deviceId: string,
+    @Arg('name') name: string
+  ): Promise<Sensor | null> {
+    const device = await Device.findOneBy({ id: deviceId });
+    if (device === null) {
+      throw new GraphQLError('Invalid device id');
+    }
+    return Sensor.create({
+      name: name,
+      unit: 'celcius',
+      device: device
+    }).save();
+  }
+
+  @Authorized()
+  @UseMiddleware(sensorOwner)
+  @Mutation(() => Sensor)
+  async updateSensor(
+    @Arg('data') input: UpdateSensorInput
+  ): Promise<Sensor | null> {
+    await Sensor.update({ id: input.id }, input);
+    return Sensor.findOneBy({ id: input.id });
+  }
+
+  @Authorized()
+  @UseMiddleware(sensorOwner)
+  @Mutation(() => Boolean)
+  async deleteSensor(@Arg('id') id: string): Promise<boolean> {
+    await Sensor.delete({ id: id });
+    return true;
   }
 }
 

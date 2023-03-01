@@ -10,7 +10,10 @@ export class CreateSensorInput implements Partial<Sensor> {
   name!: string;
 
   @Field()
-  deviceId!: number;
+  unit!: string;
+
+  @Field()
+  deviceId!: string;
 }
 
 @InputType({ description: 'Data for editing sensor' })
@@ -24,5 +27,5 @@ export class UpdateSensorInput implements Partial<Sensor> {
   name!: string;
 
   @Field()
-  deviceId!: number;
+  deviceId!: string;
 }

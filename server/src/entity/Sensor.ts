@@ -23,7 +23,7 @@ export default class Sensor extends BaseEntity {
 
   @Field()
   @Column()
-  unit!: number;
+  unit!: string;
 
   @Field(() => Device)
   @ManyToOne(() => Device, (device) => device.sensors)
