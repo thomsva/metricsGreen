@@ -16,14 +16,14 @@ export class createDeviceInput implements Partial<Device> {
   location?: string;
 }
 
-@InputType({ description: 'Data for editing sensor' })
+@InputType({ description: 'Data for editing device' })
 export class updateDeviceInput implements Partial<Device> {
   @Field()
   id!: string;
 
   @Field()
   @IsString()
-  @Length(5, 30)
+  @Length(7, 30)
   name!: string;
 
   @Field({ nullable: true })

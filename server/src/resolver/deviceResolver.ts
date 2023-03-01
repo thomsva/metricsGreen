@@ -10,10 +10,10 @@ import {
 } from 'type-graphql';
 import Device from '../entity/Device';
 // import { AppDataSource } from '../data-source';
-import { validate } from 'class-validator';
 import { createDeviceInput, updateDeviceInput } from '../input/DeviceInput';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
+import { GraphQLError } from 'graphql';
 
 @Resolver(() => Device)
 export class deviceResolver {
@@ -41,6 +41,7 @@ export class deviceResolver {
 
   @Authorized('ADMIN')
   @Query(() => [Device], { description: 'Get all devices.' })
+  // TODO: same as myDevices for other than admin users
   async devices(@Ctx() context: Context): Promise<Device[]> {
     const user = context.userLoggedIn;
     if (user.role === 'ADMIN') {
@@ -59,36 +60,26 @@ export class deviceResolver {
     @Arg('data') input: createDeviceInput,
     @Ctx() context: Context
   ): Promise<Device | null> {
-    console.log('Create device with this data:: ', input);
-
-    // const device = AppDataSource.getRepository(Device).create({
-    //   ...input,
-    //   user: context.userLoggedIn
-    // });
-    // const results = await AppDataSource.getRepository(Device).save(device);
-    // return results;
     return Device.create({ ...input, user: context.userLoggedIn }).save();
   }
 
+  @Authorized()
   @Mutation(() => Device)
   async updateDevice(
-    @Arg('data') input: updateDeviceInput
+    @Arg('data') input: updateDeviceInput,
+    @Ctx() context: Context
   ): Promise<Device | null> {
-    if ((await Device.findOneBy({ id: input.id })) === null) return null;
-    const errors = await validate(input);
-    if (errors.length > 0) {
-      console.log('updateDevice validation');
-      throw new Error(`Validation failed!`);
-    } else {
-      await Device.update({ id: input.id }, input);
-      return Device.findOneBy({ id: input.id });
-
-      // const device = AppDataSource.getRepository(Device).create(input);
-      // const results = await AppDataSource.getRepository(Device).save(device);
-      // return results;
-    }
+    const d = await Device.findOne({
+      relations: { user: true },
+      where: { id: input.id }
+    });
+    if (context.userLoggedIn.id !== d?.user.id && d?.user.role !== 'ADMIN')
+      throw new GraphQLError('Not authorized');
+    await Device.update({ id: input.id }, input);
+    return Device.findOneBy({ id: input.id });
   }
 
+  @Authorized()
   @Mutation(() => Boolean)
   async deleteDevice(
     @Arg('id') id: string,
