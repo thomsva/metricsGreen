@@ -2,13 +2,11 @@ import { useQuery } from '@apollo/client';
 import {
   Box,
   TableContainer,
-  Paper,
   Table,
   TableHead,
   TableRow,
   TableCell,
   Alert,
-  Typography,
   TableBody,
   Button,
   Dialog,
@@ -32,6 +30,7 @@ interface Device {
   name: string;
   description?: string;
   location: string;
+  sensorsCount: number;
 }
 
 const Devices = () => {
@@ -104,12 +103,11 @@ const Devices = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ display: { xs: 'none', sm: 'block' } }}>
-                ID
-              </TableCell>
+              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Location</TableCell>
+              <TableCell>Sensors</TableCell>
               <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
@@ -117,24 +115,24 @@ const Devices = () => {
             {data &&
               data.myDevices.map((d) => (
                 <TableRow key={d.id}>
-                  <TableCell sx={{ display: { xs: 'none', sm: 'block' } }}>
-                    {d.id}
-                  </TableCell>
+                  <TableCell>{d.id}</TableCell>
                   <TableCell>{d.name}</TableCell>
                   <TableCell>{d.description}</TableCell>
                   <TableCell>{d.location}</TableCell>
                   <TableCell>
+                    {d.sensorsCount}
                     <ButtonGroup>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => setDeviceToUpdate(d)}
-                      >
+                      <IconButton>
+                        <AddIcon />
+                      </IconButton>
+                    </ButtonGroup>
+                  </TableCell>
+                  <TableCell>
+                    <ButtonGroup>
+                      <IconButton onClick={() => setDeviceToUpdate(d)}>
                         <EditIcon />
                       </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => setDeviceToDelete(d)}
-                      >
+                      <IconButton onClick={() => setDeviceToDelete(d)}>
                         <DeleteIcon />
                       </IconButton>
                     </ButtonGroup>

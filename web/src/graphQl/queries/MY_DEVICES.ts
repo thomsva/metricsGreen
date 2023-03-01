@@ -5,8 +5,9 @@ export default gql`
     myDevices {
       id
       name
-      location
       description
+      location
+      sensorsCount
       sensors {
         id
         name

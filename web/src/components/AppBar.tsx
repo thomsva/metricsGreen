@@ -23,7 +23,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import LoginIcon from '@mui/icons-material/Login';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LoginForm from './LoginForm';
 import ME from '../graphQl/queries/ME';
 import { isLoggedInVar } from '../cache';
@@ -179,7 +179,7 @@ const AppBar = () => {
                 >
                   {isLoggedIn ? (
                     admin ? (
-                      <SupervisedUserCircleIcon data-testid="adminUserIcon" />
+                      <AdminPanelSettingsIcon data-testid="adminUserIcon" />
                     ) : (
                       <AccountCircleIcon data-testid="accountUserIcon" />
                     )

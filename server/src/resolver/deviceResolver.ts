@@ -4,6 +4,7 @@ import {
   Authorized,
   Ctx,
   FieldResolver,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -25,6 +26,16 @@ export class deviceResolver {
       where: { device: { id: device.id } }
     });
     return result !== undefined ? result : [];
+  }
+
+  @FieldResolver(() => Int)
+  async sensorsCount(@Root() device: Device) {
+    const result = await Sensor.count({
+      relations: { device: true },
+      where: { device: { id: device.id } }
+    });
+    console.log('result', result);
+    return result;
   }
 
   @Authorized()
