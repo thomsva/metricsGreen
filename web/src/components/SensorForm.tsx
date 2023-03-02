@@ -28,17 +28,19 @@ type serverFieldError = {
 interface Sensor {
   id: number;
   name: string;
-  deviceId?: string;
+  unit: string;
+  deviceId: string;
 }
 
 interface Props {
-  Sensor: Sensor | undefined;
+  sensor: Sensor | undefined;
+  deviceId: string;
   closeForm: () => void;
 }
 
 // eslint-disable-next-line react/prop-types
-const SensorForm = ({ Sensor, closeForm }: Props) => {
-  const createMode = Sensor === undefined;
+const SensorForm = ({ sensor, deviceId, closeForm }: Props) => {
+  const createMode = sensor === undefined;
   console.log('createMode', createMode);
 
   const {
@@ -78,20 +80,19 @@ const SensorForm = ({ Sensor, closeForm }: Props) => {
       if (createMode) {
         await createSensor({
           variables: {
-            data: formData
+            data: { ...formData, deviceId: deviceId }
           }
         });
       } else {
         console.log('about to send:', {
-          id: Sensor.id,
+          id: sensor.id,
           name: formData.name
         });
         await updateSensor({
           variables: {
             data: {
-              id: Sensor.id,
-              name: formData.name,
-              unit: formData.unit
+              id: sensor.id,
+              ...formData
             }
           }
         });
@@ -118,7 +119,7 @@ const SensorForm = ({ Sensor, closeForm }: Props) => {
         size="small"
         fullWidth
         margin="dense"
-        defaultValue={createMode ? '' : Sensor.name}
+        defaultValue={createMode ? '' : sensor.name}
         helperText={
           ('name' in serverFieldErrors ? serverFieldErrors.name : '') +
           (formFieldErrors.name ? formFieldErrors.name.message || '' : '')
@@ -131,7 +132,7 @@ const SensorForm = ({ Sensor, closeForm }: Props) => {
         size="small"
         fullWidth
         margin="dense"
-        defaultValue={createMode ? '' : Sensor.name}
+        defaultValue={createMode ? '' : sensor.name}
         helperText={
           ('unit' in serverFieldErrors ? serverFieldErrors.unit : '') +
           (formFieldErrors.unit ? formFieldErrors.unit.message || '' : '')

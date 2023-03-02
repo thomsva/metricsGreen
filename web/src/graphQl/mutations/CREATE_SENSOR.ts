@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export default gql`
-  mutation CreateSensor($name: String!, $deviceId: String!) {
-    createSensor(name: $name, deviceId: $deviceId) {
+  mutation CreateSensor($data: CreateSensorInput!) {
+    createSensor(data: $data) {
       id
       name
       unit

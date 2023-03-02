@@ -29,7 +29,7 @@ type serverFieldError = {
 };
 
 interface Device {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   location: string;

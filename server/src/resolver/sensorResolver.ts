@@ -11,7 +11,7 @@ import {
 import { Context } from '..';
 import Device from '../entity/Device';
 import Sensor from '../entity/Sensor';
-import { UpdateSensorInput } from '../input/SensorInput';
+import { CreateSensorInput, UpdateSensorInput } from '../input/SensorInput';
 import { sensorOwner } from '../middleware/sensorOwner';
 
 @Resolver(() => Sensor)
@@ -42,16 +42,16 @@ export class sensorResolver {
   @UseMiddleware(sensorOwner)
   @Mutation(() => Sensor)
   async createSensor(
-    @Arg('deviceId') deviceId: string,
-    @Arg('name') name: string
+    @Arg('data') input: CreateSensorInput
   ): Promise<Sensor | null> {
-    const device = await Device.findOneBy({ id: deviceId });
+    console.log('here');
+    const device = await Device.findOneBy({ id: input.deviceId });
     if (device === null) {
       throw new GraphQLError('Invalid device id');
     }
     return Sensor.create({
-      name: name,
-      unit: 'celcius',
+      name: input.name,
+      unit: input.unit,
       device: device
     }).save();
   }

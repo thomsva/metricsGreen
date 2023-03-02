@@ -24,9 +24,10 @@ import { useState } from 'react';
 import DeviceForm from './DeviceForm';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 import DeleteDeviceDialog from './DeleteDeviceDialog';
+import SensorForm from './SensorForm';
 
 interface Device {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   location: string;
@@ -37,6 +38,7 @@ const Devices = () => {
   const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
   const [deviceToDelete, setDeviceToDelete] = useState<Device | undefined>();
   const [createFormOpen, setCreateFormOpen] = useState(false);
+  const [createSensorOpen, setCreateSensorOpen] = useState(false);
   const { loading, data, error } = useQuery<{ myDevices: Device[] }>(
     MY_DEVICES
   );
@@ -115,6 +117,23 @@ const Devices = () => {
             {data &&
               data.myDevices.map((d) => (
                 <TableRow key={d.id}>
+                  <Dialog
+                    open={createSensorOpen}
+                    onClose={() => setCreateSensorOpen(false)}
+                  >
+                    <DialogTitle>Create sensor</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText>
+                        Fill in new sensor data.
+                      </DialogContentText>
+                      <SensorForm
+                        sensor={undefined}
+                        deviceId={d.id}
+                        closeForm={() => setCreateSensorOpen(false)}
+                      />
+                    </DialogContent>
+                  </Dialog>
+
                   <TableCell>{d.id}</TableCell>
                   <TableCell>{d.name}</TableCell>
                   <TableCell>{d.description}</TableCell>
@@ -122,7 +141,7 @@ const Devices = () => {
                   <TableCell>
                     {d.sensorsCount}
                     <ButtonGroup>
-                      <IconButton>
+                      <IconButton onClick={() => setCreateSensorOpen(true)}>
                         <AddIcon />
                       </IconButton>
                     </ButtonGroup>

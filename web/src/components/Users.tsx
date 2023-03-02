@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import {
   Alert,
   Box,
-  Paper,
   Table,
   TableBody,
   TableCell,

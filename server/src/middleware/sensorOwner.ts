@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql';
 import { MiddlewareFn } from 'type-graphql';
 import { Context } from '..';
-import Sensor from '../entity/Sensor';
+import Device from '../entity/Device';
 
 /**
  * Guard middleware for resolvers. Makes sure that the user requesting
@@ -16,20 +16,18 @@ export const sensorOwner: MiddlewareFn<Context> = async (
   { context, args },
   next
 ) => {
-  if (typeof args.id !== 'string') {
-    throw new GraphQLError('Invalid argument: id');
-  }
+  const deviceId = args.data.deviceId as string;
 
-  const s = await Sensor.findOne({
-    relations: { device: { user: true } },
-    where: { id: args.id }
+  const d = await Device.findOne({
+    relations: { user: true },
+    where: { id: deviceId }
   });
 
-  if (s === null) {
+  if (d === null) {
     throw new GraphQLError('Object not found in database');
   }
 
-  if (context.userLoggedIn.id !== s?.device.user.id) {
+  if (context.userLoggedIn.id !== d?.user.id) {
     throw new GraphQLError('Only the authorized owner can perform this action');
   }
 

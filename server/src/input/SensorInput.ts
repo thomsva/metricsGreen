@@ -2,7 +2,7 @@ import { IsString, Length } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 import Sensor from '../entity/Sensor';
 
-@InputType({ description: 'Data for editing sensor' })
+@InputType({ description: 'Data for creating sensor' })
 export class CreateSensorInput implements Partial<Sensor> {
   @Field()
   @IsString()

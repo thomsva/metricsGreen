@@ -4,7 +4,7 @@ import DELETE_DEVICE from '../graphQl/mutations/DELETE_DEVICE';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 
 interface Device {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   location: string;
