@@ -13,21 +13,14 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  ButtonGroup,
-  IconButton,
   Link,
   RadioGroup,
-  FormControlLabel,
   Radio
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import DeviceForm from './DeviceForm';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
-import DeleteDeviceDialog from './DeleteDeviceDialog';
-import SensorForm from './SensorForm';
 import DeviceDetails from './DeviceDetails';
 import { useEffect, useState } from 'react';
 
@@ -43,10 +36,8 @@ const Devices = () => {
   const [activeDeviceId, setActiveDeviceId] = useState<string | undefined>(
     undefined
   );
-  const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
-  const [deviceToDelete, setDeviceToDelete] = useState<Device | undefined>();
   const [createFormOpen, setCreateFormOpen] = useState(false);
-  const [createSensorOpen, setCreateSensorOpen] = useState(false);
+
   const { loading, data, error } = useQuery<{ myDevices: Device[] }>(
     MY_DEVICES
   );
@@ -132,6 +123,16 @@ const Devices = () => {
           </Box>
         </TableContainer>
       </RadioGroup>
+      <Dialog open={createFormOpen} onClose={() => setCreateFormOpen(false)}>
+        <DialogTitle>Create device</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Fill in new device data.</DialogContentText>
+          <DeviceForm
+            device={undefined}
+            closeForm={() => setCreateFormOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
