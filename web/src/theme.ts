@@ -9,7 +9,7 @@ const components = {
   MuiTableHead: {
     styleOverrides: {
       root: {
-        backgroundColor: '#F5F5F5'
+        backgroundColor: '#cccccc'
       }
     }
   }

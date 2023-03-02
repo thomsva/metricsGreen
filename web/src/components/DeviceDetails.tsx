@@ -12,7 +12,11 @@ import {
   TableBody,
   ButtonGroup,
   IconButton,
-  Button
+  Button,
+  Grid,
+  Typography,
+  Stack,
+  Paper
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -44,7 +48,7 @@ const DeviceDetails = ({ device }: Props) => {
   if (device === undefined) return <HourglassBottomIcon />;
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <>
       <Dialog open={createFormOpen} onClose={() => setCreateFormOpen(false)}>
         <DialogTitle>Create device</DialogTitle>
         <DialogContent>
@@ -100,55 +104,51 @@ const DeviceDetails = ({ device }: Props) => {
           />
         </DialogContent>
       </Dialog>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Sensors</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{device.id}</TableCell>
-              <TableCell>{device.name}</TableCell>
-              <TableCell>{device.description}</TableCell>
-              <TableCell>{device.location}</TableCell>
-              <TableCell>{device.sensorsCount}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box display="flex" justifyContent="flex-end" mt={3}>
-        <ButtonGroup>
-          <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
-            onClick={() => setDeviceToUpdate(device)}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-            onClick={() => setDeviceToDelete(device)}
-          >
-            Delete
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateSensorOpen(true)}
-          >
-            Add sensor
-          </Button>
-        </ButtonGroup>
-      </Box>
-    </Box>
+
+      <Paper component={Grid} container spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h4">{device.name}</Typography>
+        </Grid>
+        <Grid item>
+          <Typography>{device.id}</Typography>
+        </Grid>
+        <Grid item>
+          <Typography>{device.description}</Typography>
+        </Grid>
+        <Grid item>
+          <Typography>{device.location}</Typography>
+        </Grid>
+        <Grid item>
+          <Typography>{device.sensorsCount}</Typography>
+        </Grid>
+
+        <Grid item>
+          <Stack mt={3} spacing={2}>
+            <Button
+              variant="outlined"
+              startIcon={<EditIcon />}
+              onClick={() => setDeviceToUpdate(device)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<DeleteIcon />}
+              onClick={() => setDeviceToDelete(device)}
+            >
+              Delete
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={() => setCreateSensorOpen(true)}
+            >
+              Add sensor
+            </Button>
+          </Stack>
+        </Grid>
+      </Paper>
+    </>
   );
 };
 export default DeviceDetails;
