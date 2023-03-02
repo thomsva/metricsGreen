@@ -15,7 +15,10 @@ import {
   DialogContentText,
   ButtonGroup,
   IconButton,
-  Link
+  Link,
+  RadioGroup,
+  FormControlLabel,
+  Radio
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddIcon from '@mui/icons-material/Add';
@@ -55,6 +58,13 @@ const Devices = () => {
     }
   }),
     [data];
+
+  const updateSelection = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    value: string
+  ) => {
+    setActiveDeviceId(value);
+  };
 
   if (error)
     return (
@@ -114,65 +124,65 @@ const Devices = () => {
         </DialogContent>
       </Dialog>
 
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Device ID</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Sensors</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data &&
-              data.myDevices.map((d) => (
-                <TableRow key={d.id}>
-                  <Dialog
-                    open={createSensorOpen}
-                    onClose={() => setCreateSensorOpen(false)}
-                  >
-                    <DialogTitle>Create sensor</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Fill in new sensor data.
-                      </DialogContentText>
-                      <SensorForm
-                        sensor={undefined}
-                        deviceId={d.id}
-                        closeForm={() => setCreateSensorOpen(false)}
-                      />
-                    </DialogContent>
-                  </Dialog>
-
-                  <TableCell>{d.name}</TableCell>
-                  <TableCell>
-                    <Link
-                      underline="hover"
-                      onClick={() => setActiveDeviceId(d.id)}
+      <RadioGroup onChange={updateSelection}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Select</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Device ID</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Sensors</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data &&
+                data.myDevices.map((d) => (
+                  <TableRow key={d.id}>
+                    <Dialog
+                      open={createSensorOpen}
+                      onClose={() => setCreateSensorOpen(false)}
                     >
-                      {d.id.substring(0, 12)}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{d.description}</TableCell>
-                  <TableCell>{d.location}</TableCell>
-                  <TableCell>{d.sensorsCount}</TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <Box display="flex" justifyContent="flex-end" mt={3}>
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateFormOpen(true)}
-          >
-            Create new device
-          </Button>
-        </Box>
-      </TableContainer>
-      {/* )} */}
+                      <DialogTitle>Create sensor</DialogTitle>
+                      <DialogContent>
+                        <DialogContentText>
+                          Fill in new sensor data.
+                        </DialogContentText>
+                        <SensorForm
+                          sensor={undefined}
+                          deviceId={d.id}
+                          closeForm={() => setCreateSensorOpen(false)}
+                        />
+                      </DialogContent>
+                    </Dialog>
+
+                    <TableCell>
+                      <Radio value={d.id} />
+                    </TableCell>
+                    <TableCell>{d.name}</TableCell>
+                    <TableCell>
+                      <Link underline="hover">{d.id.substring(0, 12)}</Link>
+                    </TableCell>
+                    <TableCell>{d.description}</TableCell>
+                    <TableCell>{d.location}</TableCell>
+                    <TableCell>{d.sensorsCount}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <Box display="flex" justifyContent="flex-end" mt={3}>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={() => setCreateFormOpen(true)}
+            >
+              Create new device
+            </Button>
+          </Box>
+        </TableContainer>
+      </RadioGroup>
     </Box>
   );
 };
