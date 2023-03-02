@@ -83,47 +83,6 @@ const Devices = () => {
         <HourglassBottomIcon />
       )}
 
-      <Dialog open={createFormOpen} onClose={() => setCreateFormOpen(false)}>
-        <DialogTitle>Create device</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Fill in new device data.</DialogContentText>
-          <DeviceForm
-            device={undefined}
-            closeForm={() => setCreateFormOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={deviceToUpdate !== undefined}
-        onClose={() => setDeviceToUpdate(undefined)}
-      >
-        <DialogTitle>Update device</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Fill in changed device data.</DialogContentText>
-          <DeviceForm
-            device={deviceToUpdate}
-            closeForm={() => setDeviceToUpdate(undefined)}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={deviceToDelete !== undefined}
-        onClose={() => setDeviceToDelete(undefined)}
-      >
-        <DialogTitle>Delete device</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Confirmation.</DialogContentText>
-          {deviceToDelete !== undefined && (
-            <DeleteDeviceDialog
-              device={deviceToDelete}
-              closeForm={() => setDeviceToDelete(undefined)}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-
       <RadioGroup onChange={updateSelection}>
         <TableContainer>
           <Table>
@@ -148,23 +107,6 @@ const Devices = () => {
                       })
                     }}
                   >
-                    <Dialog
-                      open={createSensorOpen}
-                      onClose={() => setCreateSensorOpen(false)}
-                    >
-                      <DialogTitle>Create sensor</DialogTitle>
-                      <DialogContent>
-                        <DialogContentText>
-                          Fill in new sensor data.
-                        </DialogContentText>
-                        <SensorForm
-                          sensor={undefined}
-                          deviceId={d.id}
-                          closeForm={() => setCreateSensorOpen(false)}
-                        />
-                      </DialogContent>
-                    </Dialog>
-
                     <TableCell>
                       <Radio value={d.id} />
                     </TableCell>
