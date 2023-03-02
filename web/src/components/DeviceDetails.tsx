@@ -118,29 +118,36 @@ const DeviceDetails = ({ device }: Props) => {
               <TableCell>{device.name}</TableCell>
               <TableCell>{device.description}</TableCell>
               <TableCell>{device.location}</TableCell>
-              <TableCell>
-                {device.sensorsCount}
-                <ButtonGroup>
-                  <IconButton onClick={() => setCreateSensorOpen(true)}>
-                    <AddIcon />
-                  </IconButton>
-                </ButtonGroup>
-              </TableCell>
-              <TableCell>
-                <ButtonGroup>
-                  <IconButton onClick={() => setDeviceToUpdate(device)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => setDeviceToDelete(device)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </ButtonGroup>
-              </TableCell>
+              <TableCell>{device.sensorsCount}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      {/* )} */}
+      <Box display="flex" justifyContent="flex-end" mt={3}>
+        <ButtonGroup>
+          <Button
+            variant="outlined"
+            startIcon={<EditIcon />}
+            onClick={() => setDeviceToUpdate(device)}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+            onClick={() => setDeviceToDelete(device)}
+          >
+            Delete
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={() => setCreateSensorOpen(true)}
+          >
+            Add sensor
+          </Button>
+        </ButtonGroup>
+      </Box>
     </Box>
   );
 };

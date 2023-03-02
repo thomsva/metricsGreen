@@ -14,7 +14,8 @@ import {
   DialogContent,
   DialogContentText,
   ButtonGroup,
-  IconButton
+  IconButton,
+  Link
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddIcon from '@mui/icons-material/Add';
@@ -117,12 +118,11 @@ const Devices = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Device ID</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>Sensors</TableCell>
-              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -146,30 +146,18 @@ const Devices = () => {
                     </DialogContent>
                   </Dialog>
 
-                  <TableCell onClick={() => setActiveDeviceId(d.id)}>
-                    {d.id}
-                  </TableCell>
                   <TableCell>{d.name}</TableCell>
+                  <TableCell>
+                    <Link
+                      underline="hover"
+                      onClick={() => setActiveDeviceId(d.id)}
+                    >
+                      {d.id.substring(0, 12)}
+                    </Link>
+                  </TableCell>
                   <TableCell>{d.description}</TableCell>
                   <TableCell>{d.location}</TableCell>
-                  <TableCell>
-                    {d.sensorsCount}
-                    <ButtonGroup>
-                      <IconButton onClick={() => setCreateSensorOpen(true)}>
-                        <AddIcon />
-                      </IconButton>
-                    </ButtonGroup>
-                  </TableCell>
-                  <TableCell>
-                    <ButtonGroup>
-                      <IconButton onClick={() => setDeviceToUpdate(d)}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton onClick={() => setDeviceToDelete(d)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ButtonGroup>
-                  </TableCell>
+                  <TableCell>{d.sensorsCount}</TableCell>
                 </TableRow>
               ))}
           </TableBody>
