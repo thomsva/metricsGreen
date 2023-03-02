@@ -140,7 +140,14 @@ const Devices = () => {
             <TableBody>
               {data &&
                 data.myDevices.map((d) => (
-                  <TableRow key={d.id}>
+                  <TableRow
+                    key={d.id}
+                    sx={{
+                      ...(d.id === activeDeviceId && {
+                        bgcolor: '#eeeeee'
+                      })
+                    }}
+                  >
                     <Dialog
                       open={createSensorOpen}
                       onClose={() => setCreateSensorOpen(false)}
