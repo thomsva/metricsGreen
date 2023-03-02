@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { fieldErrorsFromGqlError } from '../formTools';
 import UPDATE_SENSOR from '../graphQl/mutations/UPDATE_SENSOR';
 import CREATE_SENSOR from '../graphQl/mutations/CREATE_SENSOR';
+import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 
 // Schema for form validation
 const schema = yup
@@ -59,13 +60,16 @@ const SensorForm = ({ sensor, deviceId, closeForm }: Props) => {
   );
 
   const [createSensor] = useMutation(CREATE_SENSOR, {
-    refetchQueries: [],
+    refetchQueries: [{ query: MY_DEVICES }],
     onError: (e) => setServerFieldErrors(fieldErrorsFromGqlError(e)),
-    onCompleted: () => reset()
+    onCompleted: () => {
+      reset();
+      closeForm();
+    }
   });
 
   const [updateSensor] = useMutation(UPDATE_SENSOR, {
-    refetchQueries: [],
+    refetchQueries: [{ query: MY_DEVICES }],
     onError: (e) => {
       setServerFieldErrors(fieldErrorsFromGqlError(e));
     },

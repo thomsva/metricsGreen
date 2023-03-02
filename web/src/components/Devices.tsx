@@ -20,11 +20,12 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
 import DeviceForm from './DeviceForm';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 import DeleteDeviceDialog from './DeleteDeviceDialog';
 import SensorForm from './SensorForm';
+import DeviceDetails from './DeviceDetails';
+import { useEffect, useState } from 'react';
 
 interface Device {
   id: string;
@@ -35,6 +36,9 @@ interface Device {
 }
 
 const Devices = () => {
+  const [activeDeviceId, setActiveDeviceId] = useState<string | undefined>(
+    undefined
+  );
   const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
   const [deviceToDelete, setDeviceToDelete] = useState<Device | undefined>();
   const [createFormOpen, setCreateFormOpen] = useState(false);
@@ -42,6 +46,15 @@ const Devices = () => {
   const { loading, data, error } = useQuery<{ myDevices: Device[] }>(
     MY_DEVICES
   );
+
+  useEffect(() => {
+    if (data !== undefined) {
+      if (data.myDevices.find((d) => d.id === activeDeviceId) === undefined)
+        setActiveDeviceId(undefined);
+    }
+  }),
+    [data];
+
   if (error)
     return (
       <Alert severity="error">
@@ -51,14 +64,13 @@ const Devices = () => {
   if (loading) return <HourglassBottomIcon />;
   return (
     <Box sx={{ width: '100%' }}>
-      {/* {deviceToUpdate ? (
-        <DeviceForm
-          device={deviceToUpdate}
-          closeForm={() => setDeviceToUpdate(undefined)}
+      {activeDeviceId !== undefined && data ? (
+        <DeviceDetails
+          device={data?.myDevices.find((d) => d.id === activeDeviceId)}
         />
-      ) : createFormOpen ? (
-        
-      ) : ( */}
+      ) : (
+        <HourglassBottomIcon />
+      )}
 
       <Dialog open={createFormOpen} onClose={() => setCreateFormOpen(false)}>
         <DialogTitle>Create device</DialogTitle>
@@ -134,7 +146,9 @@ const Devices = () => {
                     </DialogContent>
                   </Dialog>
 
-                  <TableCell>{d.id}</TableCell>
+                  <TableCell onClick={() => setActiveDeviceId(d.id)}>
+                    {d.id}
+                  </TableCell>
                   <TableCell>{d.name}</TableCell>
                   <TableCell>{d.description}</TableCell>
                   <TableCell>{d.location}</TableCell>
