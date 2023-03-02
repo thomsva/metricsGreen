@@ -9,7 +9,7 @@ import {
   NormalizedCacheObject
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { CssBaseline, Grid, ThemeProvider } from '@mui/material';
 
 import theme from './theme';
 import Users from './components/Users';
@@ -45,7 +45,6 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
-          {/* <TopMenu name="world" /> */}
           <AppBar />
           <Routes>
             <Route path="/" element={<Users />} />

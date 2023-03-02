@@ -15,8 +15,7 @@ import {
   Button,
   Grid,
   Typography,
-  Stack,
-  Paper
+  Stack
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -105,7 +104,7 @@ const DeviceDetails = ({ device }: Props) => {
         </DialogContent>
       </Dialog>
 
-      <Paper component={Grid} container spacing={3}>
+      <Grid container spacing={6}>
         <Grid item xs={12}>
           <Typography variant="h4">{device.name}</Typography>
         </Grid>
@@ -147,7 +146,7 @@ const DeviceDetails = ({ device }: Props) => {
             </Button>
           </Stack>
         </Grid>
-      </Paper>
+      </Grid>
     </>
   );
 };

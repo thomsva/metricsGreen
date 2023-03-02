@@ -1,23 +1,20 @@
 import { createTheme } from '@mui/material';
 
-const palette = {
-  primary: { main: '#3f51b5' },
-  secondary: { main: '#f50057' }
-};
-
-const components = {
-  MuiTableHead: {
-    styleOverrides: {
-      root: {
-        backgroundColor: '#cccccc'
-      }
-    }
-  }
-};
-
 const theme = createTheme({
-  palette,
-  components
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#0f0'
+    },
+    background: {
+      default: '#111111',
+      paper: '#212121'
+    }
+  },
+
+  typography: {
+    fontSize: 16
+  }
 });
 
 export default theme;

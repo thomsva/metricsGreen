@@ -69,7 +69,7 @@ const AppBar = () => {
 
   return (
     <>
-      <MuiAppBar position="static">
+      <MuiAppBar position="static" sx={{ mb: 5 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: 'none', sm: 'flex' }, mr: 1 }} />
@@ -263,13 +263,13 @@ const AppBar = () => {
           </Dialog>
         )}
       </MuiAppBar>
-      <Box>
+      {/* <Box>
         {isLoggedIn ? (
           <Alert severity="success">logid in</Alert>
         ) : (
           <Alert severity="error">not logid in</Alert>
         )}
-      </Box>
+      </Box> */}
     </>
   );
 };
