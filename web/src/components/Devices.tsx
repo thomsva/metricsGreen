@@ -27,6 +27,7 @@ import DeviceForm from './DeviceForm';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 import DeviceDetails from './DeviceDetails';
 import { useEffect, useState } from 'react';
+import theme from '../theme';
 
 interface Device {
   id: string;
@@ -49,7 +50,7 @@ const Devices = () => {
   useEffect(() => {
     if (data !== undefined) {
       if (data.myDevices.find((d) => d.id === activeDeviceId) === undefined)
-        setActiveDeviceId(undefined);
+        setActiveDeviceId(data.myDevices[0]?.id);
     }
   }),
     [data];
@@ -61,86 +62,116 @@ const Devices = () => {
     setActiveDeviceId(value);
   };
 
+  const noDevices = data?.myDevices.length === 0;
+
   if (error)
     return (
       <Alert severity="error">
         Error while loading devices {error.message}
       </Alert>
     );
+
   if (loading) return <HourglassBottomIcon />;
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={6} sm={8}>
+    <Grid container spacing={2}>
+      <Grid item xs={noDevices ? 12 : 5} sm={noDevices ? 12 : 8}>
         <Paper
           square={true}
           variant="outlined"
-          sx={{ pt: 3, pb: 3, mt: 3, ml: 3 }}
+          sx={
+            noDevices
+              ? { pt: 2, pb: 2, mt: 2, ml: 2, mr: 2 }
+              : { pt: 2, pb: 2, mt: 2, ml: 2 }
+          }
         >
-          <RadioGroup onChange={updateSelection}>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Select</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell
-                      sx={{ display: { xs: 'none', sm: 'table-cell' } }}
-                    >
-                      Device ID
-                    </TableCell>
-                    <TableCell
-                      sx={{ display: { xs: 'none', sm: 'table-cell' } }}
-                    >
-                      Sensors
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data &&
-                    data.myDevices.map((d) => (
-                      <TableRow
-                        key={d.id}
-                        sx={{
-                          ...(d.id === activeDeviceId && {
-                            bgcolor: '#101010'
-                          })
-                        }}
+          {data?.myDevices.length === 0 ? (
+            <Box sx={{ pl: 2, pr: 2 }}>
+              <Typography variant="h4">Welcome</Typography>
+              <Typography>Create a new device to get started.</Typography>
+            </Box>
+          ) : (
+            <RadioGroup
+              onChange={updateSelection}
+              defaultValue={data?.myDevices[0].id}
+            >
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell></TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell
+                        sx={{ display: { xs: 'none', sm: 'table-cell' } }}
                       >
-                        <TableCell>
-                          <Radio value={d.id} />
-                        </TableCell>
-                        <TableCell>{d.name}</TableCell>
-                        <TableCell
-                          sx={{ display: { xs: 'none', sm: 'table-cell' } }}
+                        Device ID
+                      </TableCell>
+                      <TableCell
+                        sx={{ display: { xs: 'none', sm: 'table-cell' } }}
+                      >
+                        Sensors
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {data &&
+                      data.myDevices.map((d) => (
+                        <TableRow
+                          key={d.id}
+                          sx={{
+                            ...(d.id === activeDeviceId && {
+                              bgcolor: '#101010'
+                            })
+                          }}
                         >
-                          <Link underline="hover">{d.id.substring(0, 12)}</Link>
-                        </TableCell>
-                        <TableCell
-                          sx={{ display: { xs: 'none', sm: 'table-cell' } }}
-                        >
-                          {d.sensorsCount}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-              <Grid container sx={{ pt: 3, pl: 3 }}>
-                <Grid item>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    startIcon={<AddIcon />}
-                    onClick={() => setCreateFormOpen(true)}
-                  >
-                    Create new device
-                  </Button>
-                </Grid>
-              </Grid>
-              {/* <Box display="flex" justifyContent="flex-end" mt={3}>
-                
-              </Box> */}
-            </TableContainer>
-          </RadioGroup>
+                          <TableCell
+                            sx={{
+                              pl: { xs: 0, sm: 2 },
+                              pr: { xs: 0, sm: 2 }
+                            }}
+                          >
+                            <Radio value={d.id} />
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              pl: { xs: 1, sm: 2 }
+                            }}
+                          >
+                            {d.name}
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: 'none', sm: 'table-cell' } }}
+                          >
+                            <Link underline="hover">
+                              {d.id.substring(0, 12)}
+                            </Link>
+                          </TableCell>
+                          <TableCell
+                            sx={{ display: { xs: 'none', sm: 'table-cell' } }}
+                          >
+                            {d.sensorsCount}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </RadioGroup>
+          )}
+
+          <Grid container>
+            <Grid item xs={12}>
+              <Box sx={{ pt: 4, pb: 4, pl: 2, pr: 2 }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() => setCreateFormOpen(true)}
+                >
+                  Create new device
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
 
           <Dialog
             open={createFormOpen}
@@ -157,25 +188,27 @@ const Devices = () => {
           </Dialog>
         </Paper>
       </Grid>
-      <Grid item xs={6} sm={4}>
-        <Paper
-          square={true}
-          variant="outlined"
-          sx={{ pt: 3, pb: 3, pl: 3, pr: 3, mt: 3, mr: 3 }}
-        >
-          {activeDeviceId !== undefined && data ? (
-            <DeviceDetails
-              device={data?.myDevices.find((d) => d.id === activeDeviceId)}
-            />
-          ) : (
-            <Grid container spacing={6}>
-              <Grid item xs={12}>
-                <Typography variant="h4">Select a device</Typography>
+      {data?.myDevices.length !== 0 && (
+        <Grid item xs={7} sm={4}>
+          <Paper
+            square={true}
+            variant="outlined"
+            sx={{ pt: 2, pb: 4, pl: 2, pr: 2, mt: 2, mr: 2 }}
+          >
+            {activeDeviceId !== undefined && data ? (
+              <DeviceDetails
+                device={data?.myDevices.find((d) => d.id === activeDeviceId)}
+              />
+            ) : (
+              <Grid container spacing={6}>
+                <Grid item xs={12}>
+                  <Typography variant="h4">Select a device</Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          )}
-        </Paper>
-      </Grid>
+            )}
+          </Paper>
+        </Grid>
+      )}
     </Grid>
   );
 };

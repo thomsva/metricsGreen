@@ -121,8 +121,8 @@ const DeviceDetails = ({ device }: Props) => {
           <Typography>{device.sensorsCount}</Typography>
         </Grid>
 
-        <Grid item>
-          <Box sx={{ backgroundColor: 'red' }}>
+        <Grid item xs={12}>
+          <Stack spacing={2}>
             <Button
               fullWidth
               variant="outlined"
@@ -147,7 +147,7 @@ const DeviceDetails = ({ device }: Props) => {
             >
               Add sensor
             </Button>
-          </Box>
+          </Stack>
         </Grid>
       </Grid>
     </>
