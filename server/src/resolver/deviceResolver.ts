@@ -45,6 +45,11 @@ export class deviceResolver {
     return result;
   }
 
+  @FieldResolver(() => Boolean)
+  key(@Root() device: Device) {
+    return device.secret !== null;
+  }
+
   @Authorized()
   @Query(() => [Device], {
     description: 'All devices owned by the user logged in.'
@@ -102,7 +107,7 @@ export class deviceResolver {
 
   @Authorized()
   @UseMiddleware(deviceOwner)
-  @Mutation(() => Boolean)
+  @Mutation(() => String)
   async generateDeviceSecret(
     @Arg('data') input: GenerateDeviceSecretInput
   ): Promise<string> {

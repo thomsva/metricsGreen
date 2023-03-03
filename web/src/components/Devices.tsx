@@ -18,16 +18,16 @@ import {
   Radio,
   Paper,
   Grid,
-  Typography,
-  Stack
+  Typography
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import KeyIcon from '@mui/icons-material/Key';
+import KeyOffIcon from '@mui/icons-material/KeyOff';
 import AddIcon from '@mui/icons-material/Add';
 import DeviceForm from './DeviceForm';
 import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
 import DeviceDetails from './DeviceDetails';
 import { useEffect, useState } from 'react';
-import theme from '../theme';
 
 interface Device {
   id: string;
@@ -35,6 +35,7 @@ interface Device {
   description?: string;
   location: string;
   sensorsCount: number;
+  key: boolean;
 }
 
 const Devices = () => {
@@ -51,6 +52,7 @@ const Devices = () => {
     if (data !== undefined) {
       if (data.myDevices.find((d) => d.id === activeDeviceId) === undefined)
         setActiveDeviceId(data.myDevices[0]?.id);
+      console.log('data', data);
     }
   }),
     [data];
@@ -110,6 +112,7 @@ const Devices = () => {
                       >
                         Sensors
                       </TableCell>
+                      <TableCell>Key</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -149,6 +152,9 @@ const Devices = () => {
                             sx={{ display: { xs: 'none', sm: 'table-cell' } }}
                           >
                             {d.sensorsCount}
+                          </TableCell>
+                          <TableCell>
+                            {d.key ? <KeyIcon /> : <KeyOffIcon />}
                           </TableCell>
                         </TableRow>
                       ))}

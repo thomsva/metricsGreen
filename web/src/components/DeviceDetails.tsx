@@ -4,14 +4,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogContentText,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  ButtonGroup,
-  IconButton,
   Button,
   Grid,
   Typography,
@@ -21,10 +13,14 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import KeyIcon from '@mui/icons-material/Key';
 import { useState } from 'react';
 import DeleteDeviceDialog from './DeleteDeviceDialog';
 import DeviceForm from './DeviceForm';
 import SensorForm from './SensorForm';
+import GENERATE_DEVICE_SECRET from '../graphQl/mutations/GENERATE_DEVICE_SECRET';
+import MY_DEVICES from '../graphQl/queries/MY_DEVICES';
+import { useMutation } from '@apollo/client';
 
 interface Device {
   id: string;
@@ -39,12 +35,26 @@ interface Props {
 }
 
 const DeviceDetails = ({ device }: Props) => {
+  if (device === undefined) return <HourglassBottomIcon />;
   const [deviceToUpdate, setDeviceToUpdate] = useState<Device | undefined>();
   const [deviceToDelete, setDeviceToDelete] = useState<Device | undefined>();
   const [createFormOpen, setCreateFormOpen] = useState(false);
   const [createSensorOpen, setCreateSensorOpen] = useState(false);
 
-  if (device === undefined) return <HourglassBottomIcon />;
+  const [generateDeviceSecret, { data }] = useMutation(GENERATE_DEVICE_SECRET, {
+    refetchQueries: [{ query: MY_DEVICES }]
+  });
+
+  const handleGenerateDeviceSecret = async () => {
+    await generateDeviceSecret({
+      variables: {
+        data: { id: device.id }
+      }
+    });
+    console.log('mutation sent');
+
+    console.log('key', data);
+  };
 
   return (
     <>
@@ -146,6 +156,14 @@ const DeviceDetails = ({ device }: Props) => {
               onClick={() => setCreateSensorOpen(true)}
             >
               Add sensor
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<KeyIcon />}
+              onClick={() => handleGenerateDeviceSecret()}
+            >
+              Generate secret key
             </Button>
           </Stack>
         </Grid>

@@ -8,6 +8,7 @@ export default gql`
       description
       location
       sensorsCount
+      key
       sensors {
         id
         name
