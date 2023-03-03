@@ -39,3 +39,10 @@ export class DeleteDeviceInput implements Partial<Device> {
   @Field()
   id!: string;
 }
+
+@InputType()
+export class GenerateDeviceSecretInput implements Partial<Device> {
+  @IsString()
+  @Field()
+  id!: string;
+}

@@ -16,10 +16,13 @@ import Device from '../entity/Device';
 import {
   CreateDeviceInput,
   DeleteDeviceInput,
+  GenerateDeviceSecretInput,
   UpdateDeviceInput
 } from '../input/DeviceInput';
 import { Context } from '..';
 import Sensor from '../entity/Sensor';
+import generator from 'generate-password';
+import bcrypt from 'bcrypt';
 
 @Resolver(() => Device)
 export class deviceResolver {
@@ -95,5 +98,25 @@ export class deviceResolver {
   async deleteDevice(@Arg('data') input: DeleteDeviceInput): Promise<boolean> {
     await Device.delete({ id: input.id });
     return true;
+  }
+
+  @Authorized()
+  @UseMiddleware(deviceOwner)
+  @Mutation(() => Boolean)
+  async generateDeviceSecret(
+    @Arg('data') input: GenerateDeviceSecretInput
+  ): Promise<string> {
+    const d = await Device.findOneBy({ id: input.id });
+    console.log('secret for device: ', d);
+    const pwd = generator.generate({
+      length: 10,
+      numbers: true
+    });
+    console.log('generated pwd', pwd);
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(pwd, saltRounds);
+    console.log('hashed pwd', hash);
+    await Device.save({ ...d, secret: hash });
+    return pwd;
   }
 }
