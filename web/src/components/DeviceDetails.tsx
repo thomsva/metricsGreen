@@ -122,8 +122,9 @@ const DeviceDetails = ({ device }: Props) => {
         </Grid>
 
         <Grid item>
-          <Stack mt={3} spacing={2}>
+          <Box sx={{ backgroundColor: 'red' }}>
             <Button
+              fullWidth
               variant="outlined"
               startIcon={<EditIcon />}
               onClick={() => setDeviceToUpdate(device)}
@@ -131,6 +132,7 @@ const DeviceDetails = ({ device }: Props) => {
               Edit
             </Button>
             <Button
+              fullWidth
               variant="outlined"
               startIcon={<DeleteIcon />}
               onClick={() => setDeviceToDelete(device)}
@@ -138,13 +140,14 @@ const DeviceDetails = ({ device }: Props) => {
               Delete
             </Button>
             <Button
+              fullWidth
               variant="outlined"
               startIcon={<AddIcon />}
               onClick={() => setCreateSensorOpen(true)}
             >
               Add sensor
             </Button>
-          </Stack>
+          </Box>
         </Grid>
       </Grid>
     </>

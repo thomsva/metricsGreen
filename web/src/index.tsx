@@ -9,7 +9,7 @@ import {
   NormalizedCacheObject
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { CssBaseline, Grid, ThemeProvider } from '@mui/material';
+import { Box, CssBaseline, Grid, ThemeProvider } from '@mui/material';
 
 import theme from './theme';
 import Users from './components/Users';
@@ -46,11 +46,13 @@ ReactDOM.render(
         <CssBaseline />
         <Router>
           <AppBar />
+          {/* <Box sx={{ backgroundColor: 'red', display: 'flex' }}> */}
           <Routes>
             <Route path="/" element={<Users />} />
             <Route path="/users" element={<Users />} />
             <Route path="/devices" element={<Devices />} />
           </Routes>
+          {/* </Box> */}
         </Router>
       </ThemeProvider>
     </ApolloProvider>

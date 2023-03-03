@@ -69,7 +69,7 @@ const AppBar = () => {
 
   return (
     <>
-      <MuiAppBar position="static" sx={{ mb: 5 }}>
+      <MuiAppBar position="static" sx={{ mb: 0 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: 'none', sm: 'flex' }, mr: 1 }} />
