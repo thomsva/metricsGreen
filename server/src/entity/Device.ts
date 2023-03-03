@@ -2,10 +2,12 @@ import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import Sensor from './Sensor';
 import User from './User';
@@ -32,6 +34,14 @@ export default class Device extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   secret?: string;
+
+  @Field()
+  @CreateDateColumn()
+  createdDate!: Date;
+
+  @Field()
+  @UpdateDateColumn()
+  updatedDate!: Date;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.devices)

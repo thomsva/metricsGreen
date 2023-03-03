@@ -7,7 +7,8 @@ import {
   Button,
   Grid,
   Typography,
-  Stack
+  Stack,
+  Alert
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -41,9 +42,15 @@ const DeviceDetails = ({ device }: Props) => {
   const [createFormOpen, setCreateFormOpen] = useState(false);
   const [createSensorOpen, setCreateSensorOpen] = useState(false);
 
-  const [generateDeviceSecret, { data }] = useMutation(GENERATE_DEVICE_SECRET, {
-    refetchQueries: [{ query: MY_DEVICES }]
-  });
+  const [generateDeviceSecret, { data, loading, error }] = useMutation(
+    GENERATE_DEVICE_SECRET,
+    {
+      refetchQueries: [{ query: MY_DEVICES }],
+      onCompleted: async () => {
+        console.log('key', await data);
+      }
+    }
+  );
 
   const handleGenerateDeviceSecret = async () => {
     await generateDeviceSecret({
@@ -51,10 +58,12 @@ const DeviceDetails = ({ device }: Props) => {
         data: { id: device.id }
       }
     });
-    console.log('mutation sent');
-
-    console.log('key', data);
+    console.log('request sent');
   };
+
+  if (loading) return <HourglassBottomIcon />;
+  if (error) return <Alert>Error</Alert>;
+  if (data !== undefined) console.log('data-', data);
 
   return (
     <>
@@ -165,6 +174,16 @@ const DeviceDetails = ({ device }: Props) => {
             >
               Generate secret key
             </Button>
+            {data !== undefined && (
+              <Alert color="info">
+                A secret key has now been generated and saved. Save the key for
+                sending data from the device. A lost key can not be retrieved.
+                It can only be replaced with a new key.{' '}
+                <Typography variant="h6">
+                  {data.generateDeviceSecret}
+                </Typography>
+              </Alert>
+            )}
           </Stack>
         </Grid>
       </Grid>

@@ -52,7 +52,6 @@ const Devices = () => {
     if (data !== undefined) {
       if (data.myDevices.find((d) => d.id === activeDeviceId) === undefined)
         setActiveDeviceId(data.myDevices[0]?.id);
-      console.log('data', data);
     }
   }),
     [data];

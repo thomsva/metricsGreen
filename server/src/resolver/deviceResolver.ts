@@ -41,7 +41,6 @@ export class deviceResolver {
       relations: { device: true },
       where: { device: { id: device.id } }
     });
-    console.log('result', result);
     return result;
   }
 
@@ -59,7 +58,8 @@ export class deviceResolver {
     const user = context.userLoggedIn;
     return await Device.find({
       relations: { user: true },
-      where: { user: { id: user.id } }
+      where: { user: { id: user.id } },
+      order: { createdDate: 'ASC', id: 'ASC' }
     });
   }
 
@@ -112,16 +112,16 @@ export class deviceResolver {
     @Arg('data') input: GenerateDeviceSecretInput
   ): Promise<string> {
     const d = await Device.findOneBy({ id: input.id });
-    console.log('secret for device: ', d);
-    const pwd = generator.generate({
+    const secret = generator.generate({
       length: 10,
       numbers: true
     });
-    console.log('generated pwd', pwd);
     const saltRounds = 10;
-    const hash = await bcrypt.hash(pwd, saltRounds);
+    const hash = await bcrypt.hash(secret, saltRounds);
     console.log('hashed pwd', hash);
     await Device.save({ ...d, secret: hash });
-    return pwd;
+    console.log('generated secret', secret);
+
+    return secret;
   }
 }
