@@ -69,8 +69,7 @@ const main = async () => {
         httpServer.listen({ port: PORT }, resolve)
       );
       console.log(
-        `GraphQl is running on 
-        http://localhost:${PORT}${apolloServer.graphqlPath}`
+        `GraphQl is running on http://localhost:${PORT}${apolloServer.graphqlPath}`
       );
     })
     .catch((e) => console.error(e));
