@@ -54,7 +54,6 @@ export class deviceResolver {
     description: 'All devices owned by the user logged in.'
   })
   async myDevices(@Ctx() context: Context): Promise<Device[]> {
-    console.log('resolver myDevices');
     const user = context.userLoggedIn;
     return await Device.find({
       relations: { user: true },
@@ -118,9 +117,13 @@ export class deviceResolver {
     });
     const saltRounds = 10;
     const hash = await bcrypt.hash(secret, saltRounds);
-    console.log('hashed pwd', hash);
-    await Device.save({ ...d, secret: hash });
-    console.log('generated secret', secret);
+    const timeStamp = new Date(
+      Date.now() + 1000 * 60 * -new Date().getTimezoneOffset()
+    )
+      .toISOString()
+      .replace('T', ' ')
+      .replace('Z', '');
+    await Device.save({ ...d, secret: hash, secretTimeStamp: timeStamp });
 
     return secret;
   }

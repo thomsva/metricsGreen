@@ -9,6 +9,7 @@ export default gql`
       location
       sensorsCount
       key
+      secretTimeStamp
       sensors {
         id
         name

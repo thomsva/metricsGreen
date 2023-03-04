@@ -35,6 +35,10 @@ export default class Device extends BaseEntity {
   @Column({ nullable: true })
   secret?: string;
 
+  @Field({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
+  secretTimeStamp!: Date;
+
   @Field()
   @CreateDateColumn()
   createdDate!: Date;

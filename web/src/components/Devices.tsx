@@ -21,6 +21,7 @@ import {
   Typography
 } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import SensorsIcon from '@mui/icons-material/Sensors';
 import KeyIcon from '@mui/icons-material/Key';
 import KeyOffIcon from '@mui/icons-material/KeyOff';
 import AddIcon from '@mui/icons-material/Add';
@@ -75,7 +76,12 @@ const Devices = () => {
   if (loading) return <HourglassBottomIcon />;
   return (
     <Grid container spacing={2}>
-      <Grid item xs={noDevices ? 12 : 5} sm={noDevices ? 12 : 8}>
+      <Grid
+        item
+        xs={noDevices ? 12 : 5}
+        sm={noDevices ? 12 : 6}
+        md={noDevices ? 12 : 8}
+      >
         <Paper
           square={true}
           variant="outlined"
@@ -107,11 +113,19 @@ const Devices = () => {
                         Device ID
                       </TableCell>
                       <TableCell
-                        sx={{ display: { xs: 'none', sm: 'table-cell' } }}
+                        sx={{
+                          display: { xs: 'none', sm: 'none', md: 'table-cell' }
+                        }}
                       >
                         Sensors
                       </TableCell>
-                      <TableCell>Key</TableCell>
+                      <TableCell
+                        sx={{
+                          display: { xs: 'none', sm: 'none', md: 'table-cell' }
+                        }}
+                      >
+                        Key
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -148,12 +162,30 @@ const Devices = () => {
                             </Link>
                           </TableCell>
                           <TableCell
-                            sx={{ display: { xs: 'none', sm: 'table-cell' } }}
+                            sx={{
+                              display: {
+                                xs: 'none',
+                                sm: 'none',
+                                md: 'table-cell'
+                              }
+                            }}
                           >
-                            {d.sensorsCount}
+                            {d.sensorsCount > 0 && <SensorsIcon />}
                           </TableCell>
-                          <TableCell>
-                            {d.key ? <KeyIcon /> : <KeyOffIcon />}
+                          <TableCell
+                            sx={{
+                              display: {
+                                xs: 'none',
+                                sm: 'none',
+                                md: 'table-cell'
+                              }
+                            }}
+                          >
+                            {d.key ? (
+                              <KeyIcon color="primary" />
+                            ) : (
+                              <KeyOffIcon color="error" />
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -194,7 +226,7 @@ const Devices = () => {
         </Paper>
       </Grid>
       {data?.myDevices.length !== 0 && (
-        <Grid item xs={7} sm={4}>
+        <Grid item xs={7} sm={6} md={4}>
           <Paper
             square={true}
             variant="outlined"

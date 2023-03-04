@@ -15,6 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import KeyIcon from '@mui/icons-material/Key';
+import KeyOffIcon from '@mui/icons-material/KeyOff';
 import { useState } from 'react';
 import DeleteDeviceDialog from './DeleteDeviceDialog';
 import DeviceForm from './DeviceForm';
@@ -29,6 +30,8 @@ interface Device {
   description?: string;
   location: string;
   sensorsCount: number;
+  key: boolean;
+  secretTimeStamp?: string;
 }
 
 interface Props {
@@ -137,6 +140,17 @@ const DeviceDetails = ({ device }: Props) => {
           <Typography>{device.location}</Typography>
         </Grid>
         <Grid item>
+          {device.key ? (
+            <KeyIcon color="primary" />
+          ) : (
+            <KeyOffIcon color="error" />
+          )}
+          <Typography>
+            {device.secretTimeStamp !== null && device.secretTimeStamp}
+          </Typography>
+        </Grid>
+
+        <Grid item>
           <Typography>{device.sensorsCount}</Typography>
         </Grid>
 
@@ -179,7 +193,7 @@ const DeviceDetails = ({ device }: Props) => {
                 A secret key has now been generated and saved. Save the key for
                 sending data from the device. A lost key can not be retrieved.
                 It can only be replaced with a new key.{' '}
-                <Typography variant="h6">
+                <Typography variant="h5">
                   {data.generateDeviceSecret}
                 </Typography>
               </Alert>
