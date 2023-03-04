@@ -15,6 +15,7 @@ import theme from './theme';
 import Users from './components/Users';
 import Devices from './components/Devices';
 import AppBar from './components/AppBar';
+import { DeviceConnectInfo } from './components/DeviceConnectInfo';
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_SERVER_URL
@@ -51,6 +52,7 @@ ReactDOM.render(
             <Route path="/" element={<Users />} />
             <Route path="/users" element={<Users />} />
             <Route path="/devices" element={<Devices />} />
+            {/* <Route path="/connect" element={<DeviceConnectInfo/>}/> */}
           </Routes>
           {/* </Box> */}
         </Router>

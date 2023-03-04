@@ -1,5 +1,4 @@
 import {
-  Box,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -14,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import SensorsIcon from '@mui/icons-material/Sensors';
 import KeyIcon from '@mui/icons-material/Key';
 import KeyOffIcon from '@mui/icons-material/KeyOff';
 import { useState } from 'react';
@@ -139,7 +139,7 @@ const DeviceDetails = ({ device }: Props) => {
         <Grid item>
           <Typography>{device.location}</Typography>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           {device.key ? (
             <KeyIcon color="primary" />
           ) : (
@@ -150,8 +150,11 @@ const DeviceDetails = ({ device }: Props) => {
           </Typography>
         </Grid>
 
-        <Grid item>
-          <Typography>{device.sensorsCount}</Typography>
+        <Grid item xs={12}>
+          <Typography>
+            {device.sensorsCount > 0 && <SensorsIcon />}Sensors:{' '}
+            {device.sensorsCount}
+          </Typography>
         </Grid>
 
         <Grid item xs={12}>
