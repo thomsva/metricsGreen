@@ -60,6 +60,7 @@ const main = async () => {
       });
 
       const httpServer = http.createServer(app);
+
       await apolloServer.start();
 
       apolloServer.applyMiddleware({ app });

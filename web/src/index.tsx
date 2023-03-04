@@ -10,7 +10,6 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Box, CssBaseline, Grid, ThemeProvider } from '@mui/material';
-
 import theme from './theme';
 import Users from './components/Users';
 import Devices from './components/Devices';
