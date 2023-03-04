@@ -24,7 +24,7 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: e2e/cypress/screenshots
+          path: app-test/cypress/screenshots
       - name: Upload videos
         uses: actions/upload-artifact@v3
         if: always()
