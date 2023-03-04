@@ -27,7 +27,7 @@ const main = async () => {
       console.log('The database is running');
 
       const app = express();
-      await seedDatabase();
+      //await seedDatabase();
 
       if (process.env.NODE_ENV === 'development') {
         app.use(cors());
