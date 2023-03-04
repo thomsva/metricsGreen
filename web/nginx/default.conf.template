@@ -3,9 +3,6 @@ upstream apiurl {
 }
 
 server {
-    auth_basic  "Access restricted!";
-    auth_basic_user_file conf/htpasswd;
-
     listen      ${NGINX_PORT};
     listen [::]:${NGINX_PORT};
 
@@ -14,6 +11,9 @@ server {
     }
 
     location / {
+        auth_basic  "Access restricted!";
+        auth_basic_user_file conf/htpasswd;
+
         root /usr/share/nginx/html;
         index index.html index.htm;
         try_files $uri $uri/ /index.html =404;
