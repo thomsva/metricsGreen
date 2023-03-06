@@ -25,5 +25,16 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.Commands.add('seedDB', () => {
-  cy.request('GET', `${Cypress.env('CYPRESS_API_URL')}/seed`);
+  cy.request('GET', `${Cypress.env('API_URL')}/seed`);
+});
+
+Cypress.Commands.overwrite("log", function(log, ...args) {
+  if (Cypress.browser.isHeadless) {
+    return cy.task("log", args, { log: false }).then(() => {
+      return log(...args);
+    });
+  } else {
+    console.log(...args);
+    return log(...args);
+  }
 });

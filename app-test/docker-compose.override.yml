@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+
+  web:
+    environment:
+      REACT_APP_ENV: development
+      REACT_APP_SERVER_URL: http://localhost:4001/graphql
+      WDS_SOCKET_PORT: 3001

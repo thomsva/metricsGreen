@@ -41,10 +41,11 @@ the code are updating automatically. The development version can be running at
 the same time as the services are mapped to different ports.
 
 Cypress running in it's own container can be started using the following
-command:
+commands to not use the env settings from docker.compose.override.yml:
 
 ```
-docker-compose up web server db
+docker-compose -f docker-compose.yml up web server db
+docker-compose -f docker-compose.yml up cypress
 ```
 
 For development purposes it can be more convenient to use Cypress user interface
@@ -61,5 +62,3 @@ To run tests in headless mode (like in CI) use this:
 ```
 npx cypress run
 ```
-
-to open the Cypress user interface, where individual tests can be run.

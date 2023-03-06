@@ -15,7 +15,7 @@ services:
       dockerfile: dev.Dockerfile
     environment:
       REACT_APP_ENV: development
-      REACT_APP_SERVER_URL: http://localhost:4001/graphql
+      REACT_APP_SERVER_URL: http://server:4001/graphql
       WDS_SOCKET_PORT: 3001
     ports:
       - 3001:3000
@@ -47,6 +47,8 @@ services:
       - web
     environment:
       CYPRESS_BASE_URL: http://web:3000
+      CYPRESS_API_URL: http://server:4001
+      CYPRESS_GRAPHQL_URL: 'http://server:4001/graphql'
       CYPRESS_VERIFY_TIMEOUT: 90000
     working_dir: /e2e
     volumes:
