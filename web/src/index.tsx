@@ -19,7 +19,7 @@ import AppBar from './components/AppBar';
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_SERVER_URL
     ? process.env.REACT_APP_SERVER_URL
-    : `${window.location.href}graphql`
+    : `${window.location.origin}graphql`
 });
 
 const authLink = setContext((_, { headers }) => {
