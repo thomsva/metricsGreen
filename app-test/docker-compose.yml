@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 services:
   db:
@@ -34,7 +34,7 @@ services:
       - db
     environment:
       PORT: 4001
-      DB_HOST: metricsGreen_db_test
+      DB_HOST: db
       DB_PORT: 5432
       NODE_ENV: development
     volumes:

@@ -24,7 +24,9 @@ export type Context = {
 const main = async () => {
   await AppDataSource.initialize()
     .then(async () => {
-      console.log('The database is running');
+      console.log(
+        `The database is running at ${process.env.DB_HOST}:${process.env.DB_PORT}`
+      );
 
       const app = express();
       await seedDatabase();
