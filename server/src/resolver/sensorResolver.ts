@@ -18,6 +18,24 @@ import { sensorOwner } from '../middleware/sensorOwner';
 export class sensorResolver {
   @Authorized()
   @Query(() => [Sensor])
+  async mySensors(@Ctx() context: Context): Promise<Sensor[]> {
+    const user = context.userLoggedIn;
+    if (user.role === 'ADMIN') {
+      return await Sensor.find({ relations: { device: true } });
+    } else {
+      return await Sensor.find({
+        relations: { device: true, readings: true },
+        where: {
+          device: {
+            user: { id: user.id }
+          }
+        }
+      });
+    }
+  }
+
+  @Authorized()
+  @Query(() => [Sensor])
   async sensors(
     @Arg('deviceId') deviceId: string,
     @Ctx() context: Context
@@ -39,7 +57,6 @@ export class sensorResolver {
   }
 
   @Authorized()
-  @UseMiddleware(sensorOwner)
   @Mutation(() => Sensor)
   async createSensor(
     @Arg('data') input: CreateSensorInput

@@ -19,6 +19,10 @@ export default class Reading extends BaseEntity {
   @Column({ type: 'timestamptz', nullable: true })
   timeStamp!: Date;
 
+  @Field()
+  @Column()
+  content!: number;
+
   @Field(() => Sensor)
   @ManyToOne(() => Sensor, (sensor) => sensor.readings)
   sensor!: Sensor;

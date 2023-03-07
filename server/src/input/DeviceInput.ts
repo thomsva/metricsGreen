@@ -1,6 +1,8 @@
 import { IsString, Length } from 'class-validator';
 import { Field, InputType } from 'type-graphql';
 import Device from '../entity/Device';
+import { CreateReadingInput } from './ReadingInput';
+// import { CreateReadingInput } from './ReadingInput';
 
 @InputType({ description: 'Data for new sensor' })
 export class CreateDeviceInput implements Partial<Device> {
@@ -45,4 +47,14 @@ export class GenerateDeviceSecretInput implements Partial<Device> {
   @IsString()
   @Field()
   id!: string;
+}
+
+@InputType()
+export class CreateReadingsInput {
+  @IsString()
+  @Field()
+  secret!: string;
+
+  @Field(() => [CreateReadingInput])
+  readings!: CreateReadingInput[];
 }

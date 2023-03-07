@@ -1,3 +1,4 @@
+import { iotResolver } from './resolver/iotResolver';
 import { sensorResolver } from './resolver/sensorResolver';
 import { ApolloServer } from 'apollo-server-express';
 import express, { Request, Response } from 'express';
@@ -42,7 +43,12 @@ const main = async () => {
 
       const apolloServer = new ApolloServer({
         schema: await buildSchema({
-          resolvers: [UserResolver, deviceResolver, sensorResolver],
+          resolvers: [
+            UserResolver,
+            deviceResolver,
+            sensorResolver,
+            iotResolver
+          ],
           authChecker,
           validate: true
         }),

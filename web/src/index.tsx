@@ -13,6 +13,7 @@ import { Box, CssBaseline, Grid, ThemeProvider } from '@mui/material';
 import theme from './theme';
 import Users from './components/Users';
 import Devices from './components/Devices';
+import Sensors from './components/Sensors';
 import AppBar from './components/AppBar';
 import HomePage from './components/HomePage';
 // import { DeviceConnectInfo } from './components/DeviceConnectInfo';
@@ -52,6 +53,7 @@ ReactDOM.render(
             <Route path="/" element={<HomePage />} />
             <Route path="/users" element={<Users />} />
             <Route path="/devices" element={<Devices />} />
+            <Route path="/sensors" element={<Sensors />} />
             {/* <Route path="/connect" element={<DeviceConnectInfo/>}/> */}
           </Routes>
           {/* </Box> */}
