@@ -14,6 +14,7 @@ import theme from './theme';
 import Users from './components/Users';
 import Devices from './components/Devices';
 import AppBar from './components/AppBar';
+import HomePage from './components/HomePage';
 // import { DeviceConnectInfo } from './components/DeviceConnectInfo';
 
 const httpLink = createHttpLink({
@@ -48,7 +49,7 @@ ReactDOM.render(
           <AppBar />
           {/* <Box sx={{ backgroundColor: 'red', display: 'flex' }}> */}
           <Routes>
-            <Route path="/" element={<Users />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/users" element={<Users />} />
             <Route path="/devices" element={<Devices />} />
             {/* <Route path="/connect" element={<DeviceConnectInfo/>}/> */}

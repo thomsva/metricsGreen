@@ -3,6 +3,7 @@ import { Alert, Box, Button, TextField } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import LOGIN from '../graphQl/mutations/LOGIN';
 import { isLoggedInVar } from '../cache';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   closeForm: () => void;
@@ -13,6 +14,8 @@ const LoginForm = ({ closeForm }: Props) => {
     username: string;
     password: string;
   };
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -38,6 +41,7 @@ const LoginForm = ({ closeForm }: Props) => {
       isLoggedInVar(true);
       client.resetStore();
       closeForm();
+      navigate('/devices');
     }
   };
 

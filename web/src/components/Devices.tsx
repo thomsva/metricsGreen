@@ -93,7 +93,6 @@ const Devices = () => {
         >
           {data?.myDevices.length === 0 ? (
             <Box sx={{ pl: 2, pr: 2 }}>
-              <Typography variant="h4">Welcome</Typography>
               <Typography>Create a new device to get started.</Typography>
             </Box>
           ) : (
