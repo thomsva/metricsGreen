@@ -28,7 +28,7 @@ export class iotResolver {
           sensor: s
         }).save();
       }
-      console.log('one s');
+      console.log(`reading ${r.content} saved`);
     });
 
     return true;

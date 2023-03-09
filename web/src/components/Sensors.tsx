@@ -44,8 +44,7 @@ const Sensors = () => {
       enabled: true,
       fillSeriesColor: true,
       theme: 'dark',
-      x: { show: false },
-      intersect: true
+      x: { show: false }
     },
     series: [
       {

@@ -45,13 +45,20 @@ export const seedDatabase = async () => {
   });
   await device.save();
 
-  const sensor: Sensor = Sensor.create({
+  const sensor = Sensor.create({
     id: '73086b39-d26f-490a-885b-ea64695a0c08',
     name: 'Speed sensor',
     unit: 'km/h',
     device: device
   });
   await sensor.save();
+
+  await Sensor.create({
+    id: '4a9677cc-de38-46a5-945f-48a079d6d562',
+    name: 'Flux capacitor',
+    unit: 'GigaWatt',
+    device: device
+  }).save();
 
   let previousContent = 50;
   for (let i = 0; i <= 24; i++) {
