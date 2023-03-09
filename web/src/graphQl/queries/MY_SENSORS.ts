@@ -11,6 +11,7 @@ export default gql`
         name
       }
       readings {
+        createdAt
         content
       }
     }

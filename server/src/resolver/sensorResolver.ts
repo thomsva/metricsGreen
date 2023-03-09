@@ -29,7 +29,8 @@ export class sensorResolver {
           device: {
             user: { id: user.id }
           }
-        }
+        },
+        order: { readings: { createdAt: 'ASC' } }
       });
     }
   }

@@ -1,37 +1,80 @@
 import { useQuery } from '@apollo/client';
-import { Chip, Typography } from '@mui/material';
+import { Chip, Grid, Paper, Typography } from '@mui/material';
+import { ApexOptions } from 'apexcharts';
+import { useState } from 'react';
+import ReactApexChart from 'react-apexcharts';
 import MY_SENSORS from '../graphQl/queries/MY_SENSORS';
+import theme from '../theme';
 
 interface Sensor {
   id: string;
   name: string;
   unit: string;
   device: { id: string; name: string };
-  readings: [{ id: string; content: string }];
+  readings: [{ id: string; content: number; createdAt: string }];
 }
 
 const Sensors = () => {
+  const [values, setValues] = useState<number[]>([]);
+  const [dates, setDates] = useState<string[]>([]);
   const { loading, data, error } = useQuery<{ mySensors: Sensor[] }>(
-    MY_SENSORS
+    MY_SENSORS,
+    {
+      onCompleted: (d) => {
+        console.log('data loaded');
+        setValues(d.mySensors[0].readings.map((d) => d.content));
+        setDates(d.mySensors[0].readings.map((d) => d.createdAt));
+      }
+    }
   );
   console.log('hello s');
-  // return <Typography>Hello Sensors...</Typography>;
+
+  const chartData: ApexOptions = {
+    chart: {
+      type: 'line',
+      id: 'apexchart-example',
+      foreColor: theme.palette.primary.main
+    },
+    xaxis: {
+      type: 'datetime',
+      categories: dates
+    },
+    markers: { size: 3 },
+    tooltip: {
+      enabled: true,
+      fillSeriesColor: true,
+      theme: 'dark',
+      x: { show: false },
+      intersect: true
+    },
+    series: [
+      {
+        name: 'Distance Traveled',
+        type: 'line',
+        data: values
+      }
+    ]
+  };
 
   if (loading) return <Typography>loading...</Typography>;
   if (error) return <Typography>error!!</Typography>;
 
   return (
-    <>
-      <Typography>Sensors list</Typography>
-      {data &&
-        data.mySensors.map((s) => (
-          <Typography key={s.id}>
-            {s.id} {s.name}
-            {s.readings &&
-              s.readings.map((r) => <Chip key={r.id} label={r.content} />)}
-          </Typography>
-        ))}
-    </>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Paper
+          square={true}
+          variant="outlined"
+          sx={{ pt: 2, pb: 2, mt: 2, ml: 2, mr: 2 }}
+        >
+          <ReactApexChart
+            options={chartData}
+            series={chartData.series}
+            height="400"
+          />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 
