@@ -2,6 +2,7 @@ import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn
@@ -16,11 +17,12 @@ export default class Reading extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column({ type: 'timestamptz', nullable: true })
-  timeStamp!: Date;
+  // @Column({ type: 'timestamptz', nullable: true })
+  @CreateDateColumn()
+  createdAt!: Date;
 
   @Field()
-  @Column()
+  @Column('decimal', { precision: 6, scale: 2 })
   content!: number;
 
   @Field(() => Sensor)

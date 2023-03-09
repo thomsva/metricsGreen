@@ -17,14 +17,13 @@ export class iotResolver {
     const hash = await bcrypt.hash(input.secret, saltRounds);
     const device = await Device.findOneBy({ secret: hash });
     if (device) console.log('Device found');
-    const timeStamp = new Date(
-      Date.now() + 1000 * 60 * -new Date().getTimezoneOffset()
-    );
+    // const timeStamp = new Date(
+    //   Date.now() + 1000 * 60 * -new Date().getTimezoneOffset()
+    // );
     input.readings.forEach(async (r) => {
       const s = await Sensor.findOneBy({ id: r.sensorId });
       if (s) {
         await Reading.create({
-          timeStamp: timeStamp,
           content: r.content,
           sensor: s
         }).save();
