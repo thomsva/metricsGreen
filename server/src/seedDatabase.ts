@@ -36,6 +36,8 @@ export const seedDatabase = async () => {
   await user1.save();
   await user2.save();
 
+  await Device.delete({ user: { id: '7b84e059-87a9-496b-a441-edade172f432' } });
+
   const testDevice: Device = Device.create({
     id: 'e7f27f18-e7c5-43b3-9fc5-3933e7aad707',
     name: 'Sample device',
@@ -48,7 +50,7 @@ export const seedDatabase = async () => {
   const testSensor = Sensor.create({
     id: '67a5596e-d315-4c17-bb43-bc9150c4e8bd',
     name: 'Flux Capacitor',
-    unit: 'GW',
+    unit: 'GigaWatt',
     device: testDevice
   });
   await testSensor.save();
@@ -77,6 +79,10 @@ export const seedDatabase = async () => {
     unit: 'hPa',
     device: sampleDevice
   }).save();
+
+  await Reading.delete({
+    sensor: { id: '67a5596e-d315-4c17-bb43-bc9150c4e8bd' }
+  });
 
   let previousContent = 50;
   for (let i = 0; i <= 24; i++) {
