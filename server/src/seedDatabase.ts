@@ -69,7 +69,7 @@ export const seedDatabase = async () => {
   await Sensor.create({
     id: '73086b39-d26f-490a-885b-ea64695a0c08',
     name: 'Temperature',
-    unit: '*C',
+    unit: '°C',
     device: sampleDevice
   }).save();
 
