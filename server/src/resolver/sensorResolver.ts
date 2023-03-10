@@ -3,19 +3,56 @@ import {
   Arg,
   Authorized,
   Ctx,
+  FieldResolver,
+  Int,
   Mutation,
   Query,
   Resolver,
+  Root,
   UseMiddleware
 } from 'type-graphql';
 import { Context } from '..';
 import Device from '../entity/Device';
+import Reading from '../entity/Reading';
 import Sensor from '../entity/Sensor';
 import { CreateSensorInput, UpdateSensorInput } from '../input/SensorInput';
 import { sensorOwner } from '../middleware/sensorOwner';
 
 @Resolver(() => Sensor)
 export class sensorResolver {
+  @FieldResolver(() => Int)
+  async readingsCount(@Root() sensor: Sensor) {
+    const result = await Reading.count({
+      relations: { sensor: true },
+      where: { sensor: { id: sensor.id } }
+    });
+    return result;
+  }
+
+  @FieldResolver(() => Int)
+  async maxReading(@Root() sensor: Sensor) {
+    const result = await Reading.maximum('content', {
+      sensor: { id: sensor.id }
+    });
+    return result;
+  }
+
+  @FieldResolver(() => Int)
+  async minReading(@Root() sensor: Sensor) {
+    const result = await Reading.minimum('content', {
+      sensor: { id: sensor.id }
+    });
+    return result;
+  }
+
+  @FieldResolver(() => Int)
+  async averageReading(@Root() sensor: Sensor) {
+    const result = await Reading.average('content', {
+      sensor: { id: sensor.id }
+    });
+    return result;
+  }
+
   @Authorized()
   @Query(() => [Sensor])
   async mySensors(@Ctx() context: Context): Promise<Sensor[]> {

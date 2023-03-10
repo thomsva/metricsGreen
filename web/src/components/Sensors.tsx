@@ -1,10 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { Chip, Grid, Paper, Typography } from '@mui/material';
-import { ApexOptions } from 'apexcharts';
+import { Grid, Paper, Typography } from '@mui/material';
 import { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
 import MY_SENSORS from '../graphQl/queries/MY_SENSORS';
-import theme from '../theme';
+import LineChart from './LineChart';
 
 interface Sensor {
   id: string;
@@ -29,32 +27,6 @@ const Sensors = () => {
   );
   console.log('hello s');
 
-  const chartData: ApexOptions = {
-    chart: {
-      type: 'line',
-      id: 'apexchart-example',
-      foreColor: theme.palette.primary.main
-    },
-    xaxis: {
-      type: 'datetime',
-      categories: dates
-    },
-    markers: { size: 3 },
-    tooltip: {
-      enabled: true,
-      fillSeriesColor: true,
-      theme: 'dark',
-      x: { show: false }
-    },
-    series: [
-      {
-        name: 'Temperature',
-        type: 'line',
-        data: values
-      }
-    ]
-  };
-
   if (loading) return <Typography>loading...</Typography>;
   if (error) return <Typography>error!!</Typography>;
 
@@ -66,11 +38,15 @@ const Sensors = () => {
           variant="outlined"
           sx={{ pt: 2, pb: 2, mt: 2, ml: 2, mr: 2 }}
         >
-          <ReactApexChart
-            options={chartData}
-            series={chartData.series}
-            height="400"
-          />
+          {data?.mySensors.map((s) => (
+            <LineChart
+              key={s.id}
+              title={s.name}
+              unit={s.unit}
+              dates={s.readings.map((r) => r.createdAt)}
+              values={s.readings.map((r) => r.content)}
+            />
+          ))}
         </Paper>
       </Grid>
     </Grid>
