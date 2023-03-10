@@ -36,35 +36,51 @@ export const seedDatabase = async () => {
   await user1.save();
   await user2.save();
 
-  const device: Device = Device.create({
+  const testDevice: Device = Device.create({
     id: 'e7f27f18-e7c5-43b3-9fc5-3933e7aad707',
-    name: 'Fake device',
-    description: 'My NodeMCU 82660 based device',
+    name: 'Sample device',
+    description: 'My NodeMCU 8266 development board',
     location: 'Helsinki',
     user: user1
   });
-  await device.save();
+  await testDevice.save();
 
-  const sensor = Sensor.create({
-    id: '73086b39-d26f-490a-885b-ea64695a0c08',
-    name: 'Speed sensor',
-    unit: 'km/h',
-    device: device
+  const testSensor = Sensor.create({
+    id: '67a5596e-d315-4c17-bb43-bc9150c4e8bd',
+    name: 'Flux Capacitor',
+    unit: 'GW',
+    device: testDevice
   });
-  await sensor.save();
+  await testSensor.save();
+
+  const sampleDevice: Device = Device.create({
+    id: 'e7f27f18-e7c5-43b3-9fc5-3933e7aad707',
+    name: 'Sample device',
+    description: 'My NodeMCU 8266 development board',
+    location: 'Helsinki',
+    user: user1
+  });
+  await sampleDevice.save();
+
+  await Sensor.create({
+    id: '73086b39-d26f-490a-885b-ea64695a0c08',
+    name: 'Temperature',
+    unit: '*C',
+    device: sampleDevice
+  }).save();
 
   await Sensor.create({
     id: '4a9677cc-de38-46a5-945f-48a079d6d562',
-    name: 'Flux capacitor',
-    unit: 'GigaWatt',
-    device: device
+    name: 'Barometric pressure',
+    unit: 'hPa',
+    device: sampleDevice
   }).save();
 
   let previousContent = 50;
   for (let i = 0; i <= 24; i++) {
     const content = previousContent + Math.random() * 10 - 5;
     const reading: Reading = Reading.create({
-      sensor: sensor,
+      sensor: testSensor,
       content: content,
       createdAt: `2023-03-08 ${i < 10 ? '0' : ''}${i}:00:00.000000`
     });
