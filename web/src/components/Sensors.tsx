@@ -22,8 +22,8 @@ const Sensors = () => {
     {
       onCompleted: (d) => {
         console.log('data loaded');
-        setValues(d.mySensors[0].readings.map((d) => d.content));
-        setDates(d.mySensors[0].readings.map((d) => d.createdAt));
+        setValues(d.mySensors[1].readings.map((d) => d.content));
+        setDates(d.mySensors[1].readings.map((d) => d.createdAt));
       }
     }
   );
@@ -48,7 +48,7 @@ const Sensors = () => {
     },
     series: [
       {
-        name: 'Distance Traveled',
+        name: 'Temperature',
         type: 'line',
         data: values
       }

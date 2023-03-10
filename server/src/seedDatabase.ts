@@ -58,6 +58,8 @@ export const seedDatabase = async () => {
     name: 'Sample device',
     description: 'My NodeMCU 8266 development board',
     location: 'Helsinki',
+    secret: '$2b$10$kNqfCWh7kK0oGnfko9C2ZuR/jgMK15UYh8B9WocYmDKZXCs2JbKSe',
+    secretTimeStamp: '2023-03-10 11:00:00.000',
     user: user1
   });
   await sampleDevice.save();
