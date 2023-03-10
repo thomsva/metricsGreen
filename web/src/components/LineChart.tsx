@@ -39,24 +39,16 @@ const LineChart = ({ title, unit, dates, values }: Props) => {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Paper
-          square={true}
-          variant="outlined"
-          sx={{ pt: 2, pb: 2, mt: 2, ml: 2, mr: 2 }}
-        >
-          <Typography sx={{ ml: 2 }} variant="h5">
-            {title} ({unit})
-          </Typography>
-          <ReactApexChart
-            options={chartData}
-            series={chartData.series}
-            height="400"
-          />
-        </Paper>
-      </Grid>
-    </Grid>
+    <Paper square={true} variant="outlined" sx={{ pt: 2, pb: 2 }}>
+      <Typography sx={{ ml: 2 }} variant="h5">
+        {title} ({unit})
+      </Typography>
+      <ReactApexChart
+        options={chartData}
+        series={chartData.series}
+        height="400"
+      />
+    </Paper>
   );
 };
 

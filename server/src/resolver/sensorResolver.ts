@@ -4,6 +4,7 @@ import {
   Authorized,
   Ctx,
   FieldResolver,
+  Float,
   Int,
   Mutation,
   Query,
@@ -26,10 +27,11 @@ export class sensorResolver {
       relations: { sensor: true },
       where: { sensor: { id: sensor.id } }
     });
+    console.log('result', result);
     return result;
   }
 
-  @FieldResolver(() => Int)
+  @FieldResolver(() => Float, { nullable: true })
   async maxReading(@Root() sensor: Sensor) {
     const result = await Reading.maximum('content', {
       sensor: { id: sensor.id }
@@ -37,7 +39,7 @@ export class sensorResolver {
     return result;
   }
 
-  @FieldResolver(() => Int)
+  @FieldResolver(() => Float, { nullable: true })
   async minReading(@Root() sensor: Sensor) {
     const result = await Reading.minimum('content', {
       sensor: { id: sensor.id }
@@ -45,7 +47,7 @@ export class sensorResolver {
     return result;
   }
 
-  @FieldResolver(() => Int)
+  @FieldResolver(() => Float, { nullable: true })
   async averageReading(@Root() sensor: Sensor) {
     const result = await Reading.average('content', {
       sensor: { id: sensor.id }
