@@ -47,7 +47,7 @@ const Sensors = () => {
             >
               <Typography variant="h5">min:</Typography>
               <Typography variant="h2">
-                {s.minReading ? s.minReading : '-'}
+                {s.minReading ? s.minReading.toFixed(1) : '-'}
               </Typography>
             </Paper>
           </Grid>
@@ -60,7 +60,7 @@ const Sensors = () => {
             >
               <Typography variant="h5">max:</Typography>
               <Typography variant="h2">
-                {s.maxReading ? s.maxReading : '-'}
+                {s.maxReading ? s.maxReading.toFixed(1) : '-'}
               </Typography>
             </Paper>
           </Grid>
@@ -73,7 +73,7 @@ const Sensors = () => {
             >
               <Typography variant="h5">avg:</Typography>
               <Typography variant="h2">
-                {s.averageReading ? s.averageReading : '-'}
+                {s.averageReading ? s.averageReading.toFixed(1) : '-'}
               </Typography>
             </Paper>
           </Grid>
