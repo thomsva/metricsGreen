@@ -22,7 +22,7 @@ const LineChart = ({ title, unit, dates, values }: Props) => {
       type: 'datetime',
       categories: dates
     },
-    markers: { size: 3 },
+    markers: { size: 0 },
     tooltip: {
       enabled: true,
       fillSeriesColor: true,
